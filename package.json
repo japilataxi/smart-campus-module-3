@@ -1,0 +1,27 @@
+{
+  "name": "smart-campus-module-3",
+  "version": "1.0.0",
+  "description": "Distributed Programming final project for Module 3: Smart Campus Services.",
+  "main": "index.js",
+  "directories": {
+    "doc": "docs"
+  },
+  "scripts": {
+    "test": "echo \"Error: no test specified\" && exit 1"
+  },
+  "repository": {
+    "type": "git",
+    "url": "git+https://github.com/Kevin13201j/smart-campus-module-3.git"
+  },
+  "keywords": [],
+  "author": "",
+  "license": "ISC",
+  "type": "commonjs",
+  "bugs": {
+    "url": "https://github.com/Kevin13201j/smart-campus-module-3/issues"
+  },
+  "homepage": "https://github.com/Kevin13201j/smart-campus-module-3#readme",
+  "devDependencies": {
+    "turbo": "^2.9.16"
+  }
+}

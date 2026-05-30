@@ -48,3 +48,7 @@ Start shared local dependencies:
 docker compose up -d
 ```
 
+http://localhost:3001/api/docs
+docker compose down
+docker compose up --build 
+en la raiz del proyecto

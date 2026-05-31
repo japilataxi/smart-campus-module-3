@@ -25,6 +25,9 @@ import { ReservationService } from './application/use-cases/reservation.service'
 import { ReservationGateway } from './infrastructure/websocket/reservation.gateway';
 import { ReservationEventsProducer } from './infrastructure/kafka/reservation-events.producer';
 
+import { TerminusModule } from '@nestjs/terminus';
+import { HealthController } from './presentation/controllers/health.controller';
+
 @Module({
   imports: [
     ConfigModule.forRoot({
@@ -42,8 +45,9 @@ import { ReservationEventsProducer } from './infrastructure/kafka/reservation-ev
     ]),   
     PassportModule,
     JwtModule.register({}),
+    TerminusModule,
   ],
-  controllers: [ClassroomController, ReservationController],
+  controllers: [ClassroomController, ReservationController, HealthController],
   
   providers: [
   ClassroomService,

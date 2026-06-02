@@ -60,6 +60,11 @@ services:
       - "5434:5432"
     volumes:
       - classroom_reservation_data:/var/lib/postgresql/data
+    healthcheck:
+      test: ["CMD-SHELL", "pg_isready -U postgres -d classroom_reservation_db"]
+      interval: 10s
+      timeout: 5s
+      retries: 5
 
   classroom-reservation-service:
     build:
@@ -79,7 +84,12 @@ services:
     ports:
       - "3002:3002"
     depends_on:
-      - classroom-reservation-db
+      classroom-reservation-db:
+        condition: service_healthy
+      kafka:
+          condition: service_healthy
+      mqtt:
+        condition: service_healthy
   
   redis:
     image: redis:7-alpine
@@ -101,6 +111,11 @@ services:
       - "1883:1883"
     volumes:
       - ./docker/mosquitto.conf:/mosquitto/config/mosquitto.conf:ro
+    healthcheck:
+      test: ["CMD-SHELL", "nc -z localhost 1883 || exit 1"]
+      interval: 10s
+      timeout: 5s
+      retries: 10
   
   zookeeper:
     image: confluentinc/cp-zookeeper:7.6.1
@@ -126,6 +141,11 @@ services:
       KAFKA_LISTENER_SECURITY_PROTOCOL_MAP: PLAINTEXT:PLAINTEXT,PLAINTEXT_HOST:PLAINTEXT
       KAFKA_INTER_BROKER_LISTENER_NAME: PLAINTEXT
       KAFKA_OFFSETS_TOPIC_REPLICATION_FACTOR: 1
+    healthcheck:
+      test: ["CMD-SHELL", "kafka-topics --bootstrap-server localhost:9092 --list > /dev/null 2>&1"]
+      interval: 15s
+      timeout: 10s
+      retries: 10
 
 volumes:
   postgres-data:

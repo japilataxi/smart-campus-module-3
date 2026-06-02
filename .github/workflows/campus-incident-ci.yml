@@ -1,0 +1,53 @@
+name: Campus Incident Service CI
+
+on:
+  push:
+    branches:
+      - feature/campus-incident-service
+      - feature/campus-incident-workflows-dev
+      - dev
+      - qa
+      - main
+    paths:
+      - "apps/campus-incident-service/**"
+      - "turbo.json"
+      - ".github/workflows/campus-incident-ci.yml"
+
+  pull_request:
+    branches:
+      - dev
+      - qa
+      - main
+    paths:
+      - "apps/campus-incident-service/**"
+      - "turbo.json"
+      - ".github/workflows/campus-incident-ci.yml"
+
+jobs:
+  campus-incident-ci:
+    name: Build and Test Campus Incident Service
+    runs-on: ubuntu-latest
+
+    defaults:
+      run:
+        working-directory: apps/campus-incident-service
+
+    steps:
+      - name: Checkout repository
+        uses: actions/checkout@v4
+
+      - name: Setup Node.js
+        uses: actions/setup-node@v4
+        with:
+          node-version: 22
+          cache: npm
+          cache-dependency-path: apps/campus-incident-service/package-lock.json
+
+      - name: Install dependencies
+        run: npm install
+
+      - - name: Run tests
+       run: npm test -- --passWithNoTests
+
+      - name: Build service
+        run: npm run build

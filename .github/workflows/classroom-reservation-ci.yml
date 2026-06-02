@@ -1,0 +1,55 @@
+name: Library Service CI
+
+on:
+  push:
+    branches:
+      - feature/library-service
+      - develop
+      - qa
+      - main
+    paths:
+      - "apps/library-service/**"
+      - "package.json"
+      - "package-lock.json"
+      - "turbo.json"
+      - ".github/workflows/library-service-ci.yml"
+
+  pull_request:
+    branches:
+      - develop
+      - qa
+      - main
+    paths:
+      - "apps/library-service/**"
+      - "package.json"
+      - "package-lock.json"
+      - "turbo.json"
+      - ".github/workflows/library-service-ci.yml"
+
+jobs:
+  library-service-ci:
+    name: Build and Test Library Service
+    runs-on: ubuntu-latest
+
+    steps:
+      - name: Checkout repository
+        uses: actions/checkout@v4
+
+      - name: Setup Node.js
+        uses: actions/setup-node@v4
+        with:
+          node-version: 22
+          cache: npm
+
+      - name: Install dependencies
+        run: npm ci
+
+      - name: Run lint
+        run: npx turbo run lint --filter=library-service
+        continue-on-error: true
+
+      - name: Run tests
+        run: npx turbo run test --filter=library-service
+
+      - name: Build service
+        run: npx turbo run build --filter=library-service

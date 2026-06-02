@@ -4,6 +4,7 @@ on:
   push:
     branches:
       - feature/campus-incident-service
+      - feature/campus-incident-workflows-dev
       - dev
       - qa
       - main
@@ -27,6 +28,10 @@ jobs:
     name: Build and Test Campus Incident Service
     runs-on: ubuntu-latest
 
+    defaults:
+      run:
+        working-directory: apps/campus-incident-service
+
     steps:
       - name: Checkout repository
         uses: actions/checkout@v4
@@ -36,12 +41,13 @@ jobs:
         with:
           node-version: 22
           cache: npm
+          cache-dependency-path: apps/campus-incident-service/package-lock.json
 
       - name: Install dependencies
         run: npm ci
 
       - name: Run tests
-        run: npx turbo run test --filter=campus-incident-service
+        run: npm test
 
       - name: Build service
-        run: npx turbo run build --filter=campus-incident-service
+        run: npm run build

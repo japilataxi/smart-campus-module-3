@@ -9,8 +9,6 @@ on:
       - main
     paths:
       - "apps/classroom-reservation-service/**"
-      - "package.json"
-      - "package-lock.json"
       - "turbo.json"
       - ".github/workflows/classroom-reservation-ci.yml"
 

@@ -9,8 +9,6 @@ on:
       - main
     paths:
       - "apps/library-service/**"
-      - "package.json"
-      - "package-lock.json"
       - "turbo.json"
       - ".github/workflows/library-service-ci.yml"
 
@@ -21,8 +19,6 @@ on:
       - main
     paths:
       - "apps/library-service/**"
-      - "package.json"
-      - "package-lock.json"
       - "turbo.json"
       - ".github/workflows/library-service-ci.yml"
 

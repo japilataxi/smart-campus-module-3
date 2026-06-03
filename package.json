@@ -15,7 +15,7 @@
     "turbo": "latest",
     "typescript": "latest"
   },
-  "packageManager": "pnpm@9.0.0",
+  "packageManager": "pnpm@11.5.1",
   "dependencies": {
     "@nestjs/config": "^4.0.4",
     "@nestjs/jwt": "^11.0.2",

@@ -62,6 +62,12 @@ services:
       dockerfile: apps/web-app/Dockerfile
     ports:
       - "3003:3003"
+    environment:
+      PORT: 3003
+      HOSTNAME: 0.0.0.0
+      NEXT_PUBLIC_API_URL: http://localhost:3000
+    depends_on:
+      - api-gateway
 
   auth-db:
     image: postgres:16

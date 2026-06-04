@@ -1,15 +1,29 @@
-import { Test, TestingModule } from '@nestjs/testing';
+import { Test } from '@nestjs/testing';
+import { getRepositoryToken } from '@nestjs/typeorm';
+
 import { LoansService } from './loans.service';
+import { Loan } from './entities/loan.entity';
+import { BooksService } from '../books/books.service';
 
 describe('LoansService', () => {
   let service: LoansService;
 
   beforeEach(async () => {
-    const module: TestingModule = await Test.createTestingModule({
-      providers: [LoansService],
+    const moduleRef = await Test.createTestingModule({
+      providers: [
+        LoansService,
+        {
+          provide: getRepositoryToken(Loan),
+          useValue: {},
+        },
+        {
+          provide: BooksService,
+          useValue: {},
+        },
+      ],
     }).compile();
 
-    service = module.get<LoansService>(LoansService);
+    service = moduleRef.get(LoansService);
   });
 
   it('should be defined', () => {

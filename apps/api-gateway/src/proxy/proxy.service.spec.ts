@@ -1,15 +1,25 @@
-import { Test, TestingModule } from '@nestjs/testing';
+import { Test } from '@nestjs/testing';
+import { HttpService } from '@nestjs/axios';
+
 import { ProxyService } from './proxy.service';
 
 describe('ProxyService', () => {
   let service: ProxyService;
 
   beforeEach(async () => {
-    const module: TestingModule = await Test.createTestingModule({
-      providers: [ProxyService],
+    const moduleRef = await Test.createTestingModule({
+      providers: [
+        ProxyService,
+        {
+          provide: HttpService,
+          useValue: {
+            request: jest.fn(),
+          },
+        },
+      ],
     }).compile();
 
-    service = module.get<ProxyService>(ProxyService);
+    service = moduleRef.get(ProxyService);
   });
 
   it('should be defined', () => {

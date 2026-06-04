@@ -15,30 +15,51 @@ on:
       - main
 
 jobs:
-  build-and-test:
-    name: Build and Test Monorepo
+  build-test:
     runs-on: ubuntu-latest
 
-    steps:
-      - name: Checkout repository
-        uses: actions/checkout@v4
+    services:
+      postgres-auth:
+        image: postgres:16
+        env:
+          POSTGRES_DB: auth_db
+          POSTGRES_USER: auth_user
+          POSTGRES_PASSWORD: auth_password
+        ports:
+          - 5433:5432
 
-      - name: Setup pnpm
-        uses: pnpm/action-setup@v4
+      postgres-library:
+        image: postgres:16
+        env:
+          POSTGRES_DB: library_db
+          POSTGRES_USER: library_user
+          POSTGRES_PASSWORD: library_password
+        ports:
+          - 5434:5432
+
+      redis:
+        image: redis:7
+        ports:
+          - 6379:6379
+
+    steps:
+      - uses: actions/checkout@v4
+
+      - uses: pnpm/action-setup@v4
         with:
           version: 10
 
-      - name: Setup Node.js
-        uses: actions/setup-node@v4
+      - uses: actions/setup-node@v4
         with:
           node-version: 22
           cache: pnpm
 
-      - name: Install dependencies
-        run: pnpm install --frozen-lockfile
+      - run: pnpm install --frozen-lockfile
 
-      - name: Build projects
-        run: pnpm turbo run build
+      - run: pnpm turbo run build
 
-      - name: Run tests
-        run: pnpm turbo run test
+      - run: pnpm turbo run test
+
+      - run: pnpm --filter auth-service test:e2e
+
+      - run: pnpm --filter library-service test:e2e

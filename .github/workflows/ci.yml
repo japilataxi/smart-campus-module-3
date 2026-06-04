@@ -1,0 +1,65 @@
+name: CI
+
+on:
+  push:
+    branches:
+      - dev
+      - qa
+      - main
+      - "feature/**"
+
+  pull_request:
+    branches:
+      - dev
+      - qa
+      - main
+
+jobs:
+  build-test:
+    runs-on: ubuntu-latest
+
+    services:
+      postgres-auth:
+        image: postgres:16
+        env:
+          POSTGRES_DB: auth_db
+          POSTGRES_USER: auth_user
+          POSTGRES_PASSWORD: auth_password
+        ports:
+          - 5433:5432
+
+      postgres-library:
+        image: postgres:16
+        env:
+          POSTGRES_DB: library_db
+          POSTGRES_USER: library_user
+          POSTGRES_PASSWORD: library_password
+        ports:
+          - 5434:5432
+
+      redis:
+        image: redis:7
+        ports:
+          - 6379:6379
+
+    steps:
+      - uses: actions/checkout@v4
+
+      - uses: pnpm/action-setup@v4
+        with:
+          version: 11.5.1
+
+      - uses: actions/setup-node@v4
+        with:
+          node-version: 22
+          cache: pnpm
+
+      - run: pnpm install --frozen-lockfile
+
+      - run: pnpm turbo run build
+
+      - run: pnpm turbo run test
+
+      - run: pnpm --filter auth-service test:e2e
+
+      - run: pnpm --filter library-service test:e2e

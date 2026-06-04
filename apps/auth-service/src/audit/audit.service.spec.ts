@@ -1,15 +1,29 @@
-import { Test, TestingModule } from '@nestjs/testing';
+import { Test } from '@nestjs/testing';
+import { getRepositoryToken } from '@nestjs/typeorm';
+
 import { AuditService } from './audit.service';
+import { AuditLog } from './entities/audit-log.entity';
 
 describe('AuditService', () => {
   let service: AuditService;
 
+  const mockAuditRepository = {
+    create: jest.fn(),
+    save: jest.fn(),
+  };
+
   beforeEach(async () => {
-    const module: TestingModule = await Test.createTestingModule({
-      providers: [AuditService],
+    const moduleRef = await Test.createTestingModule({
+      providers: [
+        AuditService,
+        {
+          provide: getRepositoryToken(AuditLog),
+          useValue: mockAuditRepository,
+        },
+      ],
     }).compile();
 
-    service = module.get<AuditService>(AuditService);
+    service = moduleRef.get(AuditService);
   });
 
   it('should be defined', () => {

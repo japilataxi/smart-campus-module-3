@@ -84,20 +84,21 @@ export class AuthService {
     return this.sanitizeUser(user);
   }
 
-  private async generateTokens(userId: string, email: string) {
+    private async generateTokens(userId: string, email: string) {
     const payload = {
-      sub: userId,
-      email,
+        sub: userId,
+        email,
+        roles: ['student'],
     };
 
     return {
-      accessToken: await this.jwtService.signAsync(payload),
-      refreshToken: await this.jwtService.signAsync(payload, {
+        accessToken: await this.jwtService.signAsync(payload),
+        refreshToken: await this.jwtService.signAsync(payload, {
         secret: process.env.JWT_REFRESH_SECRET || 'dev_refresh_secret',
         expiresIn: '7d',
-      }),
+        }),
     };
-  }
+    }
 
   private sanitizeUser(user: any) {
     // eslint-disable-next-line @typescript-eslint/no-unused-vars

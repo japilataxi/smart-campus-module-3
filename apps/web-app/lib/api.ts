@@ -103,19 +103,25 @@ export const api = {
       body: JSON.stringify(data),
     }),
 
-  createCategory: (data: { name: string; description?: string }) =>
-    request<any>("/library/categories", {
-      method: "POST",
-      body: JSON.stringify(data),
-    }),
+  createCategory: (data: { name: string }) =>
+  request<any>("/library/categories", {
+    method: "POST",
+    body: JSON.stringify(data),
+  }),
 
-  createBook: (data: any) =>
+  createBook: (data: {
+    title: string;
+    isbn: string;
+    totalCopies: number;
+    authorId: string;
+    categoryId: string;
+  }) =>
     request<any>("/library/books", {
       method: "POST",
       body: JSON.stringify(data),
     }),
 
-  createLoan: (data: any) =>
+  createLoan: (data: { userEmail: string; bookId: string }) =>
     request<any>("/library/loans", {
       method: "POST",
       body: JSON.stringify(data),

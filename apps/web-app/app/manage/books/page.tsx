@@ -12,9 +12,7 @@ export default function ManageBooksPage() {
   const [form, setForm] = useState({
     title: "",
     isbn: "",
-    description: "",
     totalCopies: 1,
-    availableCopies: 1,
     authorId: "",
     categoryId: "",
   });
@@ -39,17 +37,17 @@ export default function ManageBooksPage() {
     event.preventDefault();
 
     await api.createBook({
-      ...form,
+      title: form.title,
+      isbn: form.isbn,
       totalCopies: Number(form.totalCopies),
-      availableCopies: Number(form.availableCopies),
+      authorId: form.authorId,
+      categoryId: form.categoryId,
     });
 
     setForm({
       title: "",
       isbn: "",
-      description: "",
       totalCopies: 1,
-      availableCopies: 1,
       authorId: "",
       categoryId: "",
     });
@@ -99,14 +97,6 @@ export default function ManageBooksPage() {
         </select>
 
         <input className="input" type="number" min={1} placeholder="Total copies" value={form.totalCopies} onChange={(e) => updateField("totalCopies", Number(e.target.value))} />
-        <input className="input" type="number" min={0} placeholder="Available copies" value={form.availableCopies} onChange={(e) => updateField("availableCopies", Number(e.target.value))} />
-
-        <textarea
-          className="input md:col-span-2"
-          placeholder="Description"
-          value={form.description}
-          onChange={(e) => updateField("description", e.target.value)}
-        />
 
         <button className="rounded-xl bg-[#002b5c] px-5 py-3 font-bold text-white md:col-span-2">
           Create Book

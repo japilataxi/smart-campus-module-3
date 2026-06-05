@@ -94,6 +94,41 @@ export class ProxyController {
     });
   }
 
+  @Get('library/:resource/:id')
+  @ApiOperation({ summary: 'Forward GET by id requests to library-service' })
+  proxyLibraryGetById(
+    @Param('resource') resource: string,
+    @Param('id') id: string,
+    @Headers('authorization') authorization?: string,
+  ) {
+    const baseUrl = process.env.LIBRARY_SERVICE_URL || 'http://localhost:3002';
+
+    return this.proxyService.forwardRequest({
+      method: 'GET',
+      targetUrl: `${baseUrl}/${resource}/${id}`,
+      authorization,
+    });
+  }
+
+@Patch('library/:resource/:id/:action')
+@ApiOperation({ summary: 'Forward PATCH action requests to library-service' })
+proxyLibraryPatchAction(
+  @Param('resource') resource: string,
+  @Param('id') id: string,
+  @Param('action') action: string,
+  @Body() body: unknown,
+  @Headers('authorization') authorization?: string,
+) {
+  const baseUrl = process.env.LIBRARY_SERVICE_URL || 'http://localhost:3002';
+
+  return this.proxyService.forwardRequest({
+    method: 'PATCH',
+    targetUrl: `${baseUrl}/${resource}/${id}/${action}`,
+    body,
+    authorization,
+  });
+}
+
   @Get('library/:resource')
   @ApiOperation({ summary: 'Forward GET requests to library-service' })
   proxyLibraryGet(
@@ -107,5 +142,5 @@ export class ProxyController {
       targetUrl: `${baseUrl}/${resource}`,
       authorization,
     });
-  }
+  }  
 }

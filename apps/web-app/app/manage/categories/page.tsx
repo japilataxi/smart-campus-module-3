@@ -19,7 +19,6 @@ export default function ManageCategoriesPage() {
 
     await api.createCategory({
       name,
-      description,
     });
 
     setName("");

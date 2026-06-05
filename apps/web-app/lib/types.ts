@@ -1,11 +1,21 @@
 export type UserRole = "student" | "librarian" | "admin";
 
-export interface User {
+export interface RoleObject {
   id?: string;
+  name: UserRole | string;
+}
+
+export interface User {
+  id: string;
   firstName: string;
   lastName: string;
   email: string;
-  role?: UserRole;
+  roles?: UserRole[] | RoleObject[];
+}
+
+export interface NormalizedUser extends User {
+  normalizedRoles: UserRole[];
+  primaryRole: UserRole;
 }
 
 export interface LoginRequest {
@@ -21,9 +31,9 @@ export interface RegisterRequest {
 }
 
 export interface AuthResponse {
-  accessToken?: string;
-  token?: string;
-  user?: User;
+  user: User;
+  accessToken: string;
+  refreshToken?: string;
 }
 
 export interface Book {
@@ -33,21 +43,14 @@ export interface Book {
   description?: string;
   availableCopies?: number;
   totalCopies?: number;
-  author?: {
-    id: string;
-    name: string;
-  };
-  category?: {
-    id: string;
-    name: string;
-  };
+  author?: { id: string; name: string };
+  category?: { id: string; name: string };
 }
 
-export interface Loan {
+export interface AppUser {
   id: string;
-  book?: Book;
-  userId?: string;
-  status?: string;
-  loanDate?: string;
-  returnDate?: string;
+  firstName: string;
+  lastName: string;
+  email: string;
+  roles?: UserRole[] | RoleObject[];
 }

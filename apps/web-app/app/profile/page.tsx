@@ -22,7 +22,7 @@ export default function ProfilePage() {
           <ProfileRow label="First Name" value={user?.firstName} />
           <ProfileRow label="Last Name" value={user?.lastName} />
           <ProfileRow label="Email" value={user?.email} />
-          <ProfileRow label="Role" value={user?.role || "student"} />
+          <ProfileRow label="Role" value={user?.roles?.join(", ") || "student"}/>
         </div>
       </section>
     </AppShell>

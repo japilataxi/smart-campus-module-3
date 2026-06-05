@@ -13,3 +13,15 @@ input,
 button {
   font: inherit;
 }
+
+.input {
+  border: 1px solid #cbd5e1;
+  border-radius: 0.75rem;
+  padding: 0.75rem 1rem;
+  outline: none;
+  background: white;
+}
+
+.input:focus {
+  border-color: #f4c430;
+}

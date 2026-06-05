@@ -34,7 +34,11 @@ export class AuthService {
       email: user.email,
     });
 
-    const tokens = await this.generateTokens(user.id, user.email);
+    const tokens = await this.generateTokens(
+      user.id,
+      user.email,
+      user.roles?.map((role) => role.name) || [],
+    );
 
     return {
       user: this.sanitizeUser(user),
@@ -66,7 +70,11 @@ export class AuthService {
       email: user.email,
     });
 
-    const tokens = await this.generateTokens(user.id, user.email);
+    const tokens = await this.generateTokens(
+      user.id,
+      user.email,
+      user.roles?.map((role) => role.name) || [],
+    );
 
     return {
       user: this.sanitizeUser(user),
@@ -84,11 +92,11 @@ export class AuthService {
     return this.sanitizeUser(user);
   }
 
-    private async generateTokens(userId: string, email: string) {
+    private async generateTokens(userId: string, email: string, roles: string[]) {
     const payload = {
-        sub: userId,
-        email,
-        roles: ['student'],
+      sub: userId,
+      email,
+      roles,
     };
 
     return {

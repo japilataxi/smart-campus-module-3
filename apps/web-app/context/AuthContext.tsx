@@ -8,12 +8,23 @@ import {
   ReactNode,
 } from "react";
 import { useRouter } from "next/navigation";
-import { api, getToken, removeToken, setToken } from "@/lib/api";
-import { LoginRequest, RegisterRequest, User } from "@/lib/types";
+import { api, removeSession, setSession } from "@/lib/api";
+import {
+  LoginRequest,
+  NormalizedUser,
+  RegisterRequest,
+  User,
+  UserRole,
+} from "@/lib/types";
 
 interface AuthContextValue {
-  user: User | null;
+  user: NormalizedUser | null;
   loading: boolean;
+  roles: UserRole[];
+  primaryRole: UserRole;
+  isAdmin: boolean;
+  isLibrarian: boolean;
+  isStudent: boolean;
   login: (data: LoginRequest) => Promise<void>;
   register: (data: RegisterRequest) => Promise<void>;
   logout: () => void;
@@ -22,40 +33,101 @@ interface AuthContextValue {
 
 const AuthContext = createContext<AuthContextValue | null>(null);
 
-function normalizeToken(response: any) {
-  return response.accessToken || response.token || response.access_token;
+const validRoles: UserRole[] = ["admin", "librarian", "student"];
+
+function normalizeRoles(user?: User | null): UserRole[] {
+  if (!user?.roles || !Array.isArray(user.roles)) return ["student"];
+
+  const roles = user.roles
+    .map((role: any) => {
+      if (typeof role === "string") return role;
+      return role?.name;
+    })
+    .filter((role: string) => validRoles.includes(role as UserRole));
+
+  return roles.length > 0 ? (roles as UserRole[]) : ["student"];
+}
+
+function getPrimaryRole(roles: UserRole[]): UserRole {
+  if (roles.includes("admin")) return "admin";
+  if (roles.includes("librarian")) return "librarian";
+  return "student";
+}
+
+function normalizeUser(user: User): NormalizedUser {
+  const normalizedRoles = normalizeRoles(user);
+
+  return {
+    ...user,
+    normalizedRoles,
+    primaryRole: getPrimaryRole(normalizedRoles),
+  };
 }
 
 export function AuthProvider({ children }: { children: ReactNode }) {
   const router = useRouter();
-  const [user, setUser] = useState<User | null>(null);
+
+  const [user, setUser] = useState<NormalizedUser | null>(null);
   const [loading, setLoading] = useState(true);
 
+  const roles = user?.normalizedRoles || [];
+  const primaryRole = user?.primaryRole || "student";
+
   async function refreshProfile() {
-    const profile = await api.profile();
-    setUser(profile.user || profile);
+    const profileResponse = await api.profile();
+    const profileUser = profileResponse.user || profileResponse;
+    const normalized = normalizeUser(profileUser);
+
+    setUser(normalized);
+
+    setSession({
+      accessToken: localStorage.getItem("smart_campus_access_token") || "",
+      refreshToken: localStorage.getItem("smart_campus_refresh_token") || "",
+      user: normalized,
+      roles: normalized.normalizedRoles,
+    });
   }
 
   async function login(data: LoginRequest) {
     const response = await api.login(data);
-    const token = normalizeToken(response);
 
-    if (!token) {
-      throw new Error("Token was not returned by the API.");
+    const accessToken =
+      response.accessToken || response.token || response.access_token;
+
+    if (!accessToken) {
+      throw new Error("Access token was not returned by the API.");
     }
 
-    setToken(token);
-    await refreshProfile();
+    const normalized = normalizeUser(response.user);
+
+    setSession({
+      accessToken,
+      refreshToken: response.refreshToken,
+      user: normalized,
+      roles: normalized.normalizedRoles,
+    });
+
+    setUser(normalized);
     router.push("/dashboard");
   }
 
   async function register(data: RegisterRequest) {
     const response = await api.register(data);
-    const token = normalizeToken(response);
 
-    if (token) {
-      setToken(token);
-      await refreshProfile();
+    const accessToken =
+      response.accessToken || response.token || response.access_token;
+
+    if (accessToken && response.user) {
+      const normalized = normalizeUser(response.user);
+
+      setSession({
+        accessToken,
+        refreshToken: response.refreshToken,
+        user: normalized,
+        roles: normalized.normalizedRoles,
+      });
+
+      setUser(normalized);
       router.push("/dashboard");
       return;
     }
@@ -64,7 +136,7 @@ export function AuthProvider({ children }: { children: ReactNode }) {
   }
 
   function logout() {
-    removeToken();
+    removeSession();
     setUser(null);
     router.push("/login");
   }
@@ -72,13 +144,13 @@ export function AuthProvider({ children }: { children: ReactNode }) {
   useEffect(() => {
     async function loadSession() {
       try {
-        const token = getToken();
+        const token = localStorage.getItem("smart_campus_access_token");
 
         if (token) {
           await refreshProfile();
         }
       } catch {
-        removeToken();
+        removeSession();
       } finally {
         setLoading(false);
       }
@@ -89,7 +161,19 @@ export function AuthProvider({ children }: { children: ReactNode }) {
 
   return (
     <AuthContext.Provider
-      value={{ user, loading, login, register, logout, refreshProfile }}
+      value={{
+        user,
+        loading,
+        roles,
+        primaryRole,
+        isAdmin: roles.includes("admin"),
+        isLibrarian: roles.includes("librarian"),
+        isStudent: roles.includes("student"),
+        login,
+        register,
+        logout,
+        refreshProfile,
+      }}
     >
       {children}
     </AuthContext.Provider>

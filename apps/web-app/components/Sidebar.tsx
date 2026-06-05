@@ -8,41 +8,61 @@ import {
   LayoutDashboard,
   LogOut,
   User,
+  Users,
+  Shield,
+  LibraryBig,
+  Tags,
+  NotebookTabs,
 } from "lucide-react";
 import { useAuth } from "@/context/AuthContext";
 import clsx from "clsx";
 
-const links = [
-  {
-    href: "/dashboard",
-    label: "Dashboard",
-    icon: LayoutDashboard,
-  },
-  {
-    href: "/library",
-    label: "Library",
-    icon: BookOpen,
-  },
-  {
-    href: "/profile",
-    label: "Profile",
-    icon: User,
-  },
-];
+const menuByRole = {
+  student: [
+    { href: "/dashboard", label: "Dashboard", icon: LayoutDashboard },
+    { href: "/library", label: "Library", icon: BookOpen },
+    { href: "/profile", label: "Profile", icon: User },
+  ],
+  librarian: [
+    { href: "/dashboard", label: "Dashboard", icon: LayoutDashboard },
+    { href: "/library", label: "Library", icon: BookOpen },
+    { href: "/manage/books", label: "Manage Books", icon: LibraryBig },
+    { href: "/manage/authors", label: "Manage Authors", icon: NotebookTabs },
+    { href: "/manage/categories", label: "Manage Categories", icon: Tags },
+    { href: "/loans", label: "Loans", icon: Shield },
+    { href: "/profile", label: "Profile", icon: User },
+  ],
+  admin: [
+    { href: "/dashboard", label: "Dashboard", icon: LayoutDashboard },
+    { href: "/admin/users", label: "Users", icon: Users },
+    { href: "/admin/roles", label: "Roles", icon: Shield },
+    { href: "/library", label: "Library", icon: BookOpen },
+    { href: "/manage/books", label: "Manage Books", icon: LibraryBig },
+    { href: "/manage/authors", label: "Manage Authors", icon: NotebookTabs },
+    { href: "/manage/categories", label: "Manage Categories", icon: Tags },
+    { href: "/loans", label: "Loans", icon: Shield },
+    { href: "/profile", label: "Profile", icon: User },
+  ],
+};
 
 export function Sidebar() {
   const pathname = usePathname();
-  const { logout } = useAuth();
+  const { logout, primaryRole } = useAuth();
+
+  const links = menuByRole[primaryRole];
 
   return (
-    <aside className="hidden min-h-screen w-72 bg-campus-navy text-white md:flex md:flex-col">
+    <aside className="hidden min-h-screen w-72 bg-gradient-to-b from-[#002b5c] via-[#003b7a] to-[#8b0000] text-white md:flex md:flex-col">
       <div className="flex items-center gap-3 border-b border-white/10 p-6">
-        <div className="rounded-xl bg-campus-gold p-3 text-campus-navy">
+        <div className="rounded-xl bg-[#f4c430] p-3 text-[#002b5c]">
           <GraduationCap />
         </div>
+
         <div>
           <h1 className="text-lg font-bold">Smart Campus</h1>
-          <p className="text-sm text-white/70">Module 3</p>
+          <p className="text-sm capitalize text-white/70">
+            {primaryRole} panel
+          </p>
         </div>
       </div>
 
@@ -58,7 +78,7 @@ export function Sidebar() {
               className={clsx(
                 "flex items-center gap-3 rounded-xl px-4 py-3 transition",
                 active
-                  ? "bg-campus-gold text-campus-navy"
+                  ? "bg-[#f4c430] text-[#002b5c]"
                   : "text-white/80 hover:bg-white/10"
               )}
             >

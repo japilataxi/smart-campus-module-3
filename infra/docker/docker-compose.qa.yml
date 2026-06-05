@@ -33,6 +33,7 @@ services:
       REDIS_PORT: 6379
       JWT_SECRET: change_me
       JWT_REFRESH_SECRET: change_me_refresh
+      ADMIN_EMAILS: kevin.amaguana@uce.edu.ec,japilataxi@uce.edu.ec,admin2026@uce.edu.ec
     depends_on:
       - auth-db
       - redis

@@ -5,10 +5,9 @@ import {
   Headers,
   Param,
   Post,
-  Req,
+  Patch,
 } from '@nestjs/common';
 import { ApiOperation, ApiTags } from '@nestjs/swagger';
-import { Request } from 'express';
 
 import { ProxyService } from './proxy.service';
 
@@ -16,6 +15,35 @@ import { ProxyService } from './proxy.service';
 @Controller('api')
 export class ProxyController {
   constructor(private readonly proxyService: ProxyService) {}
+
+  @Get('auth/users')
+  @ApiOperation({ summary: 'Forward GET users to auth-service' })
+  proxyUsersGet(@Headers('authorization') authorization?: string) {
+    const baseUrl = process.env.AUTH_SERVICE_URL || 'http://localhost:3001';
+
+    return this.proxyService.forwardRequest({
+      method: 'GET',
+      targetUrl: `${baseUrl}/users`,
+      authorization,
+    });
+  }
+
+  @Patch('auth/users/:id/roles')
+  @ApiOperation({ summary: 'Forward PATCH user roles to auth-service' })
+  proxyUserRolesPatch(
+    @Param('id') id: string,
+    @Body() body: unknown,
+    @Headers('authorization') authorization?: string,
+  ) {
+    const baseUrl = process.env.AUTH_SERVICE_URL || 'http://localhost:3001';
+
+    return this.proxyService.forwardRequest({
+      method: 'PATCH',
+      targetUrl: `${baseUrl}/users/${id}/roles`,
+      body,
+      authorization,
+    });
+  }
 
   @Post('auth/:path')
   @ApiOperation({ summary: 'Forward POST requests to auth-service' })
@@ -56,8 +84,7 @@ export class ProxyController {
     @Body() body: unknown,
     @Headers('authorization') authorization?: string,
   ) {
-    const baseUrl =
-      process.env.LIBRARY_SERVICE_URL || 'http://localhost:3002';
+    const baseUrl = process.env.LIBRARY_SERVICE_URL || 'http://localhost:3002';
 
     return this.proxyService.forwardRequest({
       method: 'POST',
@@ -73,8 +100,7 @@ export class ProxyController {
     @Param('resource') resource: string,
     @Headers('authorization') authorization?: string,
   ) {
-    const baseUrl =
-      process.env.LIBRARY_SERVICE_URL || 'http://localhost:3002';
+    const baseUrl = process.env.LIBRARY_SERVICE_URL || 'http://localhost:3002';
 
     return this.proxyService.forwardRequest({
       method: 'GET',

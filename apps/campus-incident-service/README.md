@@ -1,147 +1,65 @@
 # Campus Incident Service
 
-## Description
+## Descripción
 
-Campus Incident Service is a microservice developed with NestJS for managing incidents reported within the Smart Campus platform.
+Campus Incident Service es un microservicio del proyecto Smart Campus Module 3.  
+Su función principal es gestionar incidentes reportados dentro del campus universitario.
 
-The service allows users to create, retrieve, update, and delete incidents through a REST API.
+Permite registrar, consultar, actualizar y eliminar incidentes mediante una API REST desarrollada con NestJS.
 
----
+## Tecnologías utilizadas
 
-## Technologies
+- NestJS
+- TypeScript
+- PostgreSQL
+- TypeORM
+- Swagger
+- Docker
+- Docker Compose
+- GitHub Actions
+- Terraform
+- AWS
 
-* NestJS
-* TypeScript
-* PostgreSQL
-* TypeORM
-* Swagger
-* Docker
-* GitHub Actions
-* AWS
+## Funcionalidades
 
----
+- Crear incidentes
+- Listar incidentes
+- Consultar incidente por ID
+- Actualizar incidente
+- Eliminar incidente
+- Documentación con Swagger
+- Health Check
+- Métricas del servicio
+- Integración con frontend
 
-## Features
+## Endpoints principales
 
-* Create incidents
-* List incidents
-* Get incident by ID
-* Update incidents
-* Delete incidents
-* Health check endpoint
-* Metrics endpoint
-* Swagger documentation
+| Método | Endpoint | Descripción |
+|---|---|---|
+| POST | `/incidents` | Crear incidente |
+| GET | `/incidents` | Listar incidentes |
+| GET | `/incidents/:id` | Consultar incidente por ID |
+| PATCH | `/incidents/:id` | Actualizar incidente |
+| DELETE | `/incidents/:id` | Eliminar incidente |
+| GET | `/health` | Verificar estado del servicio |
+| GET | `/metrics` | Ver métricas del servicio |
 
----
+## Modelo de datos
 
-## API Endpoints
+El microservicio maneja la entidad `Incident` con los siguientes campos:
 
-### Incidents
+| Campo | Descripción |
+|---|---|
+| id | Identificador único |
+| title | Título del incidente |
+| description | Descripción del incidente |
+| location | Ubicación del incidente |
+| status | Estado del incidente |
+| createdAt | Fecha de creación |
 
-| Method | Endpoint       |
-| ------ | -------------- |
-| POST   | /incidents     |
-| GET    | /incidents     |
-| GET    | /incidents/:id |
-| PATCH  | /incidents/:id |
-| DELETE | /incidents/:id |
-
-### Monitoring
-
-| Method | Endpoint |
-| ------ | -------- |
-| GET    | /health  |
-| GET    | /metrics |
-
----
-
-## Environment Variables
+## Variables de entorno
 
 ```env
-DATABASE_URL=postgresql://postgres:postgres@localhost:5435/campus_incidents_db
 PORT=3020
-```
-
-## Run Locally
-
-Install dependencies:
-
-```bash
-pnpm install
-```
-
-Run development server:
-
-```bash
-pnpm run start:dev
-```
-
-Application URL:
-
-```text
-http://localhost:3020
-```
-
----
-
-## Swagger Documentation
-
-Swagger UI:
-
-```text
-http://localhost:3020/docs
-```
-
----
-
-## Docker
-
-Build image:
-
-```bash
-docker build -t campus-incident-service .
-```
-
-Run container:
-
-```bash
-docker run -p 3020:3020 campus-incident-service
-```
-
----
-
-## Database
-
-Database Engine:
-
-* PostgreSQL 16
-
-Database Name:
-
-```text
-campus_incidents_db
-```
-
----
-
-## Project Structure
-
-```text
-src
-├── incidents
-│   ├── dto
-│   ├── entities
-│   ├── incidents.controller.ts
-│   ├── incidents.service.ts
-│   └── incidents.module.ts
-├── health
-├── metrics
-├── app.module.ts
-└── main.ts
-```
-
----
-
-## Author
-
-Smart Campus Project – Group 3 Diego Lema
+DATABASE_URL=postgresql://incident_user:incident_password@campus-incident-db:5432/campus_incidents_db
+JWT_SECRET=change_me

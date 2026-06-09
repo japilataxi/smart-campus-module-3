@@ -5,6 +5,7 @@ allowBuilds:
   '@nestjs/core': true
   '@scarf/scarf': true
   bcrypt: true
+  electron: false
   msgpackr-extract: false
   sharp: true
   unrs-resolver: true

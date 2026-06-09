@@ -1,7 +1,3 @@
-Sí. Para un proyecto universitario de microservicios, te recomiendo un README profesional que incluya arquitectura, tecnologías, ejecución local, Docker, puertos y endpoints.
-
-Puedes crear un `README.md` en la raíz con algo parecido a esto:
-
 # Smart Campus Module 3
 
 ## Overview
@@ -373,4 +369,3 @@ Academic Project – Universidad Central del Ecuador (UCE)
 
 ---
 
-Este README ya tiene nivel suficiente para presentar el proyecto y también te servirá cuando hagas la entrega de Terraform y AWS Academy.

@@ -13,6 +13,7 @@ import {
   LibraryBig,
   Tags,
   NotebookTabs,
+  WalletCards,
 } from "lucide-react";
 import { useAuth } from "@/context/AuthContext";
 import clsx from "clsx";
@@ -22,6 +23,7 @@ const menuByRole = {
     { href: "/dashboard", label: "Dashboard", icon: LayoutDashboard },
     { href: "/library", label: "Library", icon: BookOpen },
     { href: "/profile", label: "Profile", icon: User },
+    { href: "/loans", label: "My Loans", icon: WalletCards },
   ],
   librarian: [
     { href: "/dashboard", label: "Dashboard", icon: LayoutDashboard },
@@ -31,6 +33,7 @@ const menuByRole = {
     { href: "/manage/categories", label: "Manage Categories", icon: Tags },
     { href: "/loans", label: "Loans", icon: Shield },
     { href: "/profile", label: "Profile", icon: User },
+    { href: "/loans", label: "Loans", icon: WalletCards },
   ],
   admin: [
     { href: "/dashboard", label: "Dashboard", icon: LayoutDashboard },
@@ -42,6 +45,7 @@ const menuByRole = {
     { href: "/manage/categories", label: "Manage Categories", icon: Tags },
     { href: "/loans", label: "Loans", icon: Shield },
     { href: "/profile", label: "Profile", icon: User },
+    { href: "/loans", label: "Loans", icon: WalletCards },
   ],
 };
 

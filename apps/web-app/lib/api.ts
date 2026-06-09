@@ -85,6 +85,16 @@ export const api = {
 
   getLoans: () => request<any[]>("/library/loans"),
 
+  // NUEVO
+  getLoanById: (id: string) =>
+    request<any>(`/library/loans/${id}`),
+
+  // NUEVO
+  returnLoan: (id: string) =>
+    request<any>(`/library/loans/${id}/return`, {
+      method: "PATCH",
+    }),
+
   getAuthors: () => request<any[]>("/library/authors"),
 
   getCategories: () => request<any[]>("/library/categories"),
@@ -104,10 +114,10 @@ export const api = {
     }),
 
   createCategory: (data: { name: string }) =>
-  request<any>("/library/categories", {
-    method: "POST",
-    body: JSON.stringify(data),
-  }),
+    request<any>("/library/categories", {
+      method: "POST",
+      body: JSON.stringify(data),
+    }),
 
   createBook: (data: {
     title: string;

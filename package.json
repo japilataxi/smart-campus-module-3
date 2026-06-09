@@ -9,9 +9,14 @@
   },
   "devDependencies": {
     "@types/bcrypt": "^6.0.0",
+    "@types/jest": "29.5.14",
     "@types/passport-jwt": "^4.0.1",
     "eslint": "latest",
+    "jest": "29.7.0",
+    "jest-environment-node": "29.7.0",
+    "jest-runtime": "29.7.0",
     "prettier": "latest",
+    "ts-jest": "29.2.5",
     "turbo": "latest",
     "typescript": "latest"
   },

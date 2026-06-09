@@ -13,9 +13,11 @@ services:
       PORT: 3000
       AUTH_SERVICE_URL: http://auth-service:3001
       LIBRARY_SERVICE_URL: http://library-service:3002
+      CAMPUS_INCIDENT_SERVICE_URL: http://campus-incident-service:3020
     depends_on:
       - auth-service
       - library-service
+      - campus-incident-service
 
   auth-service:
     build:
@@ -56,6 +58,22 @@ services:
       - library-db
       - redis
 
+  campus-incident-service:
+    build:
+      context: ../../
+      dockerfile: apps/campus-incident-service/Dockerfile
+      args:
+        APP_NAME: campus-incident-service
+    ports:
+      - "3020:3020"
+    environment:
+      SERVICE_NAME: campus-incident-service
+      PORT: 3020
+      DATABASE_URL: postgresql://incident_user:incident_password@campus-incident-db:5432/campus_incidents_db
+      JWT_SECRET: change_me
+    depends_on:
+      - campus-incident-db
+
   web-app:
     build:
       context: ../../
@@ -86,6 +104,15 @@ services:
       POSTGRES_PASSWORD: library_password
     ports:
       - "5434:5432"
+  
+  campus-incident-db:
+    image: postgres:16
+    environment:
+      POSTGRES_DB: campus_incidents_db
+      POSTGRES_USER: incident_user
+      POSTGRES_PASSWORD: incident_password
+    ports:
+      - "5436:5432"
 
   redis:
     image: redis:7-alpine

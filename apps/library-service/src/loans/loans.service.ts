@@ -1,4 +1,8 @@
-import { Injectable } from '@nestjs/common';
+import {
+  BadRequestException,
+  Injectable,
+  NotFoundException,
+} from '@nestjs/common';
 
 import { InjectRepository } from '@nestjs/typeorm';
 import { Repository } from 'typeorm';
@@ -18,17 +22,12 @@ export class LoansService {
   ) {}
 
   async create(dto: CreateLoanDto) {
-    await this.booksService.decreaseAvailability(
-      dto.bookId,
-    );
+    await this.booksService.decreaseAvailability(dto.bookId);
 
     const today = new Date();
-
     const dueDate = new Date();
 
-    dueDate.setDate(
-      dueDate.getDate() + 14,
-    );
+    dueDate.setDate(dueDate.getDate() + 14);
 
     const loan = this.repository.create({
       userEmail: dto.userEmail,
@@ -43,5 +42,31 @@ export class LoansService {
 
   findAll() {
     return this.repository.find();
+  }
+
+  async findById(id: string) {
+    const loan = await this.repository.findOne({
+      where: { id },
+    });
+
+    if (!loan) {
+      throw new NotFoundException('Loan not found');
+    }
+
+    return loan;
+  }
+
+  async returnLoan(id: string) {
+    const loan = await this.findById(id);
+
+    if (loan.returned) {
+      throw new BadRequestException('Loan already returned');
+    }
+
+    loan.returned = true;
+
+    await this.booksService.increaseAvailability(loan.bookId);
+
+    return this.repository.save(loan);
   }
 }

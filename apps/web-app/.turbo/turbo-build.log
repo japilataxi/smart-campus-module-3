@@ -7,23 +7,37 @@ $ next build
    * C:\Users\USUARIO\Desktop\smart-campus-module-3\pnpm-workspace.yaml
 
 ▲ Next.js 16.2.7 (Turbopack)
+- Environments: .env.local
 
   Creating an optimized production build ...
-✓ Compiled successfully in 10.6s
+✓ Compiled successfully in 11.3s
   Running TypeScript ...
-  Finished TypeScript in 2.3s ...
-  Collecting page data using 5 workers ...
-  Generating static pages using 5 workers (0/4) ...
-  Generating static pages using 5 workers (1/4) 
-  Generating static pages using 5 workers (2/4) 
-  Generating static pages using 5 workers (3/4) 
-✓ Generating static pages using 5 workers (4/4) in 642ms
+  Finished TypeScript in 26.8s ...
+  Collecting page data using 7 workers ...
+  Generating static pages using 7 workers (0/15) ...
+  Generating static pages using 7 workers (3/15) 
+  Generating static pages using 7 workers (7/15) 
+  Generating static pages using 7 workers (11/15) 
+✓ Generating static pages using 7 workers (15/15) in 814ms
   Finalizing page optimization ...
 
 Route (app)
 ┌ ○ /
-└ ○ /_not-found
+├ ○ /_not-found
+├ ○ /admin/roles
+├ ○ /admin/users
+├ ○ /dashboard
+├ ○ /library
+├ ƒ /library/[id]
+├ ○ /loans
+├ ○ /login
+├ ○ /manage/authors
+├ ○ /manage/books
+├ ○ /manage/categories
+├ ○ /profile
+└ ○ /register
 
 
-○  (Static)  prerendered as static content
+○  (Static)   prerendered as static content
+ƒ  (Dynamic)  server-rendered on demand
 

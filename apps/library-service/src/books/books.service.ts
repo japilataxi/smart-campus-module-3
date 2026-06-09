@@ -91,4 +91,20 @@ export class BooksService {
 
     return this.repository.save(book);
   }
+
+  async increaseAvailability(id: string) {
+  const book = await this.findById(id);
+
+  if (!book) {
+    throw new NotFoundException('Book not found');
+  }
+
+  book.availableCopies++;
+
+  if (book.availableCopies > book.totalCopies) {
+    book.availableCopies = book.totalCopies;
+  }
+
+  return this.repository.save(book);
+}
 }

@@ -29,4 +29,7 @@ export class Loan {
 
   @CreateDateColumn()
   createdAt!: Date;
+
+  @Column({ nullable: true })
+  returnedAt?: Date;
 }

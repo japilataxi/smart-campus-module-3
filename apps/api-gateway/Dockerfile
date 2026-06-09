@@ -12,7 +12,7 @@ RUN pnpm install --frozen-lockfile
 
 ARG APP_NAME
 
-RUN pnpm --filter ${APP_NAME} build
+RUN pnpm --dir apps/api-gateway build
 
 FROM node:22-alpine
 
@@ -32,4 +32,4 @@ ENV APP_NAME=${APP_NAME}
 
 EXPOSE 3000
 
-CMD pnpm --filter ${APP_NAME} start:prod
+CMD ["pnpm", "--dir", "apps/api-gateway", "start:prod"]

@@ -1,0 +1,14 @@
+{
+  "name": "desktop-app",
+  "version": "1.0.0",
+  "private": true,
+  "main": "src/main.js",
+  "scripts": {
+    "dev": "electron src/main.js",
+    "start": "electron .",
+    "build": "echo \"Desktop app build skipped for QA\""
+  },
+  "devDependencies": {
+    "electron": "^28.3.3"
+  }
+}

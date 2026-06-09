@@ -1,0 +1,87 @@
+name: CI
+
+on:
+  push:
+    branches:
+      - dev
+      - qa
+      - main
+      - "feature/**"
+
+  pull_request:
+    branches:
+      - dev
+      - qa
+      - main
+
+jobs:
+  build-test:
+    runs-on: ubuntu-latest
+
+    services:
+      postgres-auth:
+        image: postgres:16
+        env:
+          POSTGRES_DB: auth_db
+          POSTGRES_USER: auth_user
+          POSTGRES_PASSWORD: auth_password
+        ports:
+          - 5433:5432
+
+      postgres-library:
+        image: postgres:16
+        env:
+          POSTGRES_DB: library_db
+          POSTGRES_USER: library_user
+          POSTGRES_PASSWORD: library_password
+        ports:
+          - 5434:5432
+
+      redis:
+        image: redis:7
+        ports:
+          - 6379:6379
+
+    env:
+      AUTH_DATABASE_URL: postgresql://auth_user:auth_password@localhost:5433/auth_db
+      LIBRARY_DATABASE_URL: postgresql://library_user:library_password@localhost:5434/library_db
+      DATABASE_URL: postgresql://auth_user:auth_password@localhost:5433/auth_db
+      REDIS_HOST: localhost
+      REDIS_PORT: 6379
+      JWT_SECRET: test_secret
+      JWT_REFRESH_SECRET: test_refresh_secret
+      ADMIN_EMAILS: kevin.amaguana@uce.edu.ec,japilataxi@uce.edu.ec,admin2026@uce.edu.ec
+      NEXT_PUBLIC_API_URL: http://localhost:3000/api
+
+    steps:
+      - uses: actions/checkout@v4
+
+      - uses: pnpm/action-setup@v4
+        with:
+          version: 11.5.1
+
+      - uses: actions/setup-node@v4
+        with:
+          node-version: 22
+          cache: pnpm
+
+      - name: Install dependencies
+        run: pnpm install --frozen-lockfile
+
+      - name: Build backend and web
+        run: |
+          pnpm --filter api-gateway build
+          pnpm --filter auth-service build
+          pnpm --filter library-service build
+          pnpm --filter web-app build
+
+      - name: Run unit tests
+        run: |
+          pnpm --filter api-gateway test
+          pnpm --filter auth-service test
+          pnpm --filter library-service test
+
+      - name: Run e2e tests
+        run: |
+          pnpm --filter auth-service test:e2e
+          pnpm --filter library-service test:e2e

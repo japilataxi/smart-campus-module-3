@@ -4,10 +4,10 @@
   "private": true,
   "main": "src/main.js",
   "scripts": {
-    "dev": "electron .",
+    "dev": "electron src/main.js",
     "start": "electron ."
   },
   "devDependencies": {
-    "electron": "^31.7.7"
+    "electron": "^28.3.3"
   }
 }

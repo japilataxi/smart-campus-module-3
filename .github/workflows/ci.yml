@@ -37,6 +37,15 @@ jobs:
         ports:
           - 5434:5432
 
+      postgres-incident:
+        image: postgres:16
+        env:
+          POSTGRES_DB: campus_incidents_db
+          POSTGRES_USER: incident_user
+          POSTGRES_PASSWORD: incident_password
+        ports:
+          - 5435:5432
+
       redis:
         image: redis:7
         ports:
@@ -63,3 +72,7 @@ jobs:
       - run: pnpm --filter auth-service test:e2e
 
       - run: pnpm --filter library-service test:e2e
+
+      - run: pnpm --filter campus-incident-service build
+        env:
+          DATABASE_URL: postgresql://incident_user:incident_password@localhost:5435/campus_incidents_db

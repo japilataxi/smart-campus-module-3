@@ -39,7 +39,6 @@ export class AuthService {
       user.email,
       user.roles?.map((role) => role.name) || [],
     );
-
     return {
       user: this.sanitizeUser(user),
       ...tokens,
@@ -71,10 +70,10 @@ export class AuthService {
     });
 
     const tokens = await this.generateTokens(
-      user.id,
-      user.email,
-      user.roles?.map((role) => role.name) || [],
-    );
+        user.id,
+        user.email,
+        user.roles?.map((role) => role.name) || [],
+      );
 
     return {
       user: this.sanitizeUser(user),

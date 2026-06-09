@@ -6,6 +6,7 @@ import {
   HttpCode,
   HttpStatus,
   Param,
+  Patch,
   Post,
   UseGuards,
 } from '@nestjs/common';
@@ -24,6 +25,7 @@ import { RolesGuard } from '../auth/guards/roles.guard';
 import { Role } from '../common/enums/role.enum';
 import { GenerateQrAccessDto } from './dto/generate-qr-access.dto';
 import { QrAccessResponseDto } from './dto/qr-access-response.dto';
+import { RevokeQrAccessDto } from './dto/revoke-qr-access.dto';
 import { ValidateQrAccessDto } from './dto/validate-qr-access.dto';
 import { QrAccessService } from './qr-access.service';
 
@@ -48,6 +50,14 @@ export class QrAccessController {
   @ApiOkResponse({ type: QrAccessResponseDto })
   validate(@Body() dto: ValidateQrAccessDto) {
     return this.qrAccessService.validate(dto);
+  }
+
+  @Patch(':id/revoke')
+  @Roles(Role.ADMIN)
+  @ApiOperation({ summary: 'Revoke an active QR access record' })
+  @ApiOkResponse({ type: QrAccessResponseDto })
+  revoke(@Param('id') id: string, @Body() dto: RevokeQrAccessDto) {
+    return this.qrAccessService.revoke(id, dto.reason);
   }
 
   @Get('logs')

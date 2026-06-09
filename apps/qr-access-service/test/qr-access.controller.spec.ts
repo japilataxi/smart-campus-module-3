@@ -10,6 +10,7 @@ describe('QrAccessController', () => {
   const service = {
     generate: jest.fn(),
     validate: jest.fn(),
+    revoke: jest.fn(),
     findLogs: jest.fn(),
     findById: jest.fn(),
     remove: jest.fn(),

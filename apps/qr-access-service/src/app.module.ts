@@ -4,6 +4,8 @@ import { JwtModule } from '@nestjs/jwt';
 import { TypeOrmModule } from '@nestjs/typeorm';
 
 import { HealthModule } from './common/health/health.module';
+import { LoggingModule } from './common/logging/logging.module';
+import { MetricsModule } from './common/metrics/metrics.module';
 import { appConfig } from './config/app.config';
 import { databaseConfig } from './config/database.config';
 import { jwtConfig } from './config/jwt.config';
@@ -24,7 +26,9 @@ import { QrAccessModule } from './qr-access/qr-access.module';
       global: true,
       useFactory: jwtConfig,
     }),
+    LoggingModule,
     HealthModule,
+    MetricsModule,
     QrAccessModule,
   ],
 })

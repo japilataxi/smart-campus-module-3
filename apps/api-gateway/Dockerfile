@@ -5,31 +5,29 @@ WORKDIR /app
 RUN npm install -g pnpm
 
 COPY package.json pnpm-lock.yaml pnpm-workspace.yaml turbo.json ./
-COPY apps ./apps
 COPY packages ./packages
+COPY apps/api-gateway ./apps/api-gateway
 
 RUN pnpm install --frozen-lockfile
 
-ARG APP_NAME
-
 RUN pnpm --dir apps/api-gateway build
 
-FROM node:22-alpine
+FROM node:22-alpine AS runner
 
 WORKDIR /app
+
+ENV NODE_ENV=production
 
 RUN npm install -g pnpm
 
 COPY package.json pnpm-lock.yaml pnpm-workspace.yaml turbo.json ./
-COPY apps ./apps
 COPY packages ./packages
-COPY --from=builder /app/apps ./apps
+COPY apps/api-gateway/package.json ./apps/api-gateway/package.json
 
 RUN pnpm install --prod --frozen-lockfile
 
-ARG APP_NAME
-ENV APP_NAME=${APP_NAME}
+COPY --from=builder /app/apps/api-gateway/dist ./apps/api-gateway/dist
 
 EXPOSE 3000
 
-CMD ["pnpm", "--dir", "apps/api-gateway", "start:prod"]
+CMD ["node", "apps/api-gateway/dist/main.js"]

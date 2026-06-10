@@ -5,29 +5,30 @@ WORKDIR /app
 RUN npm install -g pnpm
 
 COPY package.json pnpm-lock.yaml pnpm-workspace.yaml turbo.json ./
+COPY apps ./apps
 COPY packages ./packages
-COPY apps/library-service ./apps/library-service
 
 RUN pnpm install --frozen-lockfile
 
-RUN pnpm --dir apps/library-service build
+ARG APP_NAME
 
-FROM node:22-alpine AS runner
+RUN pnpm --dir apps/library-service build
+FROM node:22-alpine
 
 WORKDIR /app
-
-ENV NODE_ENV=production
 
 RUN npm install -g pnpm
 
 COPY package.json pnpm-lock.yaml pnpm-workspace.yaml turbo.json ./
+COPY apps ./apps
 COPY packages ./packages
-COPY apps/library-service/package.json ./apps/library-service/package.json
+COPY --from=builder /app/apps ./apps
 
 RUN pnpm install --prod --frozen-lockfile
 
-COPY --from=builder /app/apps/library-service/dist ./apps/library-service/dist
+ARG APP_NAME
+ENV APP_NAME=${APP_NAME}
 
-EXPOSE 3002
+EXPOSE 3000
 
-CMD ["node", "apps/library-service/dist/main.js"]
+CMD ["pnpm", "--dir", "apps/library-service", "start:prod"]

@@ -101,8 +101,6 @@ export const api = {
 
   getUsers: () => request<any[]>("/auth/users"),
 
-  getIncidents: () => request<any[]>("/incidents"),
-
   updateUserRoles: (userId: string, roles: string[]) =>
     request<any>(`/auth/users/${userId}/roles`, {
       method: "PATCH",
@@ -137,26 +135,5 @@ export const api = {
     request<any>("/library/loans", {
       method: "POST",
       body: JSON.stringify(data),
-    }),
-
-  createIncident: (data: {
-    title: string;
-    description: string;
-    location: string;
-  }) =>
-    request<any>("/incidents", {
-      method: "POST",
-      body: JSON.stringify(data),
-    }),
-
-  updateIncident: (id: string, data: any) =>
-    request<any>(`/incidents/${id}`, {
-      method: "PATCH",
-      body: JSON.stringify(data),
-    }),
-
-  deleteIncident: (id: string) =>
-    request<any>(`/incidents/${id}`, {
-      method: "DELETE",
     }),
 };

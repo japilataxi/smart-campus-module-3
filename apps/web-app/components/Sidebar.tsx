@@ -17,6 +17,7 @@ import {
 } from "lucide-react";
 import { useAuth } from "@/context/AuthContext";
 import clsx from "clsx";
+import { AlertTriangle } from "lucide-react";
 
 const menuByRole = {
   student: [
@@ -24,6 +25,7 @@ const menuByRole = {
     { href: "/library", label: "Library", icon: BookOpen },
     { href: "/profile", label: "Profile", icon: User },
     { href: "/loans", label: "My Loans", icon: WalletCards },
+    { href: "/incidents", label: "Incidents", icon: AlertTriangle },
   ],
   librarian: [
     { href: "/dashboard", label: "Dashboard", icon: LayoutDashboard },
@@ -34,6 +36,7 @@ const menuByRole = {
     { href: "/loans", label: "Loans", icon: Shield },
     { href: "/profile", label: "Profile", icon: User },
     { href: "/loans", label: "Loans", icon: WalletCards },
+    { href: "/incidents", label: "Incidents", icon: AlertTriangle },
   ],
   admin: [
     { href: "/dashboard", label: "Dashboard", icon: LayoutDashboard },
@@ -46,6 +49,7 @@ const menuByRole = {
     { href: "/loans", label: "Loans", icon: Shield },
     { href: "/profile", label: "Profile", icon: User },
     { href: "/loans", label: "Loans", icon: WalletCards },
+    { href: "/incidents", label: "Incidents", icon: AlertTriangle },
   ],
 };
 

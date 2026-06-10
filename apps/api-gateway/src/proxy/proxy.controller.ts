@@ -6,6 +6,7 @@ import {
   Param,
   Post,
   Patch,
+  Delete,
 } from '@nestjs/common';
 import { ApiOperation, ApiTags } from '@nestjs/swagger';
 
@@ -110,24 +111,24 @@ export class ProxyController {
     });
   }
 
-@Patch('library/:resource/:id/:action')
-@ApiOperation({ summary: 'Forward PATCH action requests to library-service' })
-proxyLibraryPatchAction(
-  @Param('resource') resource: string,
-  @Param('id') id: string,
-  @Param('action') action: string,
-  @Body() body: unknown,
-  @Headers('authorization') authorization?: string,
-) {
-  const baseUrl = process.env.LIBRARY_SERVICE_URL || 'http://localhost:3002';
+  @Patch('library/:resource/:id/:action')
+  @ApiOperation({ summary: 'Forward PATCH action requests to library-service' })
+  proxyLibraryPatchAction(
+    @Param('resource') resource: string,
+    @Param('id') id: string,
+    @Param('action') action: string,
+    @Body() body: unknown,
+    @Headers('authorization') authorization?: string,
+  ) {
+    const baseUrl = process.env.LIBRARY_SERVICE_URL || 'http://localhost:3002';
 
-  return this.proxyService.forwardRequest({
-    method: 'PATCH',
-    targetUrl: `${baseUrl}/${resource}/${id}/${action}`,
-    body,
-    authorization,
-  });
-}
+    return this.proxyService.forwardRequest({
+      method: 'PATCH',
+      targetUrl: `${baseUrl}/${resource}/${id}/${action}`,
+      body,
+      authorization,
+    });
+  }
 
   @Get('library/:resource')
   @ApiOperation({ summary: 'Forward GET requests to library-service' })
@@ -143,4 +144,84 @@ proxyLibraryPatchAction(
       authorization,
     });
   }  
+
+  @Post('incidents')
+  @ApiOperation({ summary: 'Forward POST incidents to campus-incident-service' })
+  proxyIncidentPost(
+    @Body() body: unknown,
+    @Headers('authorization') authorization?: string,
+  ) {
+    const baseUrl =
+      process.env.CAMPUS_INCIDENT_SERVICE_URL || 'http://localhost:3020';
+
+    return this.proxyService.forwardRequest({
+      method: 'POST',
+      targetUrl: `${baseUrl}/incidents`,
+      body,
+      authorization,
+    });
+  }
+
+@Get('incidents')
+@ApiOperation({ summary: 'Forward GET incidents to campus-incident-service' })
+proxyIncidentsGet(@Headers('authorization') authorization?: string) {
+  const baseUrl =
+    process.env.CAMPUS_INCIDENT_SERVICE_URL || 'http://localhost:3020';
+
+  return this.proxyService.forwardRequest({
+    method: 'GET',
+    targetUrl: `${baseUrl}/incidents`,
+    authorization,
+  });
+}
+
+@Get('incidents/:id')
+@ApiOperation({ summary: 'Forward GET incident by id to campus-incident-service' })
+proxyIncidentGetById(
+  @Param('id') id: string,
+  @Headers('authorization') authorization?: string,
+) {
+  const baseUrl =
+    process.env.CAMPUS_INCIDENT_SERVICE_URL || 'http://localhost:3020';
+
+  return this.proxyService.forwardRequest({
+    method: 'GET',
+    targetUrl: `${baseUrl}/incidents/${id}`,
+    authorization,
+  });
+}
+
+@Patch('incidents/:id')
+@ApiOperation({ summary: 'Forward PATCH incident to campus-incident-service' })
+proxyIncidentPatch(
+  @Param('id') id: string,
+  @Body() body: unknown,
+  @Headers('authorization') authorization?: string,
+) {
+  const baseUrl =
+    process.env.CAMPUS_INCIDENT_SERVICE_URL || 'http://localhost:3020';
+
+  return this.proxyService.forwardRequest({
+    method: 'PATCH',
+    targetUrl: `${baseUrl}/incidents/${id}`,
+    body,
+    authorization,
+  });
+}
+
+@Delete('incidents/:id')
+@ApiOperation({ summary: 'Forward DELETE incident to campus-incident-service' })
+proxyIncidentDelete(
+  @Param('id') id: string,
+  @Headers('authorization') authorization?: string,
+) {
+  const baseUrl =
+    process.env.CAMPUS_INCIDENT_SERVICE_URL || 'http://localhost:3020';
+
+  return this.proxyService.forwardRequest({
+    method: 'DELETE',
+    targetUrl: `${baseUrl}/incidents/${id}`,
+    authorization,
+  });
+}
 }

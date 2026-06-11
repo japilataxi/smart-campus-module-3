@@ -1,0 +1,36 @@
+services:
+  campus-incident-db:
+    image: postgres:16
+    container_name: smart-campus-incident-db-qa
+    environment:
+      POSTGRES_DB: campus_incidents_db
+      POSTGRES_USER: incident_user
+      POSTGRES_PASSWORD: incident_password
+    volumes:
+      - campus_incident_db_data:/var/lib/postgresql/data
+    restart: unless-stopped
+
+  redis:
+    image: redis:7-alpine
+    container_name: smart-campus-incident-redis-qa
+    restart: unless-stopped
+
+  campus-incident-service:
+    image: japilataxi/campus-incident-service:qa
+    container_name: smart-campus-incident-service-qa
+    ports:
+      - "3020:3020"
+    environment:
+      SERVICE_NAME: campus-incident-service
+      PORT: 3020
+      DATABASE_URL: postgresql://incident_user:incident_password@campus-incident-db:5432/campus_incidents_db
+      REDIS_HOST: redis
+      REDIS_PORT: 6379
+      JWT_SECRET: change_me
+    depends_on:
+      - campus-incident-db
+      - redis
+    restart: unless-stopped
+
+volumes:
+  campus_incident_db_data:

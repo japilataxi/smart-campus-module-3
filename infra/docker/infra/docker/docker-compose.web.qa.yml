@@ -1,0 +1,11 @@
+services:
+  web-app:
+    image: japilataxi/web-app:qa
+    container_name: smart-campus-web-app-qa
+    ports:
+      - "3003:3003"
+    environment:
+      PORT: 3003
+      HOSTNAME: 0.0.0.0
+      NEXT_PUBLIC_API_URL: ${NEXT_PUBLIC_API_URL}
+    restart: unless-stopped

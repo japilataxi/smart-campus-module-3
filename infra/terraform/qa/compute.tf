@@ -63,12 +63,14 @@ resource "aws_instance" "gateway" {
   user_data = templatefile("${path.module}/templates/gateway-user-data.sh.tpl", {
     auth_private_ip    = aws_instance.auth.private_ip
     library_private_ip = aws_instance.library.private_ip
+    incident_private_ip = aws_instance.incident.private_ip
     compose_content    = file("${path.module}/../../docker/docker-compose.gateway.qa.yml")
   })
 
   depends_on = [
     aws_instance.auth,
     aws_instance.library
+    aws_instance.incident
   ]
 
   tags = {
@@ -90,5 +92,21 @@ resource "aws_instance" "web" {
 
   tags = {
     Name = "${var.project_name}-${var.environment}-web-app"
+  }
+}
+
+resource "aws_instance" "incident" {
+  ami                    = data.aws_ami.amazon_linux.id
+  instance_type          = "t2.micro"
+  subnet_id              = aws_subnet.private_a.id
+  vpc_security_group_ids = [aws_security_group.incident.id]
+  key_name               = var.key_name
+
+  user_data = templatefile("${path.module}/templates/service-user-data.sh.tpl", {
+    compose_content = file("${path.module}/../../docker/docker-compose.incident.qa.yml")
+  })
+
+  tags = {
+    Name = "${var.project_name}-${var.environment}-campus-incident-service"
   }
 }

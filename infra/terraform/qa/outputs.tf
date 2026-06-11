@@ -21,3 +21,7 @@ output "library_service_private_ip" {
 output "web_app_private_ip" {
   value = aws_instance.web.private_ip
 }
+
+output "campus_incident_service_private_ip" {
+  value = aws_instance.incident.private_ip
+}

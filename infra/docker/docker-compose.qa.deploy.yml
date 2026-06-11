@@ -10,9 +10,11 @@ services:
       CORS_ORIGIN: http://localhost:3003
       AUTH_SERVICE_URL: http://auth-service:3001
       LIBRARY_SERVICE_URL: http://library-service:3002
+      CAMPUS_INCIDENT_SERVICE_URL: http://campus-incident-service:3020
     depends_on:
       - auth-service
       - library-service
+      - campus-incident-service
     restart: unless-stopped
 
   auth-service:
@@ -51,6 +53,23 @@ services:
       - redis
     restart: unless-stopped
 
+  campus-incident-service:
+    image: japilataxi/campus-incident-service:qa
+    container_name: smart-campus-incident-service-qa
+    ports:
+      - "3020:3020"
+    environment:
+      SERVICE_NAME: campus-incident-service
+      PORT: 3020
+      DATABASE_URL: postgresql://incident_user:incident_password@campus-incident-db:5432/campus_incidents_db
+      REDIS_HOST: redis
+      REDIS_PORT: 6379
+      JWT_SECRET: change_me
+    depends_on:
+      - campus-incident-db
+      - redis
+    restart: unless-stopped
+
   web-app:
     image: japilataxi/web-app:qa
     container_name: smart-campus-web-app-qa
@@ -59,7 +78,7 @@ services:
     environment:
       PORT: 3003
       HOSTNAME: 0.0.0.0
-      NEXT_PUBLIC_API_URL: http://localhost:3000/api
+      NEXT_PUBLIC_API_URL: http://smart-campus-qa-alb-1189508831.us-east-1.elb.amazonaws.com/api
     depends_on:
       - api-gateway
     restart: unless-stopped
@@ -90,6 +109,19 @@ services:
       - library_db_data:/var/lib/postgresql/data
     restart: unless-stopped
 
+  campus-incident-db:
+    image: postgres:16
+    container_name: smart-campus-incident-db-qa
+    environment:
+      POSTGRES_DB: campus_incidents_db
+      POSTGRES_USER: incident_user
+      POSTGRES_PASSWORD: incident_password
+    ports:
+      - "5435:5432"
+    volumes:
+      - campus_incident_db_data:/var/lib/postgresql/data
+    restart: unless-stopped
+
   redis:
     image: redis:7-alpine
     container_name: smart-campus-redis-qa
@@ -114,3 +146,4 @@ services:
 volumes:
   auth_db_data:
   library_db_data:
+  campus_incident_db_data:

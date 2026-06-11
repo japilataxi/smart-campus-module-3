@@ -22,7 +22,7 @@ resource "aws_lb_target_group" "gateway" {
   vpc_id   = aws_vpc.main.id
 
   health_check {
-    path                = "/api/health"
+    path                = "/health"
     matcher             = "200-399"
     interval            = 30
     timeout             = 5

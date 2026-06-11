@@ -78,7 +78,7 @@ services:
     environment:
       PORT: 3003
       HOSTNAME: 0.0.0.0
-      NEXT_PUBLIC_API_URL: http://localhost:3000/api
+      NEXT_PUBLIC_API_URL: http://smart-campus-qa-alb-1189508831.us-east-1.elb.amazonaws.com/api
     depends_on:
       - api-gateway
     restart: unless-stopped

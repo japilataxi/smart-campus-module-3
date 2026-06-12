@@ -4,6 +4,9 @@ WORKDIR /app
 
 RUN npm install -g pnpm
 
+ARG NEXT_PUBLIC_API_URL
+ENV NEXT_PUBLIC_API_URL=$NEXT_PUBLIC_API_URL
+
 COPY package.json pnpm-lock.yaml pnpm-workspace.yaml turbo.json ./
 COPY packages ./packages
 COPY apps/web-app ./apps/web-app

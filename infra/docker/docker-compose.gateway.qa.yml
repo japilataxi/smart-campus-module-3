@@ -1,0 +1,14 @@
+services:
+  api-gateway:
+    image: japilataxi/api-gateway:qa
+    container_name: smart-campus-api-gateway-qa
+    ports:
+      - "3000:3000"
+    environment:
+      SERVICE_NAME: api-gateway
+      PORT: 3000
+      CORS_ORIGIN: ${CORS_ORIGIN}
+      AUTH_SERVICE_URL: ${AUTH_SERVICE_URL}
+      LIBRARY_SERVICE_URL: ${LIBRARY_SERVICE_URL}
+      CAMPUS_INCIDENT_SERVICE_URL: ${CAMPUS_INCIDENT_SERVICE_URL}
+    restart: unless-stopped

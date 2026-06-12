@@ -149,13 +149,13 @@ export const api = {
       body: JSON.stringify(data),
     }),
 
-  updateIncident: (id: string, data: any) =>
+  updateIncident: (id: string | number, data: any) =>
     request<any>(`/incidents/${id}`, {
       method: "PATCH",
       body: JSON.stringify(data),
     }),
 
-  deleteIncident: (id: string) =>
+  deleteIncident: (id: string | number) =>
     request<any>(`/incidents/${id}`, {
       method: "DELETE",
     }),

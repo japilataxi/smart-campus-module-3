@@ -1,5 +1,15 @@
+import {
+  View,
+  Text,
+  TextInput,
+  StyleSheet,
+  Pressable,
+  KeyboardAvoidingView,
+  Platform,
+  ScrollView,
+} from "react-native";
 import React, { useEffect, useState } from "react";
-import { View, Text, StyleSheet, FlatList } from "react-native";
+import { FlatList } from "react-native";
 import { api } from "../lib/api";
 import { useAuth } from "../context/AuthContext";
 import { Button } from "../components/Button";
@@ -33,40 +43,51 @@ export function LibraryScreen() {
   }, []);
 
   return (
-    <View style={styles.container}>
-      <Text style={styles.title}>Library Catalog</Text>
+    <KeyboardAvoidingView
+      style={{ flex: 1 }}
+      behavior={Platform.OS === "ios" ? "padding" : "height"}
+    >
+      <ScrollView
+        contentContainerStyle={styles.container}
+        keyboardShouldPersistTaps="handled"
+        showsVerticalScrollIndicator={false}
+      >
+        <View style={styles.container}>
+          <Text style={styles.title}>Library Catalog</Text>
 
-      {message ? <Text style={styles.message}>{message}</Text> : null}
+          {message ? <Text style={styles.message}>{message}</Text> : null}
 
-      <FlatList
-        data={books}
-        keyExtractor={(item) => item.id}
-        contentContainerStyle={{ gap: 14 }}
-        renderItem={({ item }) => {
-          const available = item.availableCopies ?? 0;
+          <FlatList
+            data={books}
+            keyExtractor={(item) => item.id}
+            contentContainerStyle={{ gap: 14 }}
+            renderItem={({ item }) => {
+              const available = item.availableCopies ?? 0;
 
-          return (
-            <View style={styles.card}>
-              <Text style={styles.bookTitle}>{item.title}</Text>
-              <Text>{item.author?.name || "Unknown author"}</Text>
-              <Text>{available} copies available</Text>
+              return (
+                <View style={styles.card}>
+                  <Text style={styles.bookTitle}>{item.title}</Text>
+                  <Text>{item.author?.name || "Unknown author"}</Text>
+                  <Text>{available} copies available</Text>
 
-              <Button
-                title={available > 0 ? "Request Loan" : "No copies available"}
-                disabled={available <= 0}
-                onPress={() => requestLoan(item.id)}
-              />
-            </View>
-          );
-        }}
-      />
-    </View>
+                  <Button
+                    title={available > 0 ? "Request Loan" : "No copies available"}
+                    disabled={available <= 0}
+                    onPress={() => requestLoan(item.id)}
+                  />
+                </View>
+              );
+            }}
+          />
+        </View>
+      </ScrollView>
+    </KeyboardAvoidingView>
   );
 }
 
 const styles = StyleSheet.create({
   container: {
-    flex: 1,
+    flexGrow: 1,
     padding: 20,
     backgroundColor: "#eef3f8",
   },

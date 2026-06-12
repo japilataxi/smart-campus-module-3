@@ -1,5 +1,14 @@
+import {
+  View,
+  Text,
+  TextInput,
+  StyleSheet,
+  Pressable,
+  KeyboardAvoidingView,
+  Platform,
+  ScrollView,
+} from "react-native";
 import React from "react";
-import { View, Text, StyleSheet, Pressable } from "react-native";
 import { NativeStackScreenProps } from "@react-navigation/native-stack";
 import { RootStackParamList } from "../../App";
 import { useAuth } from "../context/AuthContext";
@@ -10,40 +19,56 @@ export function DashboardScreen({ navigation }: Props) {
   const { user, logout } = useAuth();
 
   return (
-    <View style={styles.container}>
-      <View style={styles.hero}>
-        <Text style={styles.kicker}>SMART CAMPUS MODULE 3</Text>
-        <Text style={styles.title}>Welcome, {user?.firstName}</Text>
-        <Text style={styles.subtitle}>
-          Mobile interface connected through API Gateway.
-        </Text>
-      </View>
+    <KeyboardAvoidingView
+      style={{ flex: 1 }}
+      behavior={Platform.OS === "ios" ? "padding" : "height"}
+    >
+      <ScrollView
+        contentContainerStyle={styles.container}
+        keyboardShouldPersistTaps="handled"
+        showsVerticalScrollIndicator={false}
+      >
+        <View style={styles.container}>
+          <View style={styles.hero}>
+            <Text style={styles.kicker}>SMART CAMPUS MODULE 3</Text>
+            <Text style={styles.title}>Welcome, {user?.firstName}</Text>
+            <Text style={styles.subtitle}>
+              Mobile interface connected through API Gateway.
+            </Text>
+          </View>
 
-      <Pressable style={styles.card} onPress={() => navigation.navigate("Library")}>
-        <Text style={styles.cardTitle}>Library Catalog</Text>
-        <Text>Explore books and request loans.</Text>
-      </Pressable>
+          <Pressable style={styles.card} onPress={() => navigation.navigate("Library")}>
+            <Text style={styles.cardTitle}>Library Catalog</Text>
+            <Text>Explore books and request loans.</Text>
+          </Pressable>
 
-      <Pressable style={styles.card} onPress={() => navigation.navigate("Loans")}>
-        <Text style={styles.cardTitle}>My Loans</Text>
-        <Text>Review your current book loans.</Text>
-      </Pressable>
+          <Pressable style={styles.card} onPress={() => navigation.navigate("Loans")}>
+            <Text style={styles.cardTitle}>My Loans</Text>
+            <Text>Review your current book loans.</Text>
+          </Pressable>
 
-      <Pressable style={styles.card} onPress={() => navigation.navigate("Profile")}>
-        <Text style={styles.cardTitle}>Profile</Text>
-        <Text>View authenticated user information.</Text>
-      </Pressable>
+          <Pressable style={styles.card} onPress={() => navigation.navigate("Profile")}>
+            <Text style={styles.cardTitle}>Profile</Text>
+            <Text>View authenticated user information.</Text>
+          </Pressable>
 
-      <Pressable style={styles.logout} onPress={logout}>
-        <Text style={styles.logoutText}>Logout</Text>
-      </Pressable>
-    </View>
+          <Pressable style={styles.card} onPress={() => navigation.navigate("Incidents")}>
+            <Text style={styles.cardTitle}>Campus Incidents</Text>
+            <Text>Report and review campus incidents.</Text>
+          </Pressable>
+
+          <Pressable style={styles.logout} onPress={logout}>
+            <Text style={styles.logoutText}>Logout</Text>
+          </Pressable>
+        </View>
+      </ScrollView>
+    </KeyboardAvoidingView>
   );
 }
 
 const styles = StyleSheet.create({
   container: {
-    flex: 1,
+    flexGrow: 1,
     padding: 20,
     backgroundColor: "#eef3f8",
     gap: 16,

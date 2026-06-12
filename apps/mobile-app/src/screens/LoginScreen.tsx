@@ -1,5 +1,14 @@
+import {
+  View,
+  Text,
+  TextInput,
+  StyleSheet,
+  Pressable,
+  KeyboardAvoidingView,
+  Platform,
+  ScrollView,
+} from "react-native";
 import React, { useState } from "react";
-import { View, Text, TextInput, StyleSheet, Pressable } from "react-native";
 import { NativeStackScreenProps } from "@react-navigation/native-stack";
 import { RootStackParamList } from "../../App";
 import { useAuth } from "../context/AuthContext";
@@ -10,8 +19,8 @@ type Props = NativeStackScreenProps<RootStackParamList, "Login">;
 export function LoginScreen({ navigation }: Props) {
   const { login } = useAuth();
 
-  const [email, setEmail] = useState("kevin.amaguana@uce.edu.ec");
-  const [password, setPassword] = useState("Password123");
+  const [email, setEmail] = useState("");
+  const [password, setPassword] = useState("");
   const [error, setError] = useState("");
 
   async function handleLogin() {
@@ -24,44 +33,55 @@ export function LoginScreen({ navigation }: Props) {
   }
 
   return (
-    <View style={styles.container}>
-      <Text style={styles.brand}>Smart Campus</Text>
-      <Text style={styles.subtitle}>Universidad Central del Ecuador</Text>
+    <KeyboardAvoidingView
+      style={{ flex: 1 }}
+      behavior={Platform.OS === "ios" ? "padding" : "height"}
+    >
+      <ScrollView
+        contentContainerStyle={styles.container}
+        keyboardShouldPersistTaps="handled"
+        showsVerticalScrollIndicator={false}
+      >
+        <View style={styles.container}>
+          <Text style={styles.brand}>Smart Campus</Text>
+          <Text style={styles.subtitle}>Universidad Central del Ecuador</Text>
 
-      <View style={styles.card}>
-        <Text style={styles.title}>Welcome back</Text>
+          <View style={styles.card}>
+            <Text style={styles.title}>Welcome back</Text>
 
-        {error ? <Text style={styles.error}>{error}</Text> : null}
+            {error ? <Text style={styles.error}>{error}</Text> : null}
 
-        <TextInput
-          style={styles.input}
-          placeholder="Institutional email"
-          value={email}
-          onChangeText={setEmail}
-          autoCapitalize="none"
-        />
+            <TextInput
+              style={styles.input}
+              placeholder="Institutional email"
+              value={email}
+              onChangeText={setEmail}
+              autoCapitalize="none"
+            />
 
-        <TextInput
-          style={styles.input}
-          placeholder="Password"
-          value={password}
-          onChangeText={setPassword}
-          secureTextEntry
-        />
+            <TextInput
+              style={styles.input}
+              placeholder="Password"
+              value={password}
+              onChangeText={setPassword}
+              secureTextEntry
+            />
 
-        <Button title="Login" onPress={handleLogin} />
+            <Button title="Login" onPress={handleLogin} />
 
-        <Pressable onPress={() => navigation.navigate("Register")}>
-          <Text style={styles.link}>Create account</Text>
-        </Pressable>
-      </View>
-    </View>
+            <Pressable onPress={() => navigation.navigate("Register")}>
+              <Text style={styles.link}>Create account</Text>
+            </Pressable>
+          </View>
+        </View>
+      </ScrollView> 
+    </KeyboardAvoidingView>
   );
 }
 
 const styles = StyleSheet.create({
   container: {
-    flex: 1,
+    flexGrow: 1,
     backgroundColor: "#eef3f8",
     justifyContent: "center",
     padding: 24,

@@ -85,3 +85,19 @@ resource "aws_lb_listener_rule" "api" {
     }
   }
 }
+
+resource "aws_lb_listener_rule" "gateway_docs" {
+  listener_arn = aws_lb_listener.http.arn
+  priority     = 5
+
+  action {
+    type             = "forward"
+    target_group_arn = aws_lb_target_group.gateway.arn
+  }
+
+  condition {
+    path_pattern {
+      values = ["/docs", "/docs/*"]
+    }
+  }
+}

@@ -18,6 +18,14 @@ jobs:
           username: ${{ secrets.DOCKERHUB_USERNAME }}
           password: ${{ secrets.DOCKERHUB_TOKEN }}
 
+      - name: Debug repository structure
+        run: |
+          pwd
+          ls -la
+          ls -la packages
+          ls -la apps
+          ls -la apps/web-app
+
       - name: Build and push web-app QA
         run: |
           docker build \

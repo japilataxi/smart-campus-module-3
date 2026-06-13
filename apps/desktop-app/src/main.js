@@ -1,7 +1,7 @@
 const { app, BrowserWindow } = require("electron");
 
 function createWindow() {
-  const window = new BrowserWindow({
+  const mainWindow = new BrowserWindow({
     width: 1280,
     height: 800,
     minWidth: 1024,
@@ -14,9 +14,11 @@ function createWindow() {
     },
   });
 
-  window.loadURL("http://localhost:3003");
+  const APP_URL =
+    "http://smart-campus-qa-alb-1189508831.us-east-1.elb.amazonaws.com";
 
-  window.setMenuBarVisibility(false);
+  mainWindow.loadURL(APP_URL);
+  mainWindow.setMenuBarVisibility(false);
 }
 
 app.whenReady().then(createWindow);

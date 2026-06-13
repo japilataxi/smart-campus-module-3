@@ -1,0 +1,11 @@
+services:
+  web-app:
+    image: japilataxi/web-app:prod
+    container_name: smart-campus-web-prod
+    ports:
+      - "3003:3003"
+    environment:
+      PORT: 3003
+      HOSTNAME: 0.0.0.0
+      NEXT_PUBLIC_API_URL: http://smart-campus-prod-alb-1847367067.us-east-1.elb.amazonaws.com/api
+    restart: unless-stopped

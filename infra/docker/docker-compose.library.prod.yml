@@ -1,0 +1,36 @@
+services:
+  library-db:
+    image: postgres:16
+    container_name: smart-campus-library-db-prod
+    environment:
+      POSTGRES_DB: library_prod
+      POSTGRES_USER: library_user
+      POSTGRES_PASSWORD: 526768e458c94552bdfd5f4e562e39fe
+    volumes:
+      - library_db_data:/var/lib/postgresql/data
+    restart: unless-stopped
+
+  redis:
+    image: redis:7-alpine
+    container_name: smart-campus-library-redis-prod
+    restart: unless-stopped
+
+  library-service:
+    image: japilataxi/library-service:prod
+    container_name: smart-campus-library-service-prod
+    ports:
+      - "3002:3002"
+    environment:
+      SERVICE_NAME: library-service
+      PORT: 3002
+      DATABASE_URL: postgresql://library_user:526768e458c94552bdfd5f4e562e39fe@library-db:5432/library_prod
+      REDIS_HOST: redis
+      REDIS_PORT: 6379
+      JWT_SECRET: 2c31950dd72e455aa92bd4edf55948e0
+    depends_on:
+      - library-db
+      - redis
+    restart: unless-stopped
+
+volumes:
+  library_db_data:

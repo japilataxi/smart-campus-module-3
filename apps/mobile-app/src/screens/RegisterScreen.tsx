@@ -1,5 +1,14 @@
+import {
+  View,
+  Text,
+  TextInput,
+  StyleSheet,
+  Pressable,
+  KeyboardAvoidingView,
+  Platform,
+  ScrollView,
+} from "react-native";
 import React, { useState } from "react";
-import { View, Text, TextInput, StyleSheet, Pressable } from "react-native";
 import { NativeStackScreenProps } from "@react-navigation/native-stack";
 import { RootStackParamList } from "../../App";
 import { useAuth } from "../context/AuthContext";
@@ -38,53 +47,63 @@ export function RegisterScreen({ navigation }: Props) {
   }
 
   return (
-    <View style={styles.container}>
-      <Text style={styles.title}>Create Account</Text>
+  <KeyboardAvoidingView
+    style={{ flex: 1 }}
+    behavior={Platform.OS === "ios" ? "padding" : "height"}
+  >
+    <ScrollView
+      contentContainerStyle={styles.container}
+      keyboardShouldPersistTaps="handled"
+    >
+      <View>
+        <Text style={styles.title}>Create Account</Text>
 
-      {error ? <Text style={styles.error}>{error}</Text> : null}
+        {error ? <Text style={styles.error}>{error}</Text> : null}
 
-      <TextInput
-        style={styles.input}
-        placeholder="First name"
-        value={form.firstName}
-        onChangeText={(value) => updateField("firstName", value)}
-      />
+        <TextInput
+          style={styles.input}
+          placeholder="First name"
+          value={form.firstName}
+          onChangeText={(value) => updateField("firstName", value)}
+        />
 
-      <TextInput
-        style={styles.input}
-        placeholder="Last name"
-        value={form.lastName}
-        onChangeText={(value) => updateField("lastName", value)}
-      />
+        <TextInput
+          style={styles.input}
+          placeholder="Last name"
+          value={form.lastName}
+          onChangeText={(value) => updateField("lastName", value)}
+        />
 
-      <TextInput
-        style={styles.input}
-        placeholder="Institutional email"
-        value={form.email}
-        onChangeText={(value) => updateField("email", value)}
-        autoCapitalize="none"
-      />
+        <TextInput
+          style={styles.input}
+          placeholder="Institutional email"
+          value={form.email}
+          onChangeText={(value) => updateField("email", value)}
+          autoCapitalize="none"
+        />
 
-      <TextInput
-        style={styles.input}
-        placeholder="Password"
-        value={form.password}
-        onChangeText={(value) => updateField("password", value)}
-        secureTextEntry
-      />
+        <TextInput
+          style={styles.input}
+          placeholder="Password"
+          value={form.password}
+          onChangeText={(value) => updateField("password", value)}
+          secureTextEntry
+        />
 
-      <Button title="Register" onPress={handleRegister} />
+        <Button title="Register" onPress={handleRegister} />
 
-      <Pressable onPress={() => navigation.navigate("Login")}>
-        <Text style={styles.link}>Back to login</Text>
-      </Pressable>
-    </View>
-  );
+        <Pressable onPress={() => navigation.navigate("Login")}>
+          <Text style={styles.link}>Back to login</Text>
+        </Pressable>
+      </View>
+    </ScrollView>
+  </KeyboardAvoidingView>
+);
 }
 
 const styles = StyleSheet.create({
   container: {
-    flex: 1,
+    flexGrow: 1,
     backgroundColor: "#eef3f8",
     justifyContent: "center",
     padding: 24,

@@ -1,6 +1,6 @@
 import AsyncStorage from "@react-native-async-storage/async-storage";
 
-const API_BASE_URL = "http://192.168.100.11:3000/api";
+const API_BASE_URL = "http://smart-campus-qa-alb-1189508831.us-east-1.elb.amazonaws.com/api";
 
 export async function getToken() {
   return AsyncStorage.getItem("smart_campus_token");
@@ -57,9 +57,22 @@ export const api = {
 
   getLoans: () => request<any[]>("/library/loans"),
 
+  getIncidents: () => request<any[]>("/incidents"),
+
+
   createLoan: (data: { userEmail: string; bookId: string }) =>
     request<any>("/library/loans", {
       method: "POST",
       body: JSON.stringify(data),
     }),
+  
+  createIncident: (data: {
+  title: string;
+  description: string;
+  location: string;
+}) =>
+  request<any>("/incidents", {
+    method: "POST",
+    body: JSON.stringify(data),
+  }),
 };

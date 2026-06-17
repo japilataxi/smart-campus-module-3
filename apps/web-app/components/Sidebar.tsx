@@ -14,6 +14,7 @@ import {
   Tags,
   NotebookTabs,
   WalletCards,
+  QrCode,
 } from "lucide-react";
 import { useAuth } from "@/context/AuthContext";
 import clsx from "clsx";
@@ -25,6 +26,7 @@ const menuByRole = {
     { href: "/library", label: "Library", icon: BookOpen },
     { href: "/profile", label: "Profile", icon: User },
     { href: "/loans", label: "My Loans", icon: WalletCards },
+    { href: "/qr-access", label: "QR Access", icon: QrCode },
     { href: "/incidents", label: "Incidents", icon: AlertTriangle },
   ],
   librarian: [
@@ -36,6 +38,7 @@ const menuByRole = {
     { href: "/loans", label: "Loans", icon: Shield },
     { href: "/profile", label: "Profile", icon: User },
     { href: "/loans", label: "Loans", icon: WalletCards },
+    { href: "/qr-access", label: "QR Access", icon: QrCode },
     { href: "/incidents", label: "Incidents", icon: AlertTriangle },
   ],
   admin: [
@@ -49,6 +52,7 @@ const menuByRole = {
     { href: "/loans", label: "Loans", icon: Shield },
     { href: "/profile", label: "Profile", icon: User },
     { href: "/loans", label: "Loans", icon: WalletCards },
+    { href: "/qr-access", label: "QR Access", icon: QrCode },
     { href: "/incidents", label: "Incidents", icon: AlertTriangle },
   ],
 };

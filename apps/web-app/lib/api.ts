@@ -55,11 +55,28 @@ async function request<T>(path: string, options: RequestInit = {}): Promise<T> {
 
   if (!response.ok) {
     const message = await response.text();
-    throw new Error(message || "Request failed");
+    const error = new Error(message || "Request failed");
+    error.name = String(response.status);
+    throw error;
+  }
+
+  if (response.status === 204) {
+    return undefined as T;
   }
 
   return response.json();
 }
+
+export type CreateQrAccessRequest = {
+  userId: string;
+  expirationDate: string;
+  accessType: string;
+  location: string;
+};
+
+export type ValidateQrAccessRequest = {
+  qrCode: string;
+};
 
 export const api = {
   login: (data: LoginRequest) =>
@@ -159,4 +176,25 @@ export const api = {
     request<any>(`/incidents/${id}`, {
       method: "DELETE",
     }),
+
+  getQrAccessCodes: () => request<any[]>("/qr-access"),
+
+  createQrAccessCode: (data: CreateQrAccessRequest) =>
+    request<any>("/qr-access", {
+      method: "POST",
+      body: JSON.stringify(data),
+    }),
+
+  validateQrAccessCode: (data: ValidateQrAccessRequest) =>
+    request<any>("/qr-access/validate", {
+      method: "POST",
+      body: JSON.stringify(data),
+    }),
+
+  revokeQrAccessCode: (id: string) =>
+    request<any>(`/qr-access/${id}/revoke`, {
+      method: "PATCH",
+    }),
+
+  getQrAccessLogs: () => request<any[]>("/qr-access/logs"),
 };

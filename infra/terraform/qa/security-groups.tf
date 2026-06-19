@@ -48,6 +48,14 @@ resource "aws_security_group" "gateway" {
   }
 
   ingress {
+    description     = "Allow gateway port from bastion for SSH tunnel"
+    from_port       = 3000
+    to_port         = 3000
+    protocol        = "tcp"
+    security_groups = [aws_security_group.bastion.id]
+  }
+
+  ingress {
     from_port       = 22
     to_port         = 22
     protocol        = "tcp"
@@ -65,6 +73,14 @@ resource "aws_security_group" "gateway" {
 resource "aws_security_group" "auth" {
   name   = "${var.project_name}-${var.environment}-auth-sg"
   vpc_id = aws_vpc.main.id
+
+  ingress {
+  description     = "Allow auth port from bastion for Swagger tunnel"
+  from_port       = 3001
+  to_port         = 3001
+  protocol        = "tcp"
+  security_groups = [aws_security_group.bastion.id]
+}
 
   ingress {
     from_port       = 3001
@@ -98,6 +114,14 @@ resource "aws_security_group" "library" {
     protocol        = "tcp"
     security_groups = [aws_security_group.gateway.id]
   }
+
+  ingress {
+  description     = "Allow library port from bastion for Swagger tunnel"
+  from_port       = 3002
+  to_port         = 3002
+  protocol        = "tcp"
+  security_groups = [aws_security_group.bastion.id]
+}
 
   ingress {
     from_port       = 22
@@ -150,6 +174,14 @@ resource "aws_security_group" "incident" {
     protocol        = "tcp"
     security_groups = [aws_security_group.gateway.id]
   }
+
+  ingress {
+  description     = "Allow incident port from bastion for Swagger tunnel"
+  from_port       = 3020
+  to_port         = 3020
+  protocol        = "tcp"
+  security_groups = [aws_security_group.bastion.id]
+}
 
   ingress {
     from_port       = 22

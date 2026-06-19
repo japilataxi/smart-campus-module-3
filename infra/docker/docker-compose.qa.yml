@@ -14,11 +14,13 @@ services:
       AUTH_SERVICE_URL: http://auth-service:3001
       LIBRARY_SERVICE_URL: http://library-service:3002
       CAMPUS_INCIDENT_SERVICE_URL: http://campus-incident-service:3020
+      NOTIFICATION_SERVICE_URL: http://notification-service:3010
       QR_ACCESS_SERVICE_URL: http://qr-access-service:3021
     depends_on:
       - auth-service
       - library-service
       - campus-incident-service
+      - notification-service
       - qr-access-service
 
   auth-service:
@@ -38,9 +40,12 @@ services:
       JWT_SECRET: change_me
       JWT_REFRESH_SECRET: change_me_refresh
       ADMIN_EMAILS: kevin.amaguana@uce.edu.ec,japilataxi@uce.edu.ec,admin2026@uce.edu.ec
+      RABBITMQ_URL: amqp://guest:guest@rabbitmq:5672
+      RABBITMQ_EXCHANGE: smart-campus.events
     depends_on:
       - auth-db
       - redis
+      - rabbitmq
 
   library-service:
     build:
@@ -57,9 +62,12 @@ services:
       REDIS_HOST: redis
       REDIS_PORT: 6379
       JWT_SECRET: change_me
+      RABBITMQ_URL: amqp://guest:guest@rabbitmq:5672
+      RABBITMQ_EXCHANGE: smart-campus.events
     depends_on:
       - library-db
       - redis
+      - rabbitmq
 
   campus-incident-service:
     build:
@@ -74,8 +82,33 @@ services:
       PORT: 3020
       DATABASE_URL: postgresql://incident_user:incident_password@campus-incident-db:5432/campus_incidents_db
       JWT_SECRET: change_me
+      RABBITMQ_URL: amqp://guest:guest@rabbitmq:5672
+      RABBITMQ_EXCHANGE: smart-campus.events
     depends_on:
       - campus-incident-db
+      - rabbitmq
+
+  notification-service:
+    build:
+      context: ../../
+      dockerfile: apps/notification-service/Dockerfile
+      args:
+        APP_NAME: notification-service
+    ports:
+      - "3010:3010"
+    environment:
+      SERVICE_NAME: notification-service
+      PORT: 3010
+      DATABASE_URL: postgresql://notification_user:notification_password@notification-db:5432/notification_db
+      REDIS_HOST: redis
+      REDIS_PORT: 6379
+      RABBITMQ_URL: amqp://guest:guest@rabbitmq:5672
+      RABBITMQ_EXCHANGE: smart-campus.events
+      JWT_SECRET: change_me
+    depends_on:
+      - notification-db
+      - redis
+      - rabbitmq
 
   qr-access-service:
     build:
@@ -125,7 +158,7 @@ services:
       POSTGRES_PASSWORD: library_password
     ports:
       - "5434:5432"
-  
+
   campus-incident-db:
     image: postgres:16
     environment:
@@ -134,6 +167,15 @@ services:
       POSTGRES_PASSWORD: incident_password
     ports:
       - "5436:5432"
+
+  notification-db:
+    image: postgres:16
+    environment:
+      POSTGRES_DB: notification_db
+      POSTGRES_USER: notification_user
+      POSTGRES_PASSWORD: notification_password
+    ports:
+      - "5435:5432"
 
   qr-access-db:
     image: postgres:16
@@ -144,6 +186,17 @@ services:
     ports:
       - "5437:5432"
 
+  rabbitmq:
+    image: rabbitmq:3-management-alpine
+    ports:
+      - "5672:5672"
+      - "15672:15672"
+    healthcheck:
+      test: rabbitmq-diagnostics check_running
+      interval: 10s
+      timeout: 30s
+      retries: 5
+
   redis:
     image: redis:7-alpine
     ports:
@@ -153,8 +206,22 @@ services:
     image: prom/prometheus
     ports:
       - "9090:9090"
+    volumes:
+      - ../monitoring/prometheus.yml:/etc/prometheus/prometheus.yml
+    depends_on:
+      - api-gateway
+      - auth-service
+      - library-service
+      - campus-incident-service
+      - notification-service
+      - qr-access-service
 
   grafana:
     image: grafana/grafana
     ports:
       - "3005:3000"
+    environment:
+      GF_SECURITY_ADMIN_USER: admin
+      GF_SECURITY_ADMIN_PASSWORD: admin
+    depends_on:
+      - prometheus

@@ -2,13 +2,14 @@ FROM node:22-alpine AS builder
 
 WORKDIR /app
 
-RUN npm install -g pnpm
+RUN corepack enable
 
 COPY package.json pnpm-lock.yaml pnpm-workspace.yaml turbo.json ./
-COPY packages ./packages
-COPY apps/library-service ./apps/library-service
+COPY apps/library-service/package.json ./apps/library-service/package.json
 
 RUN pnpm install --frozen-lockfile
+
+COPY apps/library-service ./apps/library-service
 
 RUN pnpm --dir apps/library-service build
 
@@ -18,10 +19,9 @@ WORKDIR /app
 
 ENV NODE_ENV=production
 
-RUN npm install -g pnpm
+RUN corepack enable
 
 COPY package.json pnpm-lock.yaml pnpm-workspace.yaml turbo.json ./
-COPY packages ./packages
 COPY apps/library-service/package.json ./apps/library-service/package.json
 
 RUN pnpm install --prod --frozen-lockfile

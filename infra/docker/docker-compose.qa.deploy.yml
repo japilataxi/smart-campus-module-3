@@ -67,9 +67,12 @@ services:
       REDIS_HOST: redis
       REDIS_PORT: 6379
       JWT_SECRET: change_me
+      RABBITMQ_URL: amqp://guest:guest@rabbitmq:5672
+      RABBITMQ_EXCHANGE: smart-campus.events
     depends_on:
       - campus-incident-db
       - redis
+      - rabbitmq
     restart: unless-stopped
 
   qr-access-service:

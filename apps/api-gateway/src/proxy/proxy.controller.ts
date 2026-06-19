@@ -224,6 +224,79 @@ proxyIncidentDelete(
     authorization,
   });
 }
+  @Get('notifications')
+  @ApiOperation({ summary: 'Forward GET notifications to notification-service' })
+  proxyNotificationsGet(@Headers('authorization') authorization?: string) {
+    const baseUrl =
+      process.env.NOTIFICATION_SERVICE_URL || 'http://localhost:3010';
+
+    return this.proxyService.forwardRequest({
+      method: 'GET',
+      targetUrl: `${baseUrl}/notifications`,
+      authorization,
+    });
+  }
+
+  @Get('notifications/unread')
+  @ApiOperation({ summary: 'Forward GET unread notifications to notification-service' })
+  proxyNotificationsUnreadGet(@Headers('authorization') authorization?: string) {
+    const baseUrl =
+      process.env.NOTIFICATION_SERVICE_URL || 'http://localhost:3010';
+
+    return this.proxyService.forwardRequest({
+      method: 'GET',
+      targetUrl: `${baseUrl}/notifications/unread`,
+      authorization,
+    });
+  }
+
+  @Patch('notifications/:id/read')
+  @ApiOperation({ summary: 'Forward PATCH notification read to notification-service' })
+  proxyNotificationReadPatch(
+    @Param('id') id: string,
+    @Headers('authorization') authorization?: string,
+  ) {
+    const baseUrl =
+      process.env.NOTIFICATION_SERVICE_URL || 'http://localhost:3010';
+
+    return this.proxyService.forwardRequest({
+      method: 'PATCH',
+      targetUrl: `${baseUrl}/notifications/${id}/read`,
+      authorization,
+    });
+  }
+
+  @Patch('notifications/read-all')
+  @ApiOperation({ summary: 'Forward PATCH read all notifications to notification-service' })
+  proxyNotificationsReadAllPatch(
+    @Headers('authorization') authorization?: string,
+  ) {
+    const baseUrl =
+      process.env.NOTIFICATION_SERVICE_URL || 'http://localhost:3010';
+
+    return this.proxyService.forwardRequest({
+      method: 'PATCH',
+      targetUrl: `${baseUrl}/notifications/read-all`,
+      authorization,
+    });
+  }
+
+  @Delete('notifications/:id')
+  @ApiOperation({ summary: 'Forward DELETE notification to notification-service' })
+  proxyNotificationDelete(
+    @Param('id') id: string,
+    @Headers('authorization') authorization?: string,
+  ) {
+    const baseUrl =
+      process.env.NOTIFICATION_SERVICE_URL || 'http://localhost:3010';
+
+    return this.proxyService.forwardRequest({
+      method: 'DELETE',
+      targetUrl: `${baseUrl}/notifications/${id}`,
+      authorization,
+    });
+  }
+
   @Get('qr-access')
   @ApiOperation({ summary: 'Forward GET QR access codes to qr-access-service' })
   proxyQrAccessGet(@Headers('authorization') authorization?: string) {

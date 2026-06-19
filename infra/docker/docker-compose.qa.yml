@@ -38,9 +38,12 @@ services:
       JWT_SECRET: change_me
       JWT_REFRESH_SECRET: change_me_refresh
       ADMIN_EMAILS: kevin.amaguana@uce.edu.ec,japilataxi@uce.edu.ec,admin2026@uce.edu.ec
+      RABBITMQ_URL: amqp://guest:guest@rabbitmq:5672
+      RABBITMQ_EXCHANGE: smart-campus.events
     depends_on:
       - auth-db
       - redis
+      - rabbitmq
 
   library-service:
     build:
@@ -57,9 +60,12 @@ services:
       REDIS_HOST: redis
       REDIS_PORT: 6379
       JWT_SECRET: change_me
+      RABBITMQ_URL: amqp://guest:guest@rabbitmq:5672
+      RABBITMQ_EXCHANGE: smart-campus.events
     depends_on:
       - library-db
       - redis
+      - rabbitmq
 
   campus-incident-service:
     build:
@@ -74,8 +80,11 @@ services:
       PORT: 3020
       DATABASE_URL: postgresql://incident_user:incident_password@campus-incident-db:5432/campus_incidents_db
       JWT_SECRET: change_me
+      RABBITMQ_URL: amqp://guest:guest@rabbitmq:5672
+      RABBITMQ_EXCHANGE: smart-campus.events
     depends_on:
       - campus-incident-db
+      - rabbitmq
 
   web-app:
     build:

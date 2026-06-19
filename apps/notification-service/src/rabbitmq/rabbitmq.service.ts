@@ -36,6 +36,11 @@ export class RabbitmqService implements OnModuleInit {
       queue: 'notifications.incident.status.updated',
       routingKey: 'incident.status.updated',
     },
+
+    {
+      queue: 'notifications.library.loan.returned',
+      routingKey: 'library.loan.returned',
+    },
   ];
 
   // =========================
@@ -146,6 +151,7 @@ export class RabbitmqService implements OnModuleInit {
       'library.book.reserved': 'Book reserved',
       'incident.created': 'New campus incident created',
       'incident.status.updated': 'Campus incident status updated',
+      'library.loan.returned': 'Library loan returned',
     };
 
     return titles[routingKey] || 'New notification';
@@ -158,6 +164,7 @@ export class RabbitmqService implements OnModuleInit {
       'library.book.reserved': 'A book reservation has been created.',
       'incident.created': 'A new campus incident has been reported.',
       'incident.status.updated': 'A campus incident status was updated.',
+      'library.loan.returned': 'A library loan was returned.',
     };
 
     return messages[routingKey] || 'A new event was received.';

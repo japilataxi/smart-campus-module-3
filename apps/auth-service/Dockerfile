@@ -2,12 +2,14 @@ FROM node:22-alpine AS builder
 
 WORKDIR /app
 
-RUN npm install -g pnpm
+RUN corepack enable
 
 COPY package.json pnpm-lock.yaml pnpm-workspace.yaml turbo.json ./
-COPY apps/auth-service ./apps/auth-service
+COPY apps/auth-service/package.json ./apps/auth-service/package.json
 
 RUN pnpm install --frozen-lockfile
+
+COPY apps/auth-service ./apps/auth-service
 
 RUN pnpm --dir apps/auth-service build
 
@@ -17,7 +19,7 @@ WORKDIR /app
 
 ENV NODE_ENV=production
 
-RUN npm install -g pnpm
+RUN corepack enable
 
 COPY package.json pnpm-lock.yaml pnpm-workspace.yaml turbo.json ./
 COPY apps/auth-service/package.json ./apps/auth-service/package.json

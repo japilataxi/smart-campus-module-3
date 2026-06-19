@@ -2,12 +2,14 @@ FROM node:22-alpine AS builder
 
 WORKDIR /app
 
-RUN npm install -g pnpm
+RUN corepack enable
 
 COPY package.json pnpm-lock.yaml pnpm-workspace.yaml turbo.json ./
-COPY apps/notification-service ./apps/notification-service
+COPY apps/notification-service/package.json ./apps/notification-service/package.json
 
 RUN pnpm install --frozen-lockfile
+
+COPY apps/notification-service ./apps/notification-service
 
 RUN pnpm --dir apps/notification-service build
 
@@ -17,7 +19,7 @@ WORKDIR /app
 
 ENV NODE_ENV=production
 
-RUN npm install -g pnpm
+RUN corepack enable
 
 COPY package.json pnpm-lock.yaml pnpm-workspace.yaml turbo.json ./
 COPY apps/notification-service/package.json ./apps/notification-service/package.json

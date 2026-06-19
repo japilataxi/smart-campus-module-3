@@ -51,6 +51,19 @@ export class NotificationsService {
     });
   }
 
+
+  countAllNotifications(): Promise<number> {
+    return this.notificationRepository.count();
+  }
+
+  countUnreadNotifications(): Promise<number> {
+    return this.notificationRepository.count({
+      where: {
+        read: false,
+      },
+    });
+  }
+
   async markAsRead(id: string): Promise<Notification> {
     const notification = await this.notificationRepository.findOne({
       where: { id },

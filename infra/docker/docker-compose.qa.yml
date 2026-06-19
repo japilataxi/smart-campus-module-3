@@ -177,8 +177,21 @@ services:
     image: prom/prometheus
     ports:
       - "9090:9090"
+    volumes:
+      - ../monitoring/prometheus.yml:/etc/prometheus/prometheus.yml
+    depends_on:
+      - api-gateway
+      - auth-service
+      - library-service
+      - campus-incident-service
+      - notification-service
 
   grafana:
     image: grafana/grafana
     ports:
       - "3005:3000"
+    environment:
+      GF_SECURITY_ADMIN_USER: admin
+      GF_SECURITY_ADMIN_PASSWORD: admin
+    depends_on:
+      - prometheus

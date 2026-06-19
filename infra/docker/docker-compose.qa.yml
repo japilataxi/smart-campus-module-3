@@ -14,10 +14,12 @@ services:
       AUTH_SERVICE_URL: http://auth-service:3001
       LIBRARY_SERVICE_URL: http://library-service:3002
       CAMPUS_INCIDENT_SERVICE_URL: http://campus-incident-service:3020
+      NOTIFICATION_SERVICE_URL: http://notification-service:3010
     depends_on:
       - auth-service
       - library-service
       - campus-incident-service
+      - notification-service
 
   auth-service:
     build:
@@ -114,6 +116,48 @@ services:
       POSTGRES_PASSWORD: incident_password
     ports:
       - "5436:5432"
+
+  notification-service:
+    build:
+      context: ../../
+      dockerfile: apps/notification-service/Dockerfile
+      args:
+        APP_NAME: notification-service
+    ports:
+      - "3010:3010"
+    environment:
+      SERVICE_NAME: notification-service
+      PORT: 3010
+      DATABASE_URL: postgresql://notification_user:notification_password@notification-db:5432/notification_db
+      REDIS_HOST: redis
+      REDIS_PORT: 6379
+      RABBITMQ_URL: amqp://guest:guest@rabbitmq:5672
+      RABBITMQ_EXCHANGE: smart-campus.events
+      JWT_SECRET: change_me
+    depends_on:
+      - notification-db
+      - redis
+      - rabbitmq
+
+  notification-db:
+    image: postgres:16
+    environment:
+      POSTGRES_DB: notification_db
+      POSTGRES_USER: notification_user
+      POSTGRES_PASSWORD: notification_password
+    ports:
+      - "5435:5432"
+
+  rabbitmq:
+    image: rabbitmq:3-management-alpine
+    ports:
+      - "5672:5672"
+      - "15672:15672"
+    healthcheck:
+      test: rabbitmq-diagnostics check_running
+      interval: 10s
+      timeout: 30s
+      retries: 5
 
   redis:
     image: redis:7-alpine

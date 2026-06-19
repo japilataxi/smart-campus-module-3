@@ -5,7 +5,6 @@ WORKDIR /app
 RUN npm install -g pnpm
 
 COPY package.json pnpm-lock.yaml pnpm-workspace.yaml turbo.json ./
-COPY packages ./packages
 COPY apps/api-gateway ./apps/api-gateway
 
 RUN pnpm install --frozen-lockfile
@@ -21,7 +20,6 @@ ENV NODE_ENV=production
 RUN npm install -g pnpm
 
 COPY package.json pnpm-lock.yaml pnpm-workspace.yaml turbo.json ./
-COPY packages ./packages
 COPY apps/api-gateway/package.json ./apps/api-gateway/package.json
 
 RUN pnpm install --prod --frozen-lockfile

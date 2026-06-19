@@ -5,7 +5,6 @@ WORKDIR /app
 RUN npm install -g pnpm
 
 COPY package.json pnpm-lock.yaml pnpm-workspace.yaml turbo.json ./
-COPY packages ./packages
 COPY apps/campus-incident-service ./apps/campus-incident-service
 
 RUN pnpm install --frozen-lockfile
@@ -21,7 +20,6 @@ ENV NODE_ENV=production
 RUN npm install -g pnpm
 
 COPY package.json pnpm-lock.yaml pnpm-workspace.yaml turbo.json ./
-COPY packages ./packages
 COPY apps/campus-incident-service/package.json ./apps/campus-incident-service/package.json
 
 RUN pnpm install --prod --frozen-lockfile

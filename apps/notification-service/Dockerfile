@@ -5,11 +5,11 @@ WORKDIR /app
 RUN npm install -g pnpm
 
 COPY package.json pnpm-lock.yaml pnpm-workspace.yaml turbo.json ./
-COPY apps/auth-service ./apps/auth-service
+COPY apps/notification-service ./apps/notification-service
 
 RUN pnpm install --frozen-lockfile
 
-RUN pnpm --dir apps/auth-service build
+RUN pnpm --dir apps/notification-service build
 
 FROM node:22-alpine AS runner
 
@@ -20,12 +20,12 @@ ENV NODE_ENV=production
 RUN npm install -g pnpm
 
 COPY package.json pnpm-lock.yaml pnpm-workspace.yaml turbo.json ./
-COPY apps/auth-service/package.json ./apps/auth-service/package.json
+COPY apps/notification-service/package.json ./apps/notification-service/package.json
 
 RUN pnpm install --prod --frozen-lockfile
 
-COPY --from=builder /app/apps/auth-service/dist ./apps/auth-service/dist
+COPY --from=builder /app/apps/notification-service/dist ./apps/notification-service/dist
 
-EXPOSE 3001
+EXPOSE 3010
 
-CMD ["node", "apps/auth-service/dist/main.js"]
+CMD ["node", "apps/notification-service/dist/main.js"]

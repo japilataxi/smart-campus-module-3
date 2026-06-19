@@ -10,15 +10,15 @@ $ next build
 - Environments: .env.local
 
   Creating an optimized production build ...
-✓ Compiled successfully in 11.3s
+✓ Compiled successfully in 21.8s
   Running TypeScript ...
-  Finished TypeScript in 26.8s ...
+  Finished TypeScript in 12.7s ...
   Collecting page data using 7 workers ...
-  Generating static pages using 7 workers (0/15) ...
-  Generating static pages using 7 workers (3/15) 
-  Generating static pages using 7 workers (7/15) 
-  Generating static pages using 7 workers (11/15) 
-✓ Generating static pages using 7 workers (15/15) in 814ms
+  Generating static pages using 7 workers (0/17) ...
+  Generating static pages using 7 workers (4/17) 
+  Generating static pages using 7 workers (8/17) 
+  Generating static pages using 7 workers (12/17) 
+✓ Generating static pages using 7 workers (17/17) in 1503ms
   Finalizing page optimization ...
 
 Route (app)
@@ -27,6 +27,7 @@ Route (app)
 ├ ○ /admin/roles
 ├ ○ /admin/users
 ├ ○ /dashboard
+├ ○ /incidents
 ├ ○ /library
 ├ ƒ /library/[id]
 ├ ○ /loans
@@ -35,6 +36,7 @@ Route (app)
 ├ ○ /manage/books
 ├ ○ /manage/categories
 ├ ○ /profile
+├ ○ /qr-access
 └ ○ /register
 
 

@@ -10,6 +10,7 @@ import { DashboardScreen } from "./src/screens/DashboardScreen";
 import { LibraryScreen } from "./src/screens/LibraryScreen";
 import { ProfileScreen } from "./src/screens/ProfileScreen";
 import { LoansScreen } from "./src/screens/LoansScreen";
+import { IncidentsScreen } from "./src/screens/IncidentsScreen";
 
 export type RootStackParamList = {
   Login: undefined;
@@ -18,6 +19,7 @@ export type RootStackParamList = {
   Library: undefined;
   Loans: undefined;
   Profile: undefined;
+  Incidents: undefined;
 };
 
 const Stack = createNativeStackNavigator<RootStackParamList>();
@@ -47,6 +49,7 @@ function Navigator() {
             <Stack.Screen name="Library" component={LibraryScreen} />
             <Stack.Screen name="Loans" component={LoansScreen} />
             <Stack.Screen name="Profile" component={ProfileScreen} />
+            <Stack.Screen name="Incidents" component={IncidentsScreen} />
           </>
         )}
       </Stack.Navigator>

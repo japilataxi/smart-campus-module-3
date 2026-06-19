@@ -6,9 +6,24 @@
   "scripts": {
     "dev": "electron src/main.js",
     "start": "electron .",
-    "build": "echo \"Desktop app build skipped for QA\""
+    "dist": "electron-builder --win portable --config.win.sign=false"
   },
   "devDependencies": {
-    "electron": "^28.3.3"
+    "electron": "^28.3.3",
+    "electron-builder": "^24.13.3"
+  },
+  "build": {
+    "appId": "edu.uce.smartcampus",
+    "productName": "Smart Campus Desktop",
+    "directories": {
+      "output": "dist"
+    },
+    "files": [
+      "src/**/*",
+      "package.json"
+    ],
+    "win": {
+      "target": "portable"
+    }
   }
 }

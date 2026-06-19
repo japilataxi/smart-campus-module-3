@@ -1,0 +1,14 @@
+services:
+  prometheus:
+    image: prom/prometheus
+    container_name: smart-campus-prometheus-prod
+    ports:
+      - "9090:9090"
+    restart: unless-stopped
+
+  grafana:
+    image: grafana/grafana
+    container_name: smart-campus-grafana-prod
+    ports:
+      - "3005:3000"
+    restart: unless-stopped

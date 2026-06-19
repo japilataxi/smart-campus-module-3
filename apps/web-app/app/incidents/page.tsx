@@ -4,6 +4,7 @@ import { useEffect, useState } from "react";
 import { AppShell } from "@/components/AppShell";
 import { useAuth } from "@/context/AuthContext";
 import { isAdmin, isLibrarian } from "@/lib/roles";
+import { api } from "@/lib/api";
 
 type Incident = {
   id: number;
@@ -12,8 +13,6 @@ type Incident = {
   location: string;
   status: string;
 };
-
-const API_URL = "http://localhost:3000/api/incidents";
 
 export default function IncidentsPage() {
   const { user } = useAuth();
@@ -28,8 +27,7 @@ export default function IncidentsPage() {
   const canDeleteIncidents = isAdmin(user);
 
   async function loadIncidents() {
-    const response = await fetch(API_URL);
-    const data = await response.json();
+    const data = await api.getIncidents();
     setIncidents(data);
   }
 
@@ -40,13 +38,7 @@ export default function IncidentsPage() {
   async function createIncident(e: React.FormEvent) {
     e.preventDefault();
 
-    await fetch(API_URL, {
-      method: "POST",
-      headers: {
-        "Content-Type": "application/json",
-      },
-      body: JSON.stringify({ title, description, location }),
-    });
+    await api.createIncident({ title, description, location });
 
     setTitle("");
     setDescription("");
@@ -56,14 +48,8 @@ export default function IncidentsPage() {
   }
 
   async function updateIncident(id: number) {
-    await fetch(`${API_URL}/${id}`, {
-      method: "PATCH",
-      headers: {
-        "Content-Type": "application/json",
-      },
-      body: JSON.stringify({
-        status: "RESOLVED",
-      }),
+    await api.updateIncident(id, {
+      status: "RESOLVED",
     });
 
     setMessage("Incident marked as resolved.");
@@ -73,14 +59,11 @@ export default function IncidentsPage() {
   async function deleteIncident(id: number) {
     if (!confirm("Are you sure you want to delete this incident?")) return;
 
-    await fetch(`${API_URL}/${id}`, {
-      method: "DELETE",
-    });
+    await api.deleteIncident(id);
 
     setMessage("Incident deleted successfully.");
     await loadIncidents();
   }
-
   return (
     <AppShell>
       <section className="rounded-3xl bg-gradient-to-r from-[#002b5c] via-[#003b7a] to-[#8b0000] p-8 text-white shadow-xl">

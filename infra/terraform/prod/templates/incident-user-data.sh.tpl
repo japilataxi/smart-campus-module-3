@@ -18,11 +18,4 @@ cat > docker-compose.yml <<'EOF'
 ${compose_content}
 EOF
 
-cat > .env <<EOF
-CORS_ORIGIN=http://${alb_dns}
-AUTH_SERVICE_URL=http://${auth_private_ip}:3001
-LIBRARY_SERVICE_URL=http://${library_private_ip}:3002
-CAMPUS_INCIDENT_SERVICE_URL=http://${incident_private_ip}:3020
-EOF
-
 docker compose up -d

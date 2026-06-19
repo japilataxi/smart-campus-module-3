@@ -1,20 +1,36 @@
 import { Injectable, NotFoundException } from '@nestjs/common';
 import { InjectRepository } from '@nestjs/typeorm';
 import { Repository } from 'typeorm';
-import { Incident } from './entities/incident.entity';
+
+import { RabbitmqPublisherService } from '../rabbitmq/rabbitmq-publisher.service';
 import { CreateIncidentDto } from './dto/create-incident.dto';
 import { UpdateIncidentDto } from './dto/update-incident.dto';
+import { Incident } from './entities/incident.entity';
 
 @Injectable()
 export class IncidentsService {
   constructor(
     @InjectRepository(Incident)
     private readonly incidentRepository: Repository<Incident>,
+    private readonly rabbitmqPublisher: RabbitmqPublisherService,
   ) {}
 
-  create(dto: CreateIncidentDto) {
+  async create(dto: CreateIncidentDto) {
     const incident = this.incidentRepository.create(dto);
-    return this.incidentRepository.save(incident);
+    const savedIncident = await this.incidentRepository.save(incident);
+
+    await this.rabbitmqPublisher.publish('incident.created', {
+      userId: 'admin',
+      title: 'New campus incident',
+      message: `A new incident was created: ${savedIncident.title}`,
+      type: 'WARNING',
+      sourceService: 'campus-incident-service',
+      eventType: 'IncidentCreated',
+      incidentId: savedIncident.id,
+      payload: savedIncident,
+    });
+
+    return savedIncident;
   }
 
   findAll() {
@@ -35,8 +51,23 @@ export class IncidentsService {
 
   async update(id: number, dto: UpdateIncidentDto) {
     const incident = await this.findOne(id);
+
     Object.assign(incident, dto);
-    return this.incidentRepository.save(incident);
+
+    const updatedIncident = await this.incidentRepository.save(incident);
+
+    await this.rabbitmqPublisher.publish('incident.status.updated', {
+      userId: 'admin',
+      title: 'Campus incident updated',
+      message: `Incident ${updatedIncident.id} was updated`,
+      type: 'INFO',
+      sourceService: 'campus-incident-service',
+      eventType: 'IncidentStatusUpdated',
+      incidentId: updatedIncident.id,
+      payload: updatedIncident,
+    });
+
+    return updatedIncident;
   }
 
   async remove(id: number) {

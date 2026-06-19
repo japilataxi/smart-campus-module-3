@@ -1,0 +1,28 @@
+global:
+  scrape_interval: 15s
+
+scrape_configs:
+  - job_name: api-gateway
+    metrics_path: /metrics
+    static_configs:
+      - targets: ["api-gateway:3000"]
+
+  - job_name: auth-service
+    metrics_path: /metrics
+    static_configs:
+      - targets: ["auth-service:3001"]
+
+  - job_name: library-service
+    metrics_path: /metrics
+    static_configs:
+      - targets: ["library-service:3002"]
+
+  - job_name: campus-incident-service
+    metrics_path: /metrics
+    static_configs:
+      - targets: ["campus-incident-service:3020"]
+
+  - job_name: notification-service
+    metrics_path: /metrics
+    static_configs:
+      - targets: ["notification-service:3010"]

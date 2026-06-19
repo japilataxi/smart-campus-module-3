@@ -25,3 +25,6 @@ output "web_app_private_ip" {
 output "campus_incident_service_private_ip" {
   value = aws_instance.incident.private_ip
 }
+output "qr_access_service_private_ip" {
+  value = aws_instance.qr_access.private_ip
+}

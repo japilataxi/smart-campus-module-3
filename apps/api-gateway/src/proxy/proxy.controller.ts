@@ -224,4 +224,74 @@ proxyIncidentDelete(
     authorization,
   });
 }
+  @Get('qr-access')
+  @ApiOperation({ summary: 'Forward GET QR access codes to qr-access-service' })
+  proxyQrAccessGet(@Headers('authorization') authorization?: string) {
+    const baseUrl = process.env.QR_ACCESS_SERVICE_URL || 'http://localhost:3021';
+
+    return this.proxyService.forwardRequest({
+      method: 'GET',
+      targetUrl: `${baseUrl}/qr-access`,
+      authorization,
+    });
+  }
+
+  @Post('qr-access')
+  @ApiOperation({ summary: 'Forward POST QR access generation to qr-access-service' })
+  proxyQrAccessPost(
+    @Body() body: unknown,
+    @Headers('authorization') authorization?: string,
+  ) {
+    const baseUrl = process.env.QR_ACCESS_SERVICE_URL || 'http://localhost:3021';
+
+    return this.proxyService.forwardRequest({
+      method: 'POST',
+      targetUrl: `${baseUrl}/qr-access`,
+      body,
+      authorization,
+    });
+  }
+
+  @Post('qr-access/validate')
+  @ApiOperation({ summary: 'Forward QR access validation to qr-access-service' })
+  proxyQrAccessValidate(
+    @Body() body: unknown,
+    @Headers('authorization') authorization?: string,
+  ) {
+    const baseUrl = process.env.QR_ACCESS_SERVICE_URL || 'http://localhost:3021';
+
+    return this.proxyService.forwardRequest({
+      method: 'POST',
+      targetUrl: `${baseUrl}/qr-access/validate`,
+      body,
+      authorization,
+    });
+  }
+
+  @Patch('qr-access/:id/revoke')
+  @ApiOperation({ summary: 'Forward QR access revocation to qr-access-service' })
+  proxyQrAccessRevoke(
+    @Param('id') id: string,
+    @Headers('authorization') authorization?: string,
+  ) {
+    const baseUrl = process.env.QR_ACCESS_SERVICE_URL || 'http://localhost:3021';
+
+    return this.proxyService.forwardRequest({
+      method: 'PATCH',
+      targetUrl: `${baseUrl}/qr-access/${id}/revoke`,
+      authorization,
+    });
+  }
+
+  @Get('qr-access/logs')
+  @ApiOperation({ summary: 'Forward QR access logs to qr-access-service' })
+  proxyQrAccessLogs(@Headers('authorization') authorization?: string) {
+    const baseUrl = process.env.QR_ACCESS_SERVICE_URL || 'http://localhost:3021';
+
+    return this.proxyService.forwardRequest({
+      method: 'GET',
+      targetUrl: `${baseUrl}/qr-access/logs`,
+      authorization,
+    });
+  }
 }

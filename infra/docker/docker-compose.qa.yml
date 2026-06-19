@@ -14,10 +14,12 @@ services:
       AUTH_SERVICE_URL: http://auth-service:3001
       LIBRARY_SERVICE_URL: http://library-service:3002
       CAMPUS_INCIDENT_SERVICE_URL: http://campus-incident-service:3020
+      QR_ACCESS_SERVICE_URL: http://qr-access-service:3021
     depends_on:
       - auth-service
       - library-service
       - campus-incident-service
+      - qr-access-service
 
   auth-service:
     build:
@@ -75,6 +77,24 @@ services:
     depends_on:
       - campus-incident-db
 
+  qr-access-service:
+    build:
+      context: ../../
+      dockerfile: apps/qr-access-service/Dockerfile
+      args:
+        APP_NAME: qr-access-service
+    ports:
+      - "3021:3021"
+    environment:
+      SERVICE_NAME: qr-access-service
+      PORT: 3021
+      DATABASE_URL: postgresql://qr_access_user:qr_access_password@qr-access-db:5432/qr_access_db
+      REDIS_HOST: redis
+      REDIS_PORT: 6379
+    depends_on:
+      - qr-access-db
+      - redis
+
   web-app:
     build:
       context: ../../
@@ -84,7 +104,7 @@ services:
     environment:
       PORT: 3003
       HOSTNAME: 0.0.0.0
-      NEXT_PUBLIC_API_URL: http://localhost:3000
+      NEXT_PUBLIC_API_URL: http://localhost:3000/api
     depends_on:
       - api-gateway
 
@@ -114,6 +134,15 @@ services:
       POSTGRES_PASSWORD: incident_password
     ports:
       - "5436:5432"
+
+  qr-access-db:
+    image: postgres:16
+    environment:
+      POSTGRES_DB: qr_access_db
+      POSTGRES_USER: qr_access_user
+      POSTGRES_PASSWORD: qr_access_password
+    ports:
+      - "5437:5432"
 
   redis:
     image: redis:7-alpine

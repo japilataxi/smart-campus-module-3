@@ -41,6 +41,30 @@ jobs:
         image: redis:7
         ports:
           - 6379:6379
+      
+      postgres-notification:
+        image: postgres:16
+        env:
+          POSTGRES_DB: notification_db
+          POSTGRES_USER: notification_user
+          POSTGRES_PASSWORD: notification_password
+        ports:
+          - 5435:5432
+
+      postgres-incident:
+        image: postgres:16
+        env:
+          POSTGRES_DB: campus_incidents_db
+          POSTGRES_USER: incident_user
+          POSTGRES_PASSWORD: incident_password
+        ports:
+          - 5436:5432
+
+      rabbitmq:
+        image: rabbitmq:3-management-alpine
+        ports:
+          - 5672:5672
+          - 15672:15672
 
     env:
       AUTH_DATABASE_URL: postgresql://auth_user:auth_password@localhost:5433/auth_db
@@ -50,8 +74,14 @@ jobs:
       REDIS_PORT: 6379
       JWT_SECRET: test_secret
       JWT_REFRESH_SECRET: test_refresh_secret
-      ADMIN_EMAILS: kevin.amaguana@uce.edu.ec,japilataxi@uce.edu.ec,admin2026@uce.edu.ec
+      ADMIN_EMAILS: japilataxi@uce.edu.ec,admin2026@uce.edu.ec
       NEXT_PUBLIC_API_URL: http://localhost:3000/api
+      NOTIFICATION_DATABASE_URL: postgresql://notification_user:notification_password@localhost:5435/notification_db
+      INCIDENT_DATABASE_URL: postgresql://incident_user:incident_password@localhost:5436/campus_incidents_db
+      RABBITMQ_URL: amqp://guest:guest@localhost:5672
+      RABBITMQ_EXCHANGE: smart-campus.events
+      NOTIFICATION_SERVICE_URL: http://localhost:3010
+      CAMPUS_INCIDENT_SERVICE_URL: http://localhost:3020
 
     steps:
       - uses: actions/checkout@v4
@@ -74,14 +104,20 @@ jobs:
           pnpm --filter auth-service build
           pnpm --filter library-service build
           pnpm --filter web-app build
+          pnpm --filter campus-incident-service build
+          pnpm --filter notification-service build
 
       - name: Run unit tests
         run: |
           pnpm --filter api-gateway test
           pnpm --filter auth-service test
           pnpm --filter library-service test
+          pnpm --filter campus-incident-service test
+          pnpm --filter notification-service test
 
       - name: Run e2e tests
         run: |
           pnpm --filter auth-service test:e2e
           pnpm --filter library-service test:e2e
+          pnpm --filter campus-incident-service test:e2e
+          pnpm --filter notification-service test:e2e

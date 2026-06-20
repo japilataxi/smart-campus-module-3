@@ -78,6 +78,40 @@ export type ValidateQrAccessRequest = {
   qrCode: string;
 };
 
+
+
+export type CreateTransportRouteRequest = {
+  name: string;
+  description?: string;
+  origin: string;
+  destination: string;
+  status?: string;
+};
+
+export type CreateTransportStopRequest = {
+  name: string;
+  location: string;
+  latitude?: number;
+  longitude?: number;
+  routeId?: string;
+};
+
+export type CreateTransportVehicleRequest = {
+  code: string;
+  plate: string;
+  capacity: number;
+  status?: string;
+  currentRouteId?: string;
+};
+
+export type CreateTransportScheduleRequest = {
+  routeId: string;
+  vehicleId?: string;
+  departureTime: string;
+  arrivalTime: string;
+  status?: string;
+};
+
 export const api = {
   login: (data: LoginRequest) =>
     request<any>("/auth/login", {
@@ -197,4 +231,50 @@ export const api = {
     }),
 
   getQrAccessLogs: () => request<any[]>("/qr-access/logs"),
+
+  getTransportRoutes: () => request<any[]>("/transport/routes"),
+
+  getTransportRouteById: (id: string) => request<any>(`/transport/routes/${id}`),
+
+  createTransportRoute: (data: CreateTransportRouteRequest) =>
+    request<any>("/transport/routes", {
+      method: "POST",
+      body: JSON.stringify(data),
+    }),
+
+  updateTransportRoute: (id: string, data: Partial<CreateTransportRouteRequest>) =>
+    request<any>(`/transport/routes/${id}`, {
+      method: "PATCH",
+      body: JSON.stringify(data),
+    }),
+
+  getTransportRouteAvailability: (id: string) =>
+    request<any>(`/transport/routes/${id}/availability`),
+
+  getTransportStops: (routeId?: string) =>
+    request<any[]>(`/transport/stops${routeId ? `?routeId=${routeId}` : ""}`),
+
+  createTransportStop: (data: CreateTransportStopRequest) =>
+    request<any>("/transport/stops", {
+      method: "POST",
+      body: JSON.stringify(data),
+    }),
+
+  getTransportVehicles: () => request<any[]>("/transport/vehicles"),
+
+  createTransportVehicle: (data: CreateTransportVehicleRequest) =>
+    request<any>("/transport/vehicles", {
+      method: "POST",
+      body: JSON.stringify(data),
+    }),
+
+  getTransportSchedules: (routeId?: string) =>
+    request<any[]>(`/transport/schedules${routeId ? `?routeId=${routeId}` : ""}`),
+
+  createTransportSchedule: (data: CreateTransportScheduleRequest) =>
+    request<any>("/transport/schedules", {
+      method: "POST",
+      body: JSON.stringify(data),
+    }),
+
 };

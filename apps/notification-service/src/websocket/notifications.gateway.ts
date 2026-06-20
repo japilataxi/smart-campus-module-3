@@ -18,61 +18,74 @@ import * as jwt from 'jsonwebtoken';
   },
 })
 export class NotificationsGateway
-  implements OnGatewayConnection, OnGatewayDisconnect
-{
-  @WebSocketServer()
-  server!: Server;
+    implements OnGatewayConnection, OnGatewayDisconnect
+  {
+    @WebSocketServer()
+    server!: Server;
 
-  private readonly logger = new Logger(NotificationsGateway.name);
-  private readonly connectedUsers = new Map<string, string>();
+    private static connectedClientsCount = 0;
 
-  handleConnection(client: Socket) {
-    try {
-      const token = this.extractToken(client);
+    private readonly logger = new Logger(NotificationsGateway.name);
+    private readonly connectedUsers = new Map<string, string>();
 
-      const payload = jwt.verify(
-        token,
-        process.env.JWT_SECRET || 'change_me',
-      ) as {
-        sub?: string;
-        userId?: string;
-        email?: string;
-        roles?: string[];
-      };
+    handleConnection(client: Socket) {
+      try {
+        const token = this.extractToken(client);
 
-      const userId = payload.sub || payload.userId || payload.email;
+        const payload = jwt.verify(
+          token,
+          process.env.JWT_SECRET || 'change_me',
+        ) as {
+          sub?: string;
+          userId?: string;
+          email?: string;
+          roles?: string[];
+        };
 
-      if (!userId) {
-        throw new UnauthorizedException('Invalid token payload');
-      }
+        const userId = payload.sub || payload.userId || payload.email;
 
-      client.data.user = payload;
-      client.data.userId = userId;
+        if (!userId) {
+          throw new UnauthorizedException('Invalid token payload');
+        }
 
-      this.connectedUsers.set(userId, client.id);
-      client.join(`user:${userId}`);
+        client.data.user = payload;
+        client.data.userId = userId;
 
-      this.logger.log(`WebSocket connected: user=${userId}`);
-    } catch (error) {
-        const message =
-            error instanceof Error ? error.message : String(error);
+        this.connectedUsers.set(userId, client.id);
+        client.join(`user:${userId}`);
+
+        NotificationsGateway.connectedClientsCount =
+          this.connectedUsers.size;
+
+        this.logger.log(`WebSocket connected: user=${userId}`);
+      } catch (error) {
+        const message = error instanceof Error ? error.message : String(error);
 
         this.logger.warn(`WebSocket connection rejected: ${message}`);
         client.disconnect();
-        }
-  }
+      }
+    }
 
-  handleDisconnect(client: Socket) {
+
+   handleDisconnect(client: Socket) {
     const userId = client.data.userId;
 
     if (userId) {
       this.connectedUsers.delete(userId);
+
+      NotificationsGateway.connectedClientsCount =
+        this.connectedUsers.size;
+
       this.logger.log(`WebSocket disconnected: user=${userId}`);
     }
   }
 
   emitNewNotification(userId: string, notification: unknown) {
     this.server.to(`user:${userId}`).emit('notification:new', notification);
+  }
+
+  emitNewNotificationToAll(notification: unknown) {
+  this.server.emit('notification:new', notification);
   }
 
   emitUnreadCount(userId: string, count: number) {
@@ -98,8 +111,8 @@ export class NotificationsGateway
     };
   }
 
-  getConnectedClientsCount(): number {
-    return this.connectedUsers.size;
+  static getConnectedClientsCount(): number {
+    return NotificationsGateway.connectedClientsCount;
   }
 
   private extractToken(client: Socket): string {

@@ -123,9 +123,14 @@ jobs:
           pnpm --filter api-gateway test
           pnpm --filter auth-service test
           pnpm --filter library-service test
-          pnpm --filter qr-access-service test`r`n          pnpm --filter campus-incident-service test`r`n          pnpm --filter notification-service test
+          pnpm --filter qr-access-service test
+          pnpm --filter campus-incident-service test
+          pnpm --filter notification-service test
 
       - name: Run e2e tests
         run: |
           pnpm --filter auth-service test:e2e
-          pnpm --filter library-service test:e2e`r`n          pnpm --filter qr-access-service test:e2e`r`n          pnpm --filter campus-incident-service test:e2e`r`n          pnpm --filter notification-service test:e2e
+          pnpm --filter library-service test:e2e
+          pnpm --filter qr-access-service test:e2e
+          pnpm --filter campus-incident-service test:e2e
+          pnpm --filter notification-service test:e2e

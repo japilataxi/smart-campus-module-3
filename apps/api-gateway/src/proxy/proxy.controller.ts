@@ -7,6 +7,7 @@ import {
   Post,
   Patch,
   Delete,
+  Query,
 } from '@nestjs/common';
 import { ApiOperation, ApiTags } from '@nestjs/swagger';
 
@@ -367,4 +368,173 @@ proxyIncidentDelete(
       authorization,
     });
   }
+  @Get('transport/routes')
+  @ApiOperation({ summary: 'Forward GET transport routes to transport-service' })
+  proxyTransportRoutesGet(@Headers('authorization') authorization?: string) {
+    const baseUrl = process.env.TRANSPORT_SERVICE_URL || 'http://localhost:3022';
+
+    return this.proxyService.forwardRequest({
+      method: 'GET',
+      targetUrl: `${baseUrl}/transport/routes`,
+      authorization,
+    });
+  }
+
+  @Post('transport/routes')
+  @ApiOperation({ summary: 'Forward POST transport route to transport-service' })
+  proxyTransportRoutePost(
+    @Body() body: unknown,
+    @Headers('authorization') authorization?: string,
+  ) {
+    const baseUrl = process.env.TRANSPORT_SERVICE_URL || 'http://localhost:3022';
+
+    return this.proxyService.forwardRequest({
+      method: 'POST',
+      targetUrl: `${baseUrl}/transport/routes`,
+      body,
+      authorization,
+    });
+  }
+
+  @Get('transport/routes/:id')
+  @ApiOperation({ summary: 'Forward GET transport route by id to transport-service' })
+  proxyTransportRouteGetById(
+    @Param('id') id: string,
+    @Headers('authorization') authorization?: string,
+  ) {
+    const baseUrl = process.env.TRANSPORT_SERVICE_URL || 'http://localhost:3022';
+
+    return this.proxyService.forwardRequest({
+      method: 'GET',
+      targetUrl: `${baseUrl}/transport/routes/${id}`,
+      authorization,
+    });
+  }
+
+  @Patch('transport/routes/:id')
+  @ApiOperation({ summary: 'Forward PATCH transport route to transport-service' })
+  proxyTransportRoutePatch(
+    @Param('id') id: string,
+    @Body() body: unknown,
+    @Headers('authorization') authorization?: string,
+  ) {
+    const baseUrl = process.env.TRANSPORT_SERVICE_URL || 'http://localhost:3022';
+
+    return this.proxyService.forwardRequest({
+      method: 'PATCH',
+      targetUrl: `${baseUrl}/transport/routes/${id}`,
+      body,
+      authorization,
+    });
+  }
+
+  @Get('transport/routes/:id/availability')
+  @ApiOperation({ summary: 'Forward GET transport route availability to transport-service' })
+  proxyTransportRouteAvailability(
+    @Param('id') id: string,
+    @Headers('authorization') authorization?: string,
+  ) {
+    const baseUrl = process.env.TRANSPORT_SERVICE_URL || 'http://localhost:3022';
+
+    return this.proxyService.forwardRequest({
+      method: 'GET',
+      targetUrl: `${baseUrl}/transport/routes/${id}/availability`,
+      authorization,
+    });
+  }
+
+  @Get('transport/stops')
+  @ApiOperation({ summary: 'Forward GET transport stops to transport-service' })
+  proxyTransportStopsGet(
+    @Query('routeId') routeId?: string,
+    @Headers('authorization') authorization?: string,
+  ) {
+    const baseUrl = process.env.TRANSPORT_SERVICE_URL || 'http://localhost:3022';
+    const query = routeId ? `?routeId=${routeId}` : '';
+
+    return this.proxyService.forwardRequest({
+      method: 'GET',
+      targetUrl: `${baseUrl}/transport/stops${query}`,
+      authorization,
+    });
+  }
+
+  @Post('transport/stops')
+  @ApiOperation({ summary: 'Forward POST transport stop to transport-service' })
+  proxyTransportStopPost(
+    @Body() body: unknown,
+    @Headers('authorization') authorization?: string,
+  ) {
+    const baseUrl = process.env.TRANSPORT_SERVICE_URL || 'http://localhost:3022';
+
+    return this.proxyService.forwardRequest({
+      method: 'POST',
+      targetUrl: `${baseUrl}/transport/stops`,
+      body,
+      authorization,
+    });
+  }
+
+  @Get('transport/vehicles')
+  @ApiOperation({ summary: 'Forward GET transport vehicles to transport-service' })
+  proxyTransportVehiclesGet(@Headers('authorization') authorization?: string) {
+    const baseUrl = process.env.TRANSPORT_SERVICE_URL || 'http://localhost:3022';
+
+    return this.proxyService.forwardRequest({
+      method: 'GET',
+      targetUrl: `${baseUrl}/transport/vehicles`,
+      authorization,
+    });
+  }
+
+  @Post('transport/vehicles')
+  @ApiOperation({ summary: 'Forward POST transport vehicle to transport-service' })
+  proxyTransportVehiclePost(
+    @Body() body: unknown,
+    @Headers('authorization') authorization?: string,
+  ) {
+    const baseUrl = process.env.TRANSPORT_SERVICE_URL || 'http://localhost:3022';
+
+    return this.proxyService.forwardRequest({
+      method: 'POST',
+      targetUrl: `${baseUrl}/transport/vehicles`,
+      body,
+      authorization,
+    });
+  }
+
+  @Get('transport/schedules')
+  @ApiOperation({ summary: 'Forward GET transport schedules to transport-service' })
+  proxyTransportSchedulesGet(
+    @Query('routeId') routeId?: string,
+    @Headers('authorization') authorization?: string,
+  ) {
+    const baseUrl = process.env.TRANSPORT_SERVICE_URL || 'http://localhost:3022';
+    const query = routeId ? `?routeId=${routeId}` : '';
+
+    return this.proxyService.forwardRequest({
+      method: 'GET',
+      targetUrl: `${baseUrl}/transport/schedules${query}`,
+      authorization,
+    });
+  }
+
+  @Post('transport/schedules')
+  @ApiOperation({ summary: 'Forward POST transport schedule to transport-service' })
+  proxyTransportSchedulePost(
+    @Body() body: unknown,
+    @Headers('authorization') authorization?: string,
+  ) {
+    const baseUrl = process.env.TRANSPORT_SERVICE_URL || 'http://localhost:3022';
+
+    return this.proxyService.forwardRequest({
+      method: 'POST',
+      targetUrl: `${baseUrl}/transport/schedules`,
+      body,
+      authorization,
+    });
+  }
 }
+
+
+

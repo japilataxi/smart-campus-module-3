@@ -84,6 +84,7 @@ resource "aws_instance" "gateway" {
     library_private_ip   = aws_instance.library.private_ip
     incident_private_ip  = aws_instance.incident.private_ip
     qr_access_private_ip = aws_instance.qr_access.private_ip
+    transport_private_ip = aws_instance.transport.private_ip
     alb_dns              = aws_lb.app.dns_name
     compose_content      = file("${path.module}/../../docker/docker-compose.gateway.qa.yml")
   })
@@ -92,7 +93,8 @@ resource "aws_instance" "gateway" {
     aws_instance.auth,
     aws_instance.library,
     aws_instance.incident,
-    aws_instance.qr_access
+    aws_instance.qr_access,
+    aws_instance.transport
   ]
 
   tags = {
@@ -163,5 +165,27 @@ resource "aws_instance" "qr_access" {
 
   tags = {
     Name = "${var.project_name}-${var.environment}-qr-access-service"
+  }
+}
+
+resource "aws_instance" "transport" {
+  ami                    = data.aws_ami.amazon_linux.id
+  instance_type          = "t2.micro"
+  subnet_id              = aws_subnet.private_a.id
+  vpc_security_group_ids = [aws_security_group.transport.id]
+  key_name               = var.key_name
+
+  root_block_device {
+    volume_size           = 20
+    volume_type           = "gp3"
+    delete_on_termination = true
+  }
+
+  user_data = templatefile("${path.module}/templates/transport-user-data.sh.tpl", {
+    compose_content = file("${path.module}/../../docker/docker-compose.transport.qa.yml")
+  })
+
+  tags = {
+    Name = "${var.project_name}-${var.environment}-transport-service"
   }
 }

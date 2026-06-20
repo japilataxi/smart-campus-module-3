@@ -5,6 +5,7 @@ import { usePathname } from "next/navigation";
 import {
   AlertTriangle,
   Bell,
+  BusFront,
   BookOpen,
   GraduationCap,
   LayoutDashboard,
@@ -42,6 +43,7 @@ const groupedMenuByRole = {
       title: "Campus Services",
       items: [
         { href: "/qr-access", label: "QR Access", icon: QrCode },
+        { href: "/transport", label: "Transport", icon: BusFront },
         { href: "/incidents", label: "Incidents", icon: AlertTriangle },
       ],
     },
@@ -69,6 +71,7 @@ const groupedMenuByRole = {
       title: "Campus Services",
       items: [
         { href: "/qr-access", label: "QR Access", icon: QrCode },
+        { href: "/transport", label: "Transport", icon: BusFront },
         { href: "/incidents", label: "Incidents", icon: AlertTriangle },
       ],
     },
@@ -88,6 +91,7 @@ const groupedMenuByRole = {
         { href: "/admin/users", label: "Users", icon: Users },
         { href: "/admin/roles", label: "Roles", icon: Shield },
         { href: "/qr-access", label: "QR Access", icon: QrCode },
+        { href: "/transport", label: "Transport", icon: BusFront },
       ],
     },
     {
@@ -102,7 +106,10 @@ const groupedMenuByRole = {
     },
     {
       title: "Campus Operations",
-      items: [{ href: "/incidents", label: "Incidents", icon: AlertTriangle }],
+      items: [
+        { href: "/transport", label: "Transport", icon: BusFront },
+        { href: "/incidents", label: "Incidents", icon: AlertTriangle },
+      ],
     },
   ],
 };

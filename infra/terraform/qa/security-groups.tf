@@ -75,12 +75,12 @@ resource "aws_security_group" "auth" {
   vpc_id = aws_vpc.main.id
 
   ingress {
-  description     = "Allow auth port from bastion for Swagger tunnel"
-  from_port       = 3001
-  to_port         = 3001
-  protocol        = "tcp"
-  security_groups = [aws_security_group.bastion.id]
-}
+    description     = "Allow auth port from bastion for Swagger tunnel"
+    from_port       = 3001
+    to_port         = 3001
+    protocol        = "tcp"
+    security_groups = [aws_security_group.bastion.id]
+  }
 
   ingress {
     from_port       = 3001
@@ -116,12 +116,12 @@ resource "aws_security_group" "library" {
   }
 
   ingress {
-  description     = "Allow library port from bastion for Swagger tunnel"
-  from_port       = 3002
-  to_port         = 3002
-  protocol        = "tcp"
-  security_groups = [aws_security_group.bastion.id]
-}
+    description     = "Allow library port from bastion for Swagger tunnel"
+    from_port       = 3002
+    to_port         = 3002
+    protocol        = "tcp"
+    security_groups = [aws_security_group.bastion.id]
+  }
 
   ingress {
     from_port       = 22
@@ -176,12 +176,12 @@ resource "aws_security_group" "incident" {
   }
 
   ingress {
-  description     = "Allow incident port from bastion for Swagger tunnel"
-  from_port       = 3020
-  to_port         = 3020
-  protocol        = "tcp"
-  security_groups = [aws_security_group.bastion.id]
-}
+    description     = "Allow incident port from bastion for Swagger tunnel"
+    from_port       = 3020
+    to_port         = 3020
+    protocol        = "tcp"
+    security_groups = [aws_security_group.bastion.id]
+  }
 
   ingress {
     from_port       = 22
@@ -206,6 +206,40 @@ resource "aws_security_group" "qr_access" {
     to_port         = 3021
     protocol        = "tcp"
     security_groups = [aws_security_group.gateway.id]
+  }
+
+  ingress {
+    from_port       = 22
+    to_port         = 22
+    protocol        = "tcp"
+    security_groups = [aws_security_group.bastion.id]
+  }
+
+  egress {
+    from_port   = 0
+    to_port     = 0
+    protocol    = "-1"
+    cidr_blocks = ["0.0.0.0/0"]
+  }
+}
+
+resource "aws_security_group" "transport" {
+  name   = "${var.project_name}-${var.environment}-transport-sg"
+  vpc_id = aws_vpc.main.id
+
+  ingress {
+    from_port       = 3022
+    to_port         = 3022
+    protocol        = "tcp"
+    security_groups = [aws_security_group.gateway.id]
+  }
+
+  ingress {
+    description     = "Allow transport port from bastion for Swagger tunnel"
+    from_port       = 3022
+    to_port         = 3022
+    protocol        = "tcp"
+    security_groups = [aws_security_group.bastion.id]
   }
 
   ingress {

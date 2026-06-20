@@ -28,3 +28,6 @@ output "campus_incident_service_private_ip" {
 output "qr_access_service_private_ip" {
   value = aws_instance.qr_access.private_ip
 }
+output "transport_service_private_ip" {
+  value = aws_instance.transport.private_ip
+}

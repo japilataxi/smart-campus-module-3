@@ -11,10 +11,12 @@ services:
       AUTH_SERVICE_URL: http://auth-service:3001
       LIBRARY_SERVICE_URL: http://library-service:3002
       CAMPUS_INCIDENT_SERVICE_URL: http://campus-incident-service:3020
+      NOTIFICATION_SERVICE_URL: http://notification-service:3010
     depends_on:
       - auth-service
       - library-service
       - campus-incident-service
+      - notification-service
     restart: unless-stopped
 
   auth-service:
@@ -31,9 +33,12 @@ services:
       JWT_SECRET: change_me
       JWT_REFRESH_SECRET: change_me_refresh
       ADMIN_EMAILS: kevin.amaguana@uce.edu.ec,japilataxi@uce.edu.ec,admin2026@uce.edu.ec
+      RABBITMQ_URL: amqp://guest:guest@rabbitmq:5672
+      RABBITMQ_EXCHANGE: smart-campus.events
     depends_on:
       - auth-db
       - redis
+      - rabbitmq
     restart: unless-stopped
 
   library-service:
@@ -48,9 +53,12 @@ services:
       REDIS_HOST: redis
       REDIS_PORT: 6379
       JWT_SECRET: change_me
+      RABBITMQ_URL: amqp://guest:guest@rabbitmq:5672
+      RABBITMQ_EXCHANGE: smart-campus.events
     depends_on:
       - library-db
       - redis
+      - rabbitmq
     restart: unless-stopped
 
   campus-incident-service:
@@ -73,6 +81,26 @@ services:
       - rabbitmq
     restart: unless-stopped
 
+  notification-service:
+    image: japilataxi/notification-service:qa
+    container_name: smart-campus-notification-service-qa
+    ports:
+      - "3010:3010"
+    environment:
+      SERVICE_NAME: notification-service
+      PORT: 3010
+      DATABASE_URL: postgresql://notification_user:notification_password@notification-db:5432/notification_db
+      REDIS_HOST: redis
+      REDIS_PORT: 6379
+      RABBITMQ_URL: amqp://guest:guest@rabbitmq:5672
+      RABBITMQ_EXCHANGE: smart-campus.events
+      JWT_SECRET: change_me
+    depends_on:
+      - redis
+      - rabbitmq
+      - notification-db
+    restart: unless-stopped
+
   web-app:
     image: japilataxi/web-app:qa
     container_name: smart-campus-web-app-qa
@@ -81,7 +109,7 @@ services:
     environment:
       PORT: 3003
       HOSTNAME: 0.0.0.0
-      NEXT_PUBLIC_API_URL: http://smart-campus-qa-alb-1189508831.us-east-1.elb.amazonaws.com/api
+      NEXT_PUBLIC_API_URL: http://localhost:3000
     depends_on:
       - api-gateway
     restart: unless-stopped
@@ -125,6 +153,37 @@ services:
       - campus_incident_db_data:/var/lib/postgresql/data
     restart: unless-stopped
 
+  notification-db:
+    image: postgres:16
+    container_name: smart-campus-notification-db-qa
+    environment:
+      POSTGRES_DB: notification_db
+      POSTGRES_USER: notification_user
+      POSTGRES_PASSWORD: notification_password
+    ports:
+      - "5436:5432"
+    volumes:
+      - notification_db_data:/var/lib/postgresql/data
+    restart: unless-stopped
+
+  rabbitmq:
+    image: rabbitmq:3-management-alpine
+    container_name: smart-campus-rabbitmq-qa
+    ports:
+      - "5672:5672"
+      - "15672:15672"
+    environment:
+      RABBITMQ_DEFAULT_USER: guest
+      RABBITMQ_DEFAULT_PASS: guest
+      RABBITMQ_ERLANG_COOKIE: smart-campus-cookie
+    healthcheck:
+      test: ["CMD", "rabbitmq-diagnostics", "check_running"]
+      interval: 10s
+      timeout: 30s
+      retries: 5
+      start_period: 30s
+    restart: unless-stopped
+
   redis:
     image: redis:7-alpine
     container_name: smart-campus-redis-qa
@@ -137,6 +196,14 @@ services:
     container_name: smart-campus-prometheus-qa
     ports:
       - "9090:9090"
+    volumes:
+        - ../monitoring/prometheus.yml:/etc/prometheus/prometheus.yml
+    depends_on:
+        - api-gateway
+        - auth-service
+        - library-service
+        - campus-incident-service
+        - notification-service
     restart: unless-stopped
 
   grafana:
@@ -144,9 +211,16 @@ services:
     container_name: smart-campus-grafana-qa
     ports:
       - "3005:3000"
+    environment:
+      GF_SECURITY_ADMIN_USER: admin 
+      GF_SECURITY_ADMIN_PASSWORD: admin
+    depends_on: 
+    - prometheus
     restart: unless-stopped
 
 volumes:
   auth_db_data:
   library_db_data:
   campus_incident_db_data:
+  notification_db_data:
+  

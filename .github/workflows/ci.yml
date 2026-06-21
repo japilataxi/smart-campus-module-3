@@ -37,6 +37,23 @@ jobs:
         ports:
           - 5434:5432
 
+      postgres-qr-access:
+        image: postgres:16
+        env:
+          POSTGRES_DB: qr_access_db
+          POSTGRES_USER: qr_access_user
+          POSTGRES_PASSWORD: qr_access_password
+        ports:
+          - 5437:5432
+
+      postgres-transport:
+        image: postgres:16
+        env:
+          POSTGRES_DB: transport_db
+          POSTGRES_USER: transport_user
+          POSTGRES_PASSWORD: transport_password
+        ports:
+          - 5438:5432
       redis:
         image: redis:7
         ports:
@@ -69,6 +86,8 @@ jobs:
     env:
       AUTH_DATABASE_URL: postgresql://auth_user:auth_password@localhost:5433/auth_db
       LIBRARY_DATABASE_URL: postgresql://library_user:library_password@localhost:5434/library_db
+      QR_ACCESS_DATABASE_URL: postgresql://qr_access_user:qr_access_password@localhost:5437/qr_access_db
+      TRANSPORT_DATABASE_URL: postgresql://transport_user:transport_password@localhost:5438/transport_db
       DATABASE_URL: postgresql://auth_user:auth_password@localhost:5433/auth_db
       REDIS_HOST: localhost
       REDIS_PORT: 6379
@@ -103,6 +122,8 @@ jobs:
           pnpm --filter api-gateway build
           pnpm --filter auth-service build
           pnpm --filter library-service build
+          pnpm --filter qr-access-service build
+          pnpm --filter transport-service build
           pnpm --filter web-app build
           pnpm --filter campus-incident-service build
           pnpm --filter notification-service build
@@ -112,6 +133,8 @@ jobs:
           pnpm --filter api-gateway test
           pnpm --filter auth-service test
           pnpm --filter library-service test
+          pnpm --filter qr-access-service test
+          pnpm --filter transport-service test
           pnpm --filter campus-incident-service test
           pnpm --filter notification-service test
 
@@ -119,5 +142,8 @@ jobs:
         run: |
           pnpm --filter auth-service test:e2e
           pnpm --filter library-service test:e2e
+          pnpm --filter qr-access-service test:e2e
+          pnpm --filter transport-service test:e2e
           pnpm --filter campus-incident-service test:e2e
           pnpm --filter notification-service test:e2e
+

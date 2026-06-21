@@ -24,3 +24,5 @@ coverage
 *.tfstate.backup
 .terraform.lock.hcl
 .turbo
+!.env.example
+!**/.env.example

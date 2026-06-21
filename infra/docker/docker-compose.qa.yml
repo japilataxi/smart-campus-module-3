@@ -15,11 +15,15 @@ services:
       LIBRARY_SERVICE_URL: http://library-service:3002
       CAMPUS_INCIDENT_SERVICE_URL: http://campus-incident-service:3020
       NOTIFICATION_SERVICE_URL: http://notification-service:3010
+      QR_ACCESS_SERVICE_URL: http://qr-access-service:3021
+      TRANSPORT_SERVICE_URL: http://transport-service:3022
     depends_on:
       - auth-service
       - library-service
       - campus-incident-service
       - notification-service
+      - qr-access-service
+      - transport-service
 
   auth-service:
     build:
@@ -86,46 +90,6 @@ services:
       - campus-incident-db
       - rabbitmq
 
-  web-app:
-    build:
-      context: ../../
-      dockerfile: apps/web-app/Dockerfile
-    ports:
-      - "3003:3003"
-    environment:
-      PORT: 3003
-      HOSTNAME: 0.0.0.0
-      NEXT_PUBLIC_API_URL: http://localhost:3000
-    depends_on:
-      - api-gateway
-
-  auth-db:
-    image: postgres:16
-    environment:
-      POSTGRES_DB: auth_db
-      POSTGRES_USER: auth_user
-      POSTGRES_PASSWORD: auth_password
-    ports:
-      - "5433:5432"
-
-  library-db:
-    image: postgres:16
-    environment:
-      POSTGRES_DB: library_db
-      POSTGRES_USER: library_user
-      POSTGRES_PASSWORD: library_password
-    ports:
-      - "5434:5432"
-  
-  campus-incident-db:
-    image: postgres:16
-    environment:
-      POSTGRES_DB: campus_incidents_db
-      POSTGRES_USER: incident_user
-      POSTGRES_PASSWORD: incident_password
-    ports:
-      - "5436:5432"
-
   notification-service:
     build:
       context: ../../
@@ -148,6 +112,82 @@ services:
       - redis
       - rabbitmq
 
+  qr-access-service:
+    build:
+      context: ../../
+      dockerfile: apps/qr-access-service/Dockerfile
+      args:
+        APP_NAME: qr-access-service
+    ports:
+      - "3021:3021"
+    environment:
+      SERVICE_NAME: qr-access-service
+      PORT: 3021
+      DATABASE_URL: postgresql://qr_access_user:qr_access_password@qr-access-db:5432/qr_access_db
+      REDIS_HOST: redis
+      REDIS_PORT: 6379
+    depends_on:
+      - qr-access-db
+      - redis
+
+
+  transport-service:
+    build:
+      context: ../../
+      dockerfile: apps/transport-service/Dockerfile
+      args:
+        APP_NAME: transport-service
+    ports:
+      - "3022:3022"
+    environment:
+      SERVICE_NAME: transport-service
+      PORT: 3022
+      DATABASE_URL: postgresql://transport_user:transport_password@transport-db:5432/transport_db
+      REDIS_HOST: redis
+      REDIS_PORT: 6379
+    depends_on:
+      - transport-db
+      - redis
+  web-app:
+    build:
+      context: ../../
+      dockerfile: apps/web-app/Dockerfile
+    ports:
+      - "3003:3003"
+    environment:
+      PORT: 3003
+      HOSTNAME: 0.0.0.0
+      NEXT_PUBLIC_API_URL: http://localhost:3000/api
+    depends_on:
+      - api-gateway
+
+  auth-db:
+    image: postgres:16
+    environment:
+      POSTGRES_DB: auth_db
+      POSTGRES_USER: auth_user
+      POSTGRES_PASSWORD: auth_password
+    ports:
+      - "5433:5432"
+
+  library-db:
+    image: postgres:16
+    environment:
+      POSTGRES_DB: library_db
+      POSTGRES_USER: library_user
+      POSTGRES_PASSWORD: library_password
+    ports:
+      - "5434:5432"
+
+  campus-incident-db:
+    image: postgres:16
+    environment:
+      POSTGRES_DB: campus_incidents_db
+      POSTGRES_USER: incident_user
+      POSTGRES_PASSWORD: incident_password
+    ports:
+      - "5436:5432"
+
   notification-db:
     image: postgres:16
     environment:
@@ -157,6 +197,23 @@ services:
     ports:
       - "5435:5432"
 
+  qr-access-db:
+    image: postgres:16
+    environment:
+      POSTGRES_DB: qr_access_db
+      POSTGRES_USER: qr_access_user
+      POSTGRES_PASSWORD: qr_access_password
+    ports:
+      - "5437:5432"
+
+  transport-db:
+    image: postgres:16
+    environment:
+      POSTGRES_DB: transport_db
+      POSTGRES_USER: transport_user
+      POSTGRES_PASSWORD: transport_password
+    ports:
+      - "5438:5432"
   rabbitmq:
     image: rabbitmq:3-management-alpine
     ports:
@@ -185,6 +242,8 @@ services:
       - library-service
       - campus-incident-service
       - notification-service
+      - qr-access-service
+      - transport-service
 
   grafana:
     image: grafana/grafana
@@ -195,3 +254,4 @@ services:
       GF_SECURITY_ADMIN_PASSWORD: admin
     depends_on:
       - prometheus
+

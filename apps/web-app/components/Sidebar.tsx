@@ -5,6 +5,7 @@ import { usePathname } from "next/navigation";
 import {
   AlertTriangle,
   Bell,
+  Building2,
   BusFront,
   BookOpen,
   GraduationCap,
@@ -44,6 +45,7 @@ const groupedMenuByRole = {
       items: [
         { href: "/qr-access", label: "QR Access", icon: QrCode },
         { href: "/transport", label: "Transport", icon: BusFront },
+        { href: "/space-availability", label: "Space Availability", icon: Building2 },
         { href: "/incidents", label: "Incidents", icon: AlertTriangle },
       ],
     },
@@ -72,6 +74,7 @@ const groupedMenuByRole = {
       items: [
         { href: "/qr-access", label: "QR Access", icon: QrCode },
         { href: "/transport", label: "Transport", icon: BusFront },
+        { href: "/space-availability", label: "Space Availability", icon: Building2 },
         { href: "/incidents", label: "Incidents", icon: AlertTriangle },
       ],
     },
@@ -92,6 +95,7 @@ const groupedMenuByRole = {
         { href: "/admin/roles", label: "Roles", icon: Shield },
         { href: "/qr-access", label: "QR Access", icon: QrCode },
         { href: "/transport", label: "Transport", icon: BusFront },
+        { href: "/space-availability", label: "Space Availability", icon: Building2 },
       ],
     },
     {
@@ -108,6 +112,7 @@ const groupedMenuByRole = {
       title: "Campus Operations",
       items: [
         { href: "/transport", label: "Transport", icon: BusFront },
+        { href: "/space-availability", label: "Space Availability", icon: Building2 },
         { href: "/incidents", label: "Incidents", icon: AlertTriangle },
       ],
     },
@@ -181,3 +186,4 @@ export function Sidebar() {
     </aside>
   );
 }
+

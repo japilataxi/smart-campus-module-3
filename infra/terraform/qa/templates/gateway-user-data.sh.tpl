@@ -24,6 +24,8 @@ LIBRARY_SERVICE_URL=http://${library_private_ip}:3002
 CAMPUS_INCIDENT_SERVICE_URL=http://${incident_private_ip}:3020
 QR_ACCESS_SERVICE_URL=http://${qr_access_private_ip}:3021
 TRANSPORT_SERVICE_URL=http://${transport_private_ip}:3022
+SPACE_AVAILABILITY_SERVICE_URL=http://${space_availability_private_ip}:3023
 EOF
 
 docker compose up -d
+

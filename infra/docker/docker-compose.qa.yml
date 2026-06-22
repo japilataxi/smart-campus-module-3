@@ -17,6 +17,7 @@ services:
       NOTIFICATION_SERVICE_URL: http://notification-service:3010
       QR_ACCESS_SERVICE_URL: http://qr-access-service:3021
       TRANSPORT_SERVICE_URL: http://transport-service:3022
+      SPACE_AVAILABILITY_SERVICE_URL: http://space-availability-service:3023
     depends_on:
       - auth-service
       - library-service
@@ -24,6 +25,7 @@ services:
       - notification-service
       - qr-access-service
       - transport-service
+      - space-availability-service
 
   auth-service:
     build:
@@ -148,6 +150,23 @@ services:
     depends_on:
       - transport-db
       - redis
+  space-availability-service:
+    build:
+      context: ../../
+      dockerfile: apps/space-availability-service/Dockerfile
+      args:
+        APP_NAME: space-availability-service
+    ports:
+      - "3023:3023"
+    environment:
+      SERVICE_NAME: space-availability-service
+      PORT: 3023
+      DATABASE_URL: postgresql://space_user:space_password@space-availability-db:5432/space_availability_db
+      REDIS_HOST: redis
+      REDIS_PORT: 6379
+    depends_on:
+      - space-availability-db
+      - redis
   web-app:
     build:
       context: ../../
@@ -214,6 +233,14 @@ services:
       POSTGRES_PASSWORD: transport_password
     ports:
       - "5438:5432"
+  space-availability-db:
+    image: postgres:16
+    environment:
+      POSTGRES_DB: space_availability_db
+      POSTGRES_USER: space_user
+      POSTGRES_PASSWORD: space_password
+    ports:
+      - "5439:5432"
   rabbitmq:
     image: rabbitmq:3-management-alpine
     ports:
@@ -244,6 +271,7 @@ services:
       - notification-service
       - qr-access-service
       - transport-service
+      - space-availability-service
 
   grafana:
     image: grafana/grafana
@@ -254,4 +282,6 @@ services:
       GF_SECURITY_ADMIN_PASSWORD: admin
     depends_on:
       - prometheus
+
+
 

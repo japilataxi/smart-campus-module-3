@@ -534,7 +534,178 @@ proxyIncidentDelete(
       authorization,
     });
   }
+  @Post('spaces')
+  @ApiOperation({ summary: 'Forward POST space to space-availability-service' })
+  proxySpacePost(
+    @Body() body: unknown,
+    @Headers('authorization') authorization?: string,
+  ) {
+    const baseUrl = process.env.SPACE_AVAILABILITY_SERVICE_URL || 'http://localhost:3023';
+
+    return this.proxyService.forwardRequest({
+      method: 'POST',
+      targetUrl: `${baseUrl}/spaces`,
+      body,
+      authorization,
+    });
+  }
+
+  @Get('spaces')
+  @ApiOperation({ summary: 'Forward GET spaces to space-availability-service' })
+  proxySpacesGet(
+    @Query('type') type?: string,
+    @Query('availabilityStatus') availabilityStatus?: string,
+    @Query('location') location?: string,
+    @Headers('authorization') authorization?: string,
+  ) {
+    const baseUrl = process.env.SPACE_AVAILABILITY_SERVICE_URL || 'http://localhost:3023';
+    const params = new URLSearchParams();
+    if (type) params.set('type', type);
+    if (availabilityStatus) params.set('availabilityStatus', availabilityStatus);
+    if (location) params.set('location', location);
+    const query = params.toString() ? `?${params.toString()}` : '';
+
+    return this.proxyService.forwardRequest({
+      method: 'GET',
+      targetUrl: `${baseUrl}/spaces${query}`,
+      authorization,
+    });
+  }
+
+  @Get('spaces/available')
+  @ApiOperation({ summary: 'Forward GET available spaces to space-availability-service' })
+  proxySpacesAvailable(@Headers('authorization') authorization?: string) {
+    const baseUrl = process.env.SPACE_AVAILABILITY_SERVICE_URL || 'http://localhost:3023';
+
+    return this.proxyService.forwardRequest({
+      method: 'GET',
+      targetUrl: `${baseUrl}/spaces/available`,
+      authorization,
+    });
+  }
+
+  @Get('spaces/type/:type')
+  @ApiOperation({ summary: 'Forward GET spaces by type to space-availability-service' })
+  proxySpacesByType(
+    @Param('type') type: string,
+    @Headers('authorization') authorization?: string,
+  ) {
+    const baseUrl = process.env.SPACE_AVAILABILITY_SERVICE_URL || 'http://localhost:3023';
+
+    return this.proxyService.forwardRequest({
+      method: 'GET',
+      targetUrl: `${baseUrl}/spaces/type/${type}`,
+      authorization,
+    });
+  }
+
+  @Get('spaces/location/:location')
+  @ApiOperation({ summary: 'Forward GET spaces by location to space-availability-service' })
+  proxySpacesByLocation(
+    @Param('location') location: string,
+    @Headers('authorization') authorization?: string,
+  ) {
+    const baseUrl = process.env.SPACE_AVAILABILITY_SERVICE_URL || 'http://localhost:3023';
+
+    return this.proxyService.forwardRequest({
+      method: 'GET',
+      targetUrl: `${baseUrl}/spaces/location/${location}`,
+      authorization,
+    });
+  }
+
+  @Get('spaces/:id/check-availability')
+  @ApiOperation({ summary: 'Forward space availability check to space-availability-service' })
+  proxySpaceCheckAvailability(
+    @Param('id') id: string,
+    @Headers('authorization') authorization?: string,
+  ) {
+    const baseUrl = process.env.SPACE_AVAILABILITY_SERVICE_URL || 'http://localhost:3023';
+
+    return this.proxyService.forwardRequest({
+      method: 'GET',
+      targetUrl: `${baseUrl}/spaces/${id}/check-availability`,
+      authorization,
+    });
+  }
+
+  @Get('spaces/:id')
+  @ApiOperation({ summary: 'Forward GET space by id to space-availability-service' })
+  proxySpaceGetById(
+    @Param('id') id: string,
+    @Headers('authorization') authorization?: string,
+  ) {
+    const baseUrl = process.env.SPACE_AVAILABILITY_SERVICE_URL || 'http://localhost:3023';
+
+    return this.proxyService.forwardRequest({
+      method: 'GET',
+      targetUrl: `${baseUrl}/spaces/${id}`,
+      authorization,
+    });
+  }
+
+  @Patch('spaces/:id')
+  @ApiOperation({ summary: 'Forward PATCH space to space-availability-service' })
+  proxySpacePatch(
+    @Param('id') id: string,
+    @Body() body: unknown,
+    @Headers('authorization') authorization?: string,
+  ) {
+    const baseUrl = process.env.SPACE_AVAILABILITY_SERVICE_URL || 'http://localhost:3023';
+
+    return this.proxyService.forwardRequest({
+      method: 'PATCH',
+      targetUrl: `${baseUrl}/spaces/${id}`,
+      body,
+      authorization,
+    });
+  }
+
+  @Delete('spaces/:id')
+  @ApiOperation({ summary: 'Forward DELETE space to space-availability-service' })
+  proxySpaceDelete(
+    @Param('id') id: string,
+    @Headers('authorization') authorization?: string,
+  ) {
+    const baseUrl = process.env.SPACE_AVAILABILITY_SERVICE_URL || 'http://localhost:3023';
+
+    return this.proxyService.forwardRequest({
+      method: 'DELETE',
+      targetUrl: `${baseUrl}/spaces/${id}`,
+      authorization,
+    });
+  }
+
+  @Patch('spaces/:id/deactivate')
+  @ApiOperation({ summary: 'Forward space deactivation to space-availability-service' })
+  proxySpaceDeactivate(
+    @Param('id') id: string,
+    @Headers('authorization') authorization?: string,
+  ) {
+    const baseUrl = process.env.SPACE_AVAILABILITY_SERVICE_URL || 'http://localhost:3023';
+
+    return this.proxyService.forwardRequest({
+      method: 'PATCH',
+      targetUrl: `${baseUrl}/spaces/${id}/deactivate`,
+      authorization,
+    });
+  }
+
+  @Patch('spaces/:id/availability')
+  @ApiOperation({ summary: 'Forward space availability update to space-availability-service' })
+  proxySpaceAvailabilityPatch(
+    @Param('id') id: string,
+    @Body() body: unknown,
+    @Headers('authorization') authorization?: string,
+  ) {
+    const baseUrl = process.env.SPACE_AVAILABILITY_SERVICE_URL || 'http://localhost:3023';
+
+    return this.proxyService.forwardRequest({
+      method: 'PATCH',
+      targetUrl: `${baseUrl}/spaces/${id}/availability`,
+      body,
+      authorization,
+    });
+  }
 }
-
-
 

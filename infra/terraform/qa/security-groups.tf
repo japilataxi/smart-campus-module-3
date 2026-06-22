@@ -256,3 +256,37 @@ resource "aws_security_group" "transport" {
     cidr_blocks = ["0.0.0.0/0"]
   }
 }
+
+resource "aws_security_group" "space_availability" {
+  name   = "${var.project_name}-${var.environment}-space-availability-sg"
+  vpc_id = aws_vpc.main.id
+
+  ingress {
+    from_port       = 3023
+    to_port         = 3023
+    protocol        = "tcp"
+    security_groups = [aws_security_group.gateway.id]
+  }
+
+  ingress {
+    description     = "Allow space availability port from bastion for Swagger tunnel"
+    from_port       = 3023
+    to_port         = 3023
+    protocol        = "tcp"
+    security_groups = [aws_security_group.bastion.id]
+  }
+
+  ingress {
+    from_port       = 22
+    to_port         = 22
+    protocol        = "tcp"
+    security_groups = [aws_security_group.bastion.id]
+  }
+
+  egress {
+    from_port   = 0
+    to_port     = 0
+    protocol    = "-1"
+    cidr_blocks = ["0.0.0.0/0"]
+  }
+}

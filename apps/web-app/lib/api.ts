@@ -112,6 +112,21 @@ export type CreateTransportScheduleRequest = {
   status?: string;
 };
 
+
+export type CreateSpaceRequest = {
+  name: string;
+  type: string;
+  location: string;
+  capacity: number;
+  status?: string;
+  availabilityStatus?: string;
+  openingTime: string;
+  closingTime: string;
+};
+
+export type UpdateSpaceAvailabilityRequest = {
+  availabilityStatus: string;
+};
 export const api = {
   login: (data: LoginRequest) =>
     request<any>("/auth/login", {
@@ -277,4 +292,53 @@ export const api = {
       body: JSON.stringify(data),
     }),
 
+  getSpaces: (filters?: { type?: string; availabilityStatus?: string; location?: string }) => {
+    const params = new URLSearchParams();
+    if (filters?.type) params.set("type", filters.type);
+    if (filters?.availabilityStatus) params.set("availabilityStatus", filters.availabilityStatus);
+    if (filters?.location) params.set("location", filters.location);
+    const query = params.toString() ? `?${params.toString()}` : "";
+    return request<any[]>(`/spaces${query}`);
+  },
+
+  getSpaceById: (id: string) => request<any>(`/spaces/${id}`),
+
+  createSpace: (data: CreateSpaceRequest) =>
+    request<any>("/spaces", {
+      method: "POST",
+      body: JSON.stringify(data),
+    }),
+
+  updateSpace: (id: string, data: Partial<CreateSpaceRequest>) =>
+    request<any>(`/spaces/${id}`, {
+      method: "PATCH",
+      body: JSON.stringify(data),
+    }),
+
+  deleteSpace: (id: string) =>
+    request<any>(`/spaces/${id}`, {
+      method: "DELETE",
+    }),
+
+  deactivateSpace: (id: string) =>
+    request<any>(`/spaces/${id}/deactivate`, {
+      method: "PATCH",
+    }),
+
+  updateSpaceAvailability: (id: string, data: UpdateSpaceAvailabilityRequest) =>
+    request<any>(`/spaces/${id}/availability`, {
+      method: "PATCH",
+      body: JSON.stringify(data),
+    }),
+
+  getAvailableSpaces: () => request<any[]>("/spaces/available"),
+
+  getSpacesByType: (type: string) => request<any[]>(`/spaces/type/${type}`),
+
+  getSpacesByLocation: (location: string) =>
+    request<any[]>(`/spaces/location/${encodeURIComponent(location)}`),
+
+  checkSpaceAvailability: (id: string) =>
+    request<any>(`/spaces/${id}/check-availability`),
 };
+

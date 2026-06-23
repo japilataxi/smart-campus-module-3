@@ -294,6 +294,9 @@ services:
         - library-service
         - campus-incident-service
         - notification-service
+        - qr-access-service
+        - transport-service
+        - space-availability-service
     restart: unless-stopped
 
   grafana:

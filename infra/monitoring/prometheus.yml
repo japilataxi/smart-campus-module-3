@@ -26,3 +26,13 @@ scrape_configs:
     metrics_path: /metrics
     static_configs:
       - targets: ["notification-service:3010"]
+
+  - job_name: qr-access-service
+    metrics_path: /metrics
+    static_configs:
+      - targets: ["qr-access-service:3021"]
+
+  - job_name: transport-service
+    metrics_path: /metrics
+    static_configs:
+      - targets: ["transport-service:3022"]

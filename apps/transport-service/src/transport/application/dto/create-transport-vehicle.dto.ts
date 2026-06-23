@@ -5,16 +5,16 @@ import { TransportVehicleStatus } from '../../domain/transport-status.enum';
 export class CreateTransportVehicleDto {
   @ApiProperty({ example: 'BUS-001' })
   @IsString()
-  code: string;
+  code!: string;
 
   @ApiProperty({ example: 'ABC-1234' })
   @IsString()
-  plate: string;
+  plate!: string;
 
   @ApiProperty({ example: 40 })
   @IsInt()
   @Min(1)
-  capacity: number;
+  capacity!: number;
 
   @ApiPropertyOptional({ enum: TransportVehicleStatus, default: TransportVehicleStatus.AVAILABLE })
   @IsEnum(TransportVehicleStatus)

@@ -4,11 +4,11 @@ import { IsNumber, IsOptional, IsString, IsUUID } from 'class-validator';
 export class CreateTransportStopDto {
   @ApiProperty({ example: 'Library Stop' })
   @IsString()
-  name: string;
+  name!: string;
 
   @ApiProperty({ example: 'North side of the library' })
   @IsString()
-  location: string;
+  location!: string;
 
   @ApiPropertyOptional({ example: -0.180653 })
   @IsNumber()

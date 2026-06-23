@@ -7,9 +7,10 @@ import { QrAccessLogEntity } from './infrastructure/entities/qr-access-log.entit
 import { TypeOrmQrAccessRepository } from './infrastructure/repositories/typeorm-qr-access.repository';
 import { QR_ACCESS_REPOSITORY } from './application/ports/qr-access-repository.port';
 import { RedisCacheService } from '../common/cache/redis-cache.service';
+import { LoggingModule } from '../common/logging/logging.module';
 
 @Module({
-  imports: [TypeOrmModule.forFeature([QrAccessCodeEntity, QrAccessLogEntity])],
+  imports: [TypeOrmModule.forFeature([QrAccessCodeEntity, QrAccessLogEntity]), LoggingModule],
   controllers: [QrAccessController],
   providers: [
     QrAccessService,

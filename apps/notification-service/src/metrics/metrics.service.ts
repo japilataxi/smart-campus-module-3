@@ -1,5 +1,6 @@
 import { Injectable } from '@nestjs/common';
 import { NotificationsService } from '../notifications/notifications.service';
+import { NotificationsGateway } from '../websocket/notifications.gateway';
 
 @Injectable()
 export class MetricsService {
@@ -31,7 +32,7 @@ export class MetricsService {
       '',
       '# HELP notification_service_websocket_connected_clients Connected WebSocket clients',
       '# TYPE notification_service_websocket_connected_clients gauge',
-      'notification_service_websocket_connected_clients 0',
+      `notification_service_websocket_connected_clients ${NotificationsGateway.getConnectedClientsCount()}`,
     ].join('\n');
   }
 }

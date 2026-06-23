@@ -6,7 +6,7 @@ export class CreateTransportRouteDto {
   @ApiProperty({ example: 'Central Campus Loop' })
   @IsString()
   @IsNotEmpty()
-  name: string;
+  name!: string;
 
   @ApiPropertyOptional({ example: 'Main internal campus route' })
   @IsString()
@@ -16,12 +16,12 @@ export class CreateTransportRouteDto {
   @ApiProperty({ example: 'Main Gate' })
   @IsString()
   @IsNotEmpty()
-  origin: string;
+  origin!: string;
 
   @ApiProperty({ example: 'Library Building' })
   @IsString()
   @IsNotEmpty()
-  destination: string;
+  destination!: string;
 
   @ApiPropertyOptional({ enum: TransportRouteStatus, default: TransportRouteStatus.ACTIVE })
   @IsEnum(TransportRouteStatus)

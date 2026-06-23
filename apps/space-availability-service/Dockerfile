@@ -1,24 +1,33 @@
-FROM node:22-alpine AS base
+FROM node:22-alpine AS builder
+
 WORKDIR /app
+
 RUN corepack enable
 
-FROM base AS deps
-COPY package.json pnpm-lock.yaml pnpm-workspace.yaml ./
-COPY apps/space-availability-service/package.json apps/space-availability-service/package.json
-RUN pnpm install --filter space-availability-service --frozen-lockfile
+COPY package.json pnpm-lock.yaml pnpm-workspace.yaml turbo.json ./
+COPY apps/space-availability-service/package.json ./apps/space-availability-service/package.json
 
-FROM deps AS build
-COPY apps/space-availability-service apps/space-availability-service
-RUN pnpm --filter space-availability-service build
+RUN pnpm install --frozen-lockfile
+
+COPY apps/space-availability-service ./apps/space-availability-service
+
+RUN pnpm --dir apps/space-availability-service build
 
 FROM node:22-alpine AS runner
+
 WORKDIR /app
+
 ENV NODE_ENV=production
+
 RUN corepack enable
-COPY --from=deps /app/node_modules ./node_modules
-COPY --from=deps /app/apps/space-availability-service/node_modules ./apps/space-availability-service/node_modules
-COPY --from=build /app/apps/space-availability-service/dist ./apps/space-availability-service/dist
+
+COPY package.json pnpm-lock.yaml pnpm-workspace.yaml turbo.json ./
 COPY apps/space-availability-service/package.json ./apps/space-availability-service/package.json
-WORKDIR /app/apps/space-availability-service
+
+RUN pnpm install --prod --frozen-lockfile
+
+COPY --from=builder /app/apps/space-availability-service/dist ./apps/space-availability-service/dist
+
 EXPOSE 3023
-CMD ["node", "dist/main"]
+
+CMD ["node", "apps/space-availability-service/dist/main.js"]

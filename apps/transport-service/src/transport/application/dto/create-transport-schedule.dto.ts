@@ -6,7 +6,7 @@ import { TransportScheduleStatus } from '../../domain/transport-status.enum';
 export class CreateTransportScheduleDto {
   @ApiProperty({ example: 'route uuid' })
   @IsUUID()
-  routeId: string;
+  routeId!: string;
 
   @ApiPropertyOptional({ example: 'vehicle uuid' })
   @IsUUID()
@@ -16,12 +16,12 @@ export class CreateTransportScheduleDto {
   @ApiProperty({ example: '2026-06-20T08:00:00.000Z' })
   @Type(() => Date)
   @IsDate()
-  departureTime: Date;
+  departureTime!: Date;
 
   @ApiProperty({ example: '2026-06-20T08:30:00.000Z' })
   @Type(() => Date)
   @IsDate()
-  arrivalTime: Date;
+  arrivalTime!: Date;
 
   @ApiPropertyOptional({ enum: TransportScheduleStatus, default: TransportScheduleStatus.SCHEDULED })
   @IsEnum(TransportScheduleStatus)

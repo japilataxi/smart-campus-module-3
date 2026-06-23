@@ -2,6 +2,7 @@
 
 import { useEffect, useState } from "react";
 import { AppShell } from "@/components/AppShell";
+import { io } from "socket.io-client";
 
 export default function NotificationsPage() {
   const [notifications, setNotifications] = useState<any[]>([]);
@@ -21,6 +22,43 @@ export default function NotificationsPage() {
     }
 
     load();
+  }, []);
+
+  useEffect(() => {
+    const token =
+      localStorage.getItem("smart_campus_access_token") ||
+      localStorage.getItem("accessToken") ||
+      localStorage.getItem("token");
+
+    if (!token) return;
+
+    const socket = io("http://localhost:3010", {
+      auth: {
+        token,
+      },
+      transports: ["websocket"],
+    });
+
+    socket.on("connect_error", (error) => {
+      console.error("WebSocket connection error:", error.message);
+    });
+
+    socket.on("notification:new", (notification) => {
+      console.log("notification:new", notification);
+      setNotifications((current) => [notification, ...current]);
+    });
+
+    socket.on("notification:unread-count", (data) => {
+      console.log("notification:unread-count", data);
+    });
+
+    socket.on("disconnect", () => {
+      console.log("WebSocket disconnected");
+    });
+
+    return () => {
+      socket.disconnect();
+    };
   }, []);
 
   return (

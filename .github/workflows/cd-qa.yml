@@ -54,3 +54,8 @@ jobs:
         run: |
           docker build -t ${{ secrets.DOCKERHUB_USERNAME }}/campus-incident-service:qa -f apps/campus-incident-service/Dockerfile .
           docker push ${{ secrets.DOCKERHUB_USERNAME }}/campus-incident-service:qa
+      
+      - name: Build and push notification-service QA
+        run: |
+          docker build -t ${{ secrets.DOCKERHUB_USERNAME }}/notification-service:qa -f apps/notification-service/Dockerfile .
+          docker push ${{ secrets.DOCKERHUB_USERNAME }}/notification-service:qa

@@ -44,9 +44,24 @@ export class TypeOrmQrAccessRepository implements QrAccessRepositoryPort {
   }
 
   async createLog(data: CreateQrAccessLogRecord): Promise<QrAccessLogRecord> {
-    const record = this.logRepository.create(data);
-    return this.logRepository.save(record);
-  }
+  const record = this.logRepository.create({
+    ...data,
+    qrAccessCodeId:
+      data.qrAccessCodeId && data.qrAccessCodeId.trim() !== ''
+        ? data.qrAccessCodeId
+        : null,
+    userId:
+      data.userId && data.userId.trim() !== ''
+        ? data.userId
+        : null,
+    location:
+      data.location && data.location.trim() !== ''
+        ? data.location
+        : null,
+  });
+
+  return this.logRepository.save(record);
+}
 
   findLogs(): Promise<QrAccessLogRecord[]> {
     return this.logRepository.find({ order: { attemptDate: 'DESC' } });

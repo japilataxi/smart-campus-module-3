@@ -122,6 +122,8 @@ export class RabbitmqService implements OnModuleInit {
               notification,
             );
 
+            this.notificationsGateway.emitNewNotificationToAll(notification);
+
             channel.ack(message);
           } catch (error) {
             this.logger.error(

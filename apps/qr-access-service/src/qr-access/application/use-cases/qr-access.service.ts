@@ -1,5 +1,5 @@
 import { randomUUID } from 'crypto';
-import { Inject, Injectable, NotFoundException } from '@nestjs/common';
+import { BadRequestException, Inject, Injectable, NotFoundException } from '@nestjs/common';
 import { CreateQrAccessDto } from '../dto/create-qr-access.dto';
 import { ValidateQrAccessDto } from '../dto/validate-qr-access.dto';
 import { QR_ACCESS_REPOSITORY } from '../ports/qr-access-repository.port';
@@ -79,50 +79,56 @@ export class QrAccessService {
   }
 
   async validate(dto: ValidateQrAccessDto): Promise<QrValidationResult> {
-    const cached = await this.cache.get<QrAccessRecord>(this.cacheKey(dto.qrCode));
-    const record = cached || (await this.repository.findByQrCode(dto.qrCode));
+  const qrCode = dto.qrCode?.trim();
 
-    if (!record) {
-      await this.repository.createLog({
-        qrAccessCodeId: null,
-        userId: null,
-        qrCode: dto.qrCode,
-        status: QrAccessStatus.REVOKED,
-        location: dto.location || null,
-        message: 'Access denied: QR code not found',
-      });
+  if (!qrCode) {
+    throw new BadRequestException('QR code is required');
+  }
 
-      return {
-        granted: false,
-        status: QrAccessStatus.REVOKED,
-        message: 'Access denied',
-      };
-    }
+  const cached = await this.cache.get<QrAccessRecord>(this.cacheKey(qrCode));
+  const record = cached || (await this.repository.findByQrCode(qrCode));
 
-    const freshRecord = await this.expireIfNeeded(record);
-    const result = await this.evaluateValidation(freshRecord, dto.location);
-
+  if (!record) {
     await this.repository.createLog({
-      qrAccessCodeId: freshRecord.id,
-      userId: freshRecord.userId,
-      qrCode: freshRecord.qrCode,
-      status: result.status,
-      location: dto.location || freshRecord.location,
-      message: result.message,
+      qrAccessCodeId: null,
+      userId: null,
+      qrCode,
+      status: QrAccessStatus.REVOKED,
+      location: dto.location?.trim() || null,
+      message: 'Access denied: QR code not found',
     });
 
-    this.logger.log(
-      {
-        action: result.granted ? 'qr_access_validated' : 'qr_access_denied',
-        id: freshRecord.id,
-        userId: freshRecord.userId,
-        status: result.status,
-      },
-      'QrAccessService',
-    );
-
-    return result;
+    return {
+      granted: false,
+      status: QrAccessStatus.REVOKED,
+      message: 'Access denied',
+    };
   }
+
+  const freshRecord = await this.expireIfNeeded(record);
+  const result = await this.evaluateValidation(freshRecord, dto.location?.trim());
+
+  await this.repository.createLog({
+    qrAccessCodeId: freshRecord.id || null,
+    userId: freshRecord.userId || null,
+    qrCode: freshRecord.qrCode,
+    status: result.status,
+    location: dto.location?.trim() || freshRecord.location || null,
+    message: result.message,
+  });
+
+  this.logger.log(
+    {
+      action: result.granted ? 'qr_access_validated' : 'qr_access_denied',
+      id: freshRecord.id,
+      userId: freshRecord.userId,
+      status: result.status,
+    },
+    'QrAccessService',
+  );
+
+  return result;
+}
 
   private async evaluateValidation(record: QrAccessRecord, location?: string): Promise<QrValidationResult> {
     if (record.status === QrAccessStatus.EXPIRED) {
@@ -152,21 +158,28 @@ export class QrAccessService {
   }
 
   private async expireIfNeeded(record: QrAccessRecord): Promise<QrAccessRecord> {
-    if (record.status === QrAccessStatus.ACTIVE && record.expirationDate.getTime() <= Date.now()) {
-      const expired = await this.repository.updateStatus(record.id, QrAccessStatus.EXPIRED);
-      await this.cache.del(this.cacheKey(record.qrCode));
-      return expired;
-    }
+  const expirationDate = new Date(record.expirationDate);
 
-    return record;
+  if (record.status === QrAccessStatus.ACTIVE && expirationDate.getTime() <= Date.now()) {
+    const expired = await this.repository.updateStatus(record.id, QrAccessStatus.EXPIRED);
+    await this.cache.del(this.cacheKey(record.qrCode));
+    return expired;
   }
+
+  return {
+    ...record,
+    expirationDate,
+  };
+}
 
   private async cacheActiveCode(record: QrAccessRecord): Promise<void> {
-    const ttlSeconds = Math.floor((record.expirationDate.getTime() - Date.now()) / 1000);
-    if (record.status === QrAccessStatus.ACTIVE && ttlSeconds > 0) {
-      await this.cache.set(this.cacheKey(record.qrCode), record, ttlSeconds);
-    }
+  const expirationDate = new Date(record.expirationDate);
+  const ttlSeconds = Math.floor((expirationDate.getTime() - Date.now()) / 1000);
+
+  if (record.status === QrAccessStatus.ACTIVE && ttlSeconds > 0) {
+    await this.cache.set(this.cacheKey(record.qrCode), record, ttlSeconds);
   }
+}
 
   private cacheKey(qrCode: string): string {
     return `qr-access:active:${qrCode}`;

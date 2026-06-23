@@ -5,7 +5,7 @@ export class ValidateQrAccessDto {
   @ApiProperty({ example: 'QR-8b3c6b1f0f2e' })
   @IsString()
   @IsNotEmpty()
-  qrCode: string;
+  qrCode!: string;
 
   @ApiProperty({ example: 'Main Library', required: false })
   @IsString()

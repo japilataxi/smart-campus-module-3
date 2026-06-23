@@ -31,3 +31,6 @@ output "qr_access_service_private_ip" {
 output "transport_service_private_ip" {
   value = aws_instance.transport.private_ip
 }
+output "space_availability_service_private_ip" {
+  value = aws_instance.space_availability.private_ip
+}

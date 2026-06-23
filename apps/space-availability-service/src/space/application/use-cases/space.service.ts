@@ -3,6 +3,7 @@ import { Inject, Injectable, NotFoundException } from '@nestjs/common';
 import { RedisCacheService } from '../../../common/cache/redis-cache.service';
 import { StructuredLogger } from '../../../common/logging/structured-logger.service';
 import { CreateSpaceDto } from '../dto/create-space.dto';
+import { CreateSpaceReservationDto } from '../dto/create-space-reservation.dto';
 import { UpdateSpaceAvailabilityDto } from '../dto/update-space-availability.dto';
 import { UpdateSpaceDto } from '../dto/update-space.dto';
 import { SPACE_REPOSITORY, SpaceFilters } from '../ports/space-repository.port';
@@ -131,6 +132,31 @@ export class SpaceService {
     };
   }
 
+  async createReservation(dto: CreateSpaceReservationDto): Promise<{
+    id: string;
+    spaceId: string;
+    userId?: string;
+    purpose?: string;
+    startTime?: string;
+    endTime?: string;
+    status: 'reserved';
+    space: Space;
+  }> {
+    const space = await this.updateAvailability(dto.spaceId, {
+      availabilityStatus: SpaceAvailabilityStatus.Reserved,
+    });
+
+    return {
+      id: `reservation-${Date.now()}`,
+      spaceId: space.id,
+      userId: dto.userId,
+      purpose: dto.purpose,
+      startTime: dto.startTime,
+      endTime: dto.endTime,
+      status: 'reserved',
+      space,
+    };
+  }
   private async invalidateCache(id?: string): Promise<void> {
     await this.cache.del('spaces:list:{}');
     if (id) await this.cache.del(`spaces:${id}`);

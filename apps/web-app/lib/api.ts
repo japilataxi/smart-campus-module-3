@@ -298,47 +298,47 @@ export const api = {
     if (filters?.availabilityStatus) params.set("availabilityStatus", filters.availabilityStatus);
     if (filters?.location) params.set("location", filters.location);
     const query = params.toString() ? `?${params.toString()}` : "";
-    return request<any[]>(`/spaces${query}`);
+    return request<any[]>(`/space-availability/spaces${query}`);
   },
 
-  getSpaceById: (id: string) => request<any>(`/spaces/${id}`),
+  getSpaceById: (id: string) => request<any>(`/space-availability/spaces/${id}`),
 
   createSpace: (data: CreateSpaceRequest) =>
-    request<any>("/spaces", {
+    request<any>("/space-availability/spaces", {
       method: "POST",
       body: JSON.stringify(data),
     }),
 
   updateSpace: (id: string, data: Partial<CreateSpaceRequest>) =>
-    request<any>(`/spaces/${id}`, {
+    request<any>(`/space-availability/spaces/${id}`, {
       method: "PATCH",
       body: JSON.stringify(data),
     }),
 
   deleteSpace: (id: string) =>
-    request<any>(`/spaces/${id}`, {
+    request<any>(`/space-availability/spaces/${id}`, {
       method: "DELETE",
     }),
 
   deactivateSpace: (id: string) =>
-    request<any>(`/spaces/${id}/deactivate`, {
+    request<any>(`/space-availability/spaces/${id}/deactivate`, {
       method: "PATCH",
     }),
 
   updateSpaceAvailability: (id: string, data: UpdateSpaceAvailabilityRequest) =>
-    request<any>(`/spaces/${id}/availability`, {
+    request<any>(`/space-availability/spaces/${id}/availability`, {
       method: "PATCH",
       body: JSON.stringify(data),
     }),
 
-  getAvailableSpaces: () => request<any[]>("/spaces/available"),
+  getAvailableSpaces: () => request<any[]>("/space-availability/availability"),
 
-  getSpacesByType: (type: string) => request<any[]>(`/spaces/type/${type}`),
+  getSpacesByType: (type: string) => request<any[]>(`/space-availability/spaces/type/${type}`),
 
   getSpacesByLocation: (location: string) =>
-    request<any[]>(`/spaces/location/${encodeURIComponent(location)}`),
+    request<any[]>(`/space-availability/spaces/location/${encodeURIComponent(location)}`),
 
   checkSpaceAvailability: (id: string) =>
-    request<any>(`/spaces/${id}/check-availability`),
+    request<any>(`/space-availability/spaces/${id}/check-availability`),
 };
 

@@ -11,6 +11,7 @@ import {
 import { ApiOperation, ApiParam, ApiQuery, ApiTags } from '@nestjs/swagger';
 
 import { CreateSpaceDto } from '../../application/dto/create-space.dto';
+import { CreateSpaceReservationDto } from '../../application/dto/create-space-reservation.dto';
 import { UpdateSpaceAvailabilityDto } from '../../application/dto/update-space-availability.dto';
 import { UpdateSpaceDto } from '../../application/dto/update-space.dto';
 import { SpaceService } from '../../application/use-cases/space.service';
@@ -30,6 +31,12 @@ export class SpaceController {
     return this.spaceService.create(body);
   }
 
+  @Post('reservations')
+  @ApiOperation({ summary: 'Reserve a campus space' })
+  createReservation(@Body() body: CreateSpaceReservationDto) {
+    return this.spaceService.createReservation(body);
+  }
+
   @Get()
   @ApiOperation({ summary: 'List campus spaces with optional filters' })
   @ApiQuery({ name: 'type', enum: SpaceType, required: false })
@@ -41,6 +48,12 @@ export class SpaceController {
     @Query('location') location?: string,
   ) {
     return this.spaceService.findAll({ type, availabilityStatus, location });
+  }
+
+  @Get('availability')
+  @ApiOperation({ summary: 'List spaces available now' })
+  findAvailability() {
+    return this.spaceService.findAvailable();
   }
 
   @Get('available')

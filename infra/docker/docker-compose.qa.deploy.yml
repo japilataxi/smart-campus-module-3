@@ -40,7 +40,7 @@ services:
       JWT_REFRESH_SECRET: change_me_refresh
       ADMIN_EMAILS: kevin.amaguana@uce.edu.ec,japilataxi@uce.edu.ec,admin2026@uce.edu.ec
       RABBITMQ_URL: amqp://guest:guest@rabbitmq:5672
-      RABBITMQ_EXCHANGE: smart-campus.events
+      RABBITMQ_EXCHANGE: smart-campus.events 
     depends_on:
       - auth-db
       - redis
@@ -116,9 +116,12 @@ services:
       DATABASE_URL: postgresql://qr_access_user:qr_access_password@qr-access-db:5432/qr_access_db
       REDIS_HOST: redis
       REDIS_PORT: 6379
+      RABBITMQ_URL: amqp://guest:guest@rabbitmq:5672
+      RABBITMQ_EXCHANGE: smart-campus.events
     depends_on:
       - qr-access-db
       - redis
+      - rabbitmq
     restart: unless-stopped
 
   transport-service:
@@ -132,9 +135,12 @@ services:
       DATABASE_URL: postgresql://transport_user:transport_password@transport-db:5432/transport_db
       REDIS_HOST: redis
       REDIS_PORT: 6379
+      RABBITMQ_URL: amqp://guest:guest@rabbitmq:5672
+      RABBITMQ_EXCHANGE: smart-campus.events
     depends_on:
       - transport-db
       - redis
+      - rabbitmq
     restart: unless-stopped
 
   space-availability-service:
@@ -148,9 +154,12 @@ services:
       DATABASE_URL: postgresql://space_user:space_password@space-availability-db:5432/space_availability_db
       REDIS_HOST: redis
       REDIS_PORT: 6379
+      RABBITMQ_URL: amqp://guest:guest@rabbitmq:5672
+      RABBITMQ_EXCHANGE: smart-campus.events
     depends_on:
       - space-availability-db
       - redis
+      - rabbitmq
     restart: unless-stopped
   web-app:
     image: japilataxi/web-app:qa
@@ -160,7 +169,7 @@ services:
     environment:
       PORT: 3003
       HOSTNAME: 0.0.0.0
-      NEXT_PUBLIC_API_URL: http://localhost:3000
+      NEXT_PUBLIC_API_URL: http://localhost:3000/api
     depends_on:
       - api-gateway
     restart: unless-stopped
@@ -308,7 +317,7 @@ services:
       GF_SECURITY_ADMIN_USER: admin 
       GF_SECURITY_ADMIN_PASSWORD: admin
     depends_on: 
-    - prometheus
+      - prometheus
     restart: unless-stopped
 
 volumes:

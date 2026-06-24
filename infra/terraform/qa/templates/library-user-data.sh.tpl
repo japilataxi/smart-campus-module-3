@@ -2,7 +2,7 @@
 set -eux
 
 yum update -y
-yum install -y docker git
+yum install -y docker git --allowerasing
 
 systemctl enable docker
 systemctl start docker
@@ -13,6 +13,10 @@ chmod +x /usr/local/lib/docker/cli-plugins/docker-compose
 
 mkdir -p /opt/smart-campus
 cd /opt/smart-campus
+
+cat > .env <<EOF
+RABBITMQ_URL=amqp://guest:guest@${rabbitmq_private_ip}:5672
+EOF
 
 cat > docker-compose.yml <<'EOF'
 ${compose_content}

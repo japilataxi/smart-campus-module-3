@@ -15,6 +15,12 @@ chmod +x /usr/local/lib/docker/cli-plugins/docker-compose
 mkdir -p /opt/smart-campus
 cd /opt/smart-campus
 
+# ENV compartido (RabbitMQ obligatorio)
+cat > .env <<EOF
+RABBITMQ_URL=amqp://guest:guest@${rabbitmq_private_ip}:5672
+EOF
+
+# Docker compose del servicio notification
 cat > docker-compose.yml <<EOF
 ${compose_content}
 EOF

@@ -2,7 +2,7 @@
 set -eux
 
 yum update -y
-yum install -y docker git
+yum install -y docker git --allowerasing
 
 systemctl enable docker
 systemctl start docker
@@ -18,6 +18,8 @@ cat > docker-compose.yml <<'EOF'
 ${compose_content}
 EOF
 
-export NEXT_PUBLIC_API_URL="http://${alb_dns}/api"
+cat > .env <<EOF
+NEXT_PUBLIC_API_URL=http://${alb_dns}/api
+EOF
 
 docker compose up -d

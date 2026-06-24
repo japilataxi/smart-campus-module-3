@@ -26,7 +26,9 @@ services:
       DATABASE_URL: postgresql://transport_user:transport_password@transport-db:5432/transport_db
       REDIS_HOST: redis
       REDIS_PORT: 6379
-      CORS_ORIGIN: '*'
+      RABBITMQ_URL: ${RABBITMQ_URL}
+      RABBITMQ_EXCHANGE: smart-campus.events
+      JWT_SECRET: change_me
     depends_on:
       - transport-db
       - redis

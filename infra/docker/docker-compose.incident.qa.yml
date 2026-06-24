@@ -27,6 +27,8 @@ services:
       REDIS_HOST: redis
       REDIS_PORT: 6379
       JWT_SECRET: change_me
+      RABBITMQ_URL: ${RABBITMQ_URL}
+      RABBITMQ_EXCHANGE: smart-campus.events
     depends_on:
       - campus-incident-db
       - redis

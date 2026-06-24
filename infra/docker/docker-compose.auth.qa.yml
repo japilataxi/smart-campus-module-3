@@ -29,6 +29,8 @@ services:
       JWT_SECRET: change_me
       JWT_REFRESH_SECRET: change_me_refresh
       ADMIN_EMAILS: kevin.amaguana@uce.edu.ec,japilataxi@uce.edu.ec,admin2026@uce.edu.ec
+      RABBITMQ_URL: ${RABBITMQ_URL}
+      RABBITMQ_EXCHANGE: smart-campus.events
     depends_on:
       - auth-db
       - redis

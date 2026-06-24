@@ -16,32 +16,97 @@ export class RabbitmqService implements OnModuleInit {
     process.env.RABBITMQ_EXCHANGE || 'smart-campus.events';
 
   private readonly queues = [
-    {
-      queue: 'notifications.user.registered',
-      routingKey: 'user.registered',
-    },
-    {
-      queue: 'notifications.library.loan.created',
-      routingKey: 'library.loan.created',
-    },
-    {
-      queue: 'notifications.library.book.reserved',
-      routingKey: 'library.book.reserved',
-    },
-    {
-      queue: 'notifications.incident.created',
-      routingKey: 'incident.created',
-    },
-    {
-      queue: 'notifications.incident.status.updated',
-      routingKey: 'incident.status.updated',
-    },
+  {
+    queue: 'notifications.user.registered',
+    routingKey: 'user.registered',
+  },
+  {
+    queue: 'notifications.library.loan.created',
+    routingKey: 'library.loan.created',
+  },
+  {
+    queue: 'notifications.library.book.reserved',
+    routingKey: 'library.book.reserved',
+  },
+  {
+    queue: 'notifications.incident.created',
+    routingKey: 'incident.created',
+  },
+  {
+    queue: 'notifications.incident.status.updated',
+    routingKey: 'incident.status.updated',
+  },
+  {
+    queue: 'notifications.library.loan.returned',
+    routingKey: 'library.loan.returned',
+  },
 
-    {
-      queue: 'notifications.library.loan.returned',
-      routingKey: 'library.loan.returned',
-    },
-  ];
+  // =========================
+  // QR ACCESS EVENTS
+  // =========================
+  {
+    queue: 'notifications.qr.access.generated',
+    routingKey: 'qr.access.generated',
+  },
+  {
+    queue: 'notifications.qr.access.granted',
+    routingKey: 'qr.access.granted',
+  },
+  {
+    queue: 'notifications.qr.access.denied',
+    routingKey: 'qr.access.denied',
+  },
+  {
+    queue: 'notifications.qr.access.revoked',
+    routingKey: 'qr.access.revoked',
+  },
+  // =========================
+  // transport ACCESS EVENTS
+  // =========================
+  {
+  queue: 'notifications.transport.route.created',
+  routingKey: 'transport.route.created',
+  },
+  {
+    queue: 'notifications.transport.route.updated',
+    routingKey: 'transport.route.updated',
+  },
+  {
+    queue: 'notifications.transport.stop.created',
+    routingKey: 'transport.stop.created',
+  },
+  {
+    queue: 'notifications.transport.vehicle.created',
+    routingKey: 'transport.vehicle.created',
+  },
+  {
+    queue: 'notifications.transport.schedule.created',
+    routingKey: 'transport.schedule.created',
+  },
+  // =========================
+  // space availibility ACCESS EVENTS
+  // =========================
+  {
+  queue: 'notifications.space.created',
+  routingKey: 'space.created',
+  },
+  {
+    queue: 'notifications.space.updated',
+    routingKey: 'space.updated',
+  },
+  {
+    queue: 'notifications.space.deactivated',
+    routingKey: 'space.deactivated',
+  },
+  {
+    queue: 'notifications.space.availability.updated',
+    routingKey: 'space.availability.updated',
+  },
+  {
+    queue: 'notifications.space.reservation.created',
+    routingKey: 'space.reservation.created',
+  },
+];
 
   // =========================
   // INIT
@@ -154,6 +219,20 @@ export class RabbitmqService implements OnModuleInit {
       'incident.created': 'New campus incident created',
       'incident.status.updated': 'Campus incident status updated',
       'library.loan.returned': 'Library loan returned',
+      'qr.access.generated': 'QR access generated',
+      'qr.access.granted': 'QR access granted',
+      'qr.access.denied': 'QR access denied',
+      'qr.access.revoked': 'QR access revoked',
+      'transport.route.created': 'Transport route created',
+      'transport.route.updated': 'Transport route updated',
+      'transport.stop.created': 'Transport stop created',
+      'transport.vehicle.created': 'Transport vehicle created',
+      'transport.schedule.created': 'Transport schedule created',
+      'space.created': 'Space created',
+      'space.updated': 'Space updated',
+      'space.deactivated': 'Space deactivated',
+      'space.availability.updated': 'Space availability updated',
+      'space.reservation.created': 'Space reservation created',
     };
 
     return titles[routingKey] || 'New notification';
@@ -167,6 +246,20 @@ export class RabbitmqService implements OnModuleInit {
       'incident.created': 'A new campus incident has been reported.',
       'incident.status.updated': 'A campus incident status was updated.',
       'library.loan.returned': 'A library loan was returned.',
+      'qr.access.generated': 'A new QR access code was generated.',
+      'qr.access.granted': 'QR access was granted.',
+      'qr.access.denied': 'QR access was denied.',
+      'qr.access.revoked': 'QR access code was revoked.',
+      'transport.route.created': 'A new transport route has been created.',
+      'transport.route.updated': 'The transport route has been updated.',
+      'transport.stop.created': 'A new stop has been added to the transport route.',
+      'transport.vehicle.created': 'A new transport vehicle has been registered in the system.',
+      'transport.schedule.created': 'A new transport schedule has been created for a route.',
+      'space.created': 'A new campus space was created.',
+      'space.updated': 'A campus space was updated.',
+      'space.deactivated': 'A campus space was deactivated.',
+      'space.availability.updated': 'A campus space availability status changed.',
+      'space.reservation.created': 'A new space reservation was created.',
     };
 
     return messages[routingKey] || 'A new event was received.';
@@ -175,9 +268,10 @@ export class RabbitmqService implements OnModuleInit {
   private getSourceService(routingKey: string): string {
     if (routingKey.startsWith('user.')) return 'auth-service';
     if (routingKey.startsWith('library.')) return 'library-service';
-    if (routingKey.startsWith('incident.'))
-      return 'campus-incident-service';
-
+    if (routingKey.startsWith('incident.')) return 'campus-incident-service';
+    if (routingKey.startsWith('qr.')) return 'qr-access-service';
+    if (routingKey.startsWith('transport.')) return 'transport-service';
+    if (routingKey.startsWith('space.')) return 'space-availability-service';
     return 'unknown-service';
   }
 }

@@ -6,5 +6,5 @@ import { SpaceAvailabilityStatus } from '../../domain/space-status.enum';
 export class UpdateSpaceAvailabilityDto {
   @ApiProperty({ enum: SpaceAvailabilityStatus, example: SpaceAvailabilityStatus.Available })
   @IsEnum(SpaceAvailabilityStatus)
-  availabilityStatus: SpaceAvailabilityStatus;
+  availabilityStatus!: SpaceAvailabilityStatus;
 }

@@ -8,9 +8,10 @@ import { TypeOrmQrAccessRepository } from './infrastructure/repositories/typeorm
 import { QR_ACCESS_REPOSITORY } from './application/ports/qr-access-repository.port';
 import { RedisCacheService } from '../common/cache/redis-cache.service';
 import { LoggingModule } from '../common/logging/logging.module';
+import { RabbitmqPublisherModule } from '../rabbitmq/rabbitmq-publisher.module';
 
 @Module({
-  imports: [TypeOrmModule.forFeature([QrAccessCodeEntity, QrAccessLogEntity]), LoggingModule],
+  imports: [TypeOrmModule.forFeature([QrAccessCodeEntity, QrAccessLogEntity]), LoggingModule, RabbitmqPublisherModule],
   controllers: [QrAccessController],
   providers: [
     QrAccessService,

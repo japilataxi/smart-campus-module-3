@@ -108,8 +108,9 @@ function availabilityClass(status: AvailabilityStatus) {
 
 export default function SpaceAvailabilityPage() {
   const router = useRouter();
-  const { loading, roles: authRoles } = useAuth();
-  const roles = useMemo(() => normalizeRoles(authRoles), [authRoles]);
+  const { loading, user } = useAuth();
+
+  const roles = useMemo(() => normalizeRoles(user), [user]);
   const canManage = roles.includes("admin") || roles.includes("librarian");
 
   const [spaces, setSpaces] = useState<CampusSpace[]>([]);

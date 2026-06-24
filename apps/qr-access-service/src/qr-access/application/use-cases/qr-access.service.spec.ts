@@ -4,6 +4,8 @@ import { QR_ACCESS_REPOSITORY, QrAccessRepositoryPort } from '../ports/qr-access
 import { RedisCacheService } from '../../../common/cache/redis-cache.service';
 import { StructuredLogger } from '../../../common/logging/structured-logger.service';
 import { QrAccessStatus } from '../../domain/qr-access-status.enum';
+import { RabbitmqPublisherModule } from '../../../rabbitmq/rabbitmq-publisher.module';
+import { RabbitmqPublisherService } from '../../../rabbitmq/rabbitmq-publisher.service';
 
 const activeRecord = {
   id: 'qr-1',
@@ -50,6 +52,8 @@ describe('QrAccessService', () => {
           useValue: { get: jest.fn().mockResolvedValue(null), set: jest.fn(), del: jest.fn() },
         },
         { provide: StructuredLogger, useValue: { log: jest.fn(), warn: jest.fn(), error: jest.fn() } },
+
+        {provide: RabbitmqPublisherService, useValue: { publish: jest.fn()}},
       ],
     }).compile();
 

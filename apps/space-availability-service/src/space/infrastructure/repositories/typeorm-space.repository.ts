@@ -26,17 +26,30 @@ export class TypeOrmSpaceRepository implements SpaceRepositoryPort {
   }
 
   async findAll(filters: SpaceFilters = {}): Promise<Space[]> {
-    const where = {
-      ...(filters.type ? { type: filters.type } : {}),
-      ...(filters.availabilityStatus
-        ? { availabilityStatus: filters.availabilityStatus }
-        : {}),
-      ...(filters.location ? { location: ILike(`%${filters.location}%`) } : {}),
-    };
+  const query = this.repository.createQueryBuilder('space');
 
-    const spaces = await this.repository.find({ where, order: { createdAt: 'DESC' } });
-    return spaces.map((space) => this.toDomain(space));
+  if (filters.type) {
+    query.andWhere('space.type = :type', { type: filters.type });
   }
+
+  if (filters.availabilityStatus) {
+    query.andWhere('space.availabilityStatus = :availabilityStatus', {
+      availabilityStatus: filters.availabilityStatus,
+    });
+  }
+
+  if (filters.location) {
+    query.andWhere('space.location ILIKE :location', {
+      location: `%${filters.location}%`,
+    });
+  }
+
+  const spaces = await query
+    .orderBy('space.createdAt', 'DESC')
+    .getMany();
+
+  return spaces.map((space) => this.toDomain(space));
+}
 
   async findById(id: string): Promise<Space | null> {
     const space = await this.repository.findOne({ where: { id } });

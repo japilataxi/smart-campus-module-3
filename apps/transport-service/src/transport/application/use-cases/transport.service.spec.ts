@@ -2,6 +2,7 @@ import { Test } from '@nestjs/testing';
 import { RedisCacheService } from '../../../common/cache/redis-cache.service';
 import { TRANSPORT_REPOSITORY } from '../ports/transport-repository.port';
 import { TransportService } from './transport.service';
+import { RabbitmqPublisherService } from '../../../rabbitmq/rabbitmq-publisher.service';
 
 describe('TransportService', () => {
   let service: TransportService;
@@ -26,6 +27,12 @@ describe('TransportService', () => {
         TransportService,
         { provide: TRANSPORT_REPOSITORY, useValue: repository },
         { provide: RedisCacheService, useValue: cache },
+        {
+          provide: RabbitmqPublisherService,
+          useValue: {
+            publish: jest.fn(),
+          },
+        },
       ],
     }).compile();
 

@@ -15,22 +15,22 @@ import {
 @Entity('spaces')
 export class SpaceEntity {
   @PrimaryGeneratedColumn('uuid')
-  id: string;
+  id!: string;
 
   @Column()
-  name: string;
+  name!: string;
 
   @Column({ type: 'enum', enum: SpaceType })
-  type: SpaceType;
+  type!: SpaceType;
 
   @Column()
-  location: string;
+  location!: string;
 
   @Column({ type: 'int' })
-  capacity: number;
+  capacity!: number;
 
   @Column({ type: 'enum', enum: SpaceStatus, default: SpaceStatus.Active })
-  status: SpaceStatus;
+  status!: SpaceStatus;
 
   @Column({
     name: 'availability_status',
@@ -38,17 +38,17 @@ export class SpaceEntity {
     enum: SpaceAvailabilityStatus,
     default: SpaceAvailabilityStatus.Available,
   })
-  availabilityStatus: SpaceAvailabilityStatus;
+  availabilityStatus!: SpaceAvailabilityStatus;
 
   @Column({ name: 'opening_time', type: 'varchar', length: 5 })
-  openingTime: string;
+  openingTime!: string;
 
   @Column({ name: 'closing_time', type: 'varchar', length: 5 })
-  closingTime: string;
+  closingTime!: string;
 
   @CreateDateColumn({ name: 'created_at' })
-  createdAt: Date;
+  createdAt!: Date;
 
   @UpdateDateColumn({ name: 'updated_at' })
-  updatedAt: Date;
+  updatedAt!: Date;
 }

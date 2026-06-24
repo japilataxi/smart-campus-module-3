@@ -11,6 +11,7 @@ import type {
 import { QrAccessStatus } from '../../domain/qr-access-status.enum';
 import { RedisCacheService } from '../../../common/cache/redis-cache.service';
 import { StructuredLogger } from '../../../common/logging/structured-logger.service';
+import { RabbitmqPublisherService } from '../../../rabbitmq/rabbitmq-publisher.service';
 
 export type QrValidationResult = {
   granted: boolean;
@@ -26,6 +27,7 @@ export class QrAccessService {
     private readonly repository: QrAccessRepositoryPort,
     private readonly cache: RedisCacheService,
     private readonly logger: StructuredLogger,
+    private readonly rabbitmqPublisher: RabbitmqPublisherService,
   ) {}
 
   async generate(dto: CreateQrAccessDto): Promise<QrAccessRecord> {
@@ -43,6 +45,20 @@ export class QrAccessService {
 
     await this.cacheActiveCode(record);
     this.logger.log({ action: 'qr_access_generated', id: record.id, userId: record.userId }, 'QrAccessService');
+
+    this.rabbitmqPublisher.publish('qr.access.generated', {
+    userId: record.userId,
+    title: 'QR access generated',
+    message: `A QR access code was generated for ${record.location || record.accessType}`,
+    type: 'INFO',
+    sourceService: 'qr-access-service',
+    eventType: 'QrAccessGenerated',
+    qrAccessId: record.id,
+    qrCode: record.qrCode,
+    accessType: record.accessType,
+    location: record.location,
+    status: record.status,
+  });
 
     return record;
   }
@@ -75,6 +91,20 @@ export class QrAccessService {
     });
 
     this.logger.warn({ action: 'qr_access_revoked', id, userId: record.userId }, 'QrAccessService');
+
+    this.rabbitmqPublisher.publish('qr.access.revoked', {
+    userId: record.userId,
+    title: 'QR access revoked',
+    message: `QR access code was revoked for ${record.location || record.accessType}`,
+    type: 'WARNING',
+    sourceService: 'qr-access-service',
+    eventType: 'QrAccessRevoked',
+    qrAccessId: record.id,
+    qrCode: record.qrCode,
+    accessType: record.accessType,
+    location: record.location,
+    status: QrAccessStatus.REVOKED,
+  });
     return revoked;
   }
 
@@ -118,17 +148,34 @@ export class QrAccessService {
   });
 
   this.logger.log(
-    {
-      action: result.granted ? 'qr_access_validated' : 'qr_access_denied',
-      id: freshRecord.id,
-      userId: freshRecord.userId,
-      status: result.status,
-    },
-    'QrAccessService',
-  );
+  {
+    action: result.granted ? 'qr_access_validated' : 'qr_access_denied',
+    id: freshRecord.id,
+    userId: freshRecord.userId,
+    status: result.status,
+  },
+  'QrAccessService',
+);
 
-  return result;
-}
+this.rabbitmqPublisher.publish(
+  result.granted ? 'qr.access.granted' : 'qr.access.denied',
+  {
+    userId: freshRecord.userId,
+    title: result.granted ? 'QR access granted' : 'QR access denied',
+    message: result.message,
+    type: result.granted ? 'INFO' : 'WARNING',
+    sourceService: 'qr-access-service',
+    eventType: result.granted ? 'QrAccessGranted' : 'QrAccessDenied',
+    qrAccessId: freshRecord.id,
+    qrCode: freshRecord.qrCode,
+    accessType: freshRecord.accessType,
+    location: dto.location?.trim() || freshRecord.location,
+    status: result.status,
+  },
+);
+
+return result;
+  }
 
   private async evaluateValidation(record: QrAccessRecord, location?: string): Promise<QrValidationResult> {
     if (record.status === QrAccessStatus.EXPIRED) {

@@ -13,21 +13,21 @@ export class CreateSpaceDto {
   @ApiProperty({ example: 'Laboratory A-101' })
   @IsString()
   @IsNotEmpty()
-  name: string;
+  name!: string;
 
   @ApiProperty({ enum: SpaceType, example: SpaceType.Laboratory })
   @IsEnum(SpaceType)
-  type: SpaceType;
+  type!: SpaceType;
 
   @ApiProperty({ example: 'Building A, Floor 1' })
   @IsString()
   @IsNotEmpty()
-  location: string;
+  location!: string;
 
   @ApiProperty({ example: 32 })
   @IsInt()
   @Min(1)
-  capacity: number;
+  capacity!: number;
 
   @ApiProperty({ enum: SpaceStatus, example: SpaceStatus.Active, required: false })
   @IsOptional()
@@ -41,9 +41,9 @@ export class CreateSpaceDto {
 
   @ApiProperty({ example: '07:00' })
   @Matches(timePattern)
-  openingTime: string;
+  openingTime!: string;
 
   @ApiProperty({ example: '21:00' })
   @Matches(timePattern)
-  closingTime: string;
+  closingTime!: string;
 }

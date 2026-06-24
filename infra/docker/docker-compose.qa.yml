@@ -128,9 +128,13 @@ services:
       DATABASE_URL: postgresql://qr_access_user:qr_access_password@qr-access-db:5432/qr_access_db
       REDIS_HOST: redis
       REDIS_PORT: 6379
+      RABBITMQ_URL: amqp://guest:guest@rabbitmq:5672
+      RABBITMQ_EXCHANGE: smart-campus.events
+      JWT_SECRET: change_me
     depends_on:
       - qr-access-db
       - redis
+      - rabbitmq
 
 
   transport-service:
@@ -147,9 +151,14 @@ services:
       DATABASE_URL: postgresql://transport_user:transport_password@transport-db:5432/transport_db
       REDIS_HOST: redis
       REDIS_PORT: 6379
+      RABBITMQ_URL: amqp://guest:guest@rabbitmq:5672
+      RABBITMQ_EXCHANGE: smart-campus.events
+      JWT_SERVICE: change_me
     depends_on:
       - transport-db
       - redis
+      - rabbitmq
+
   space-availability-service:
     build:
       context: ../../
@@ -161,12 +170,18 @@ services:
     environment:
       SERVICE_NAME: space-availability-service
       PORT: 3023
+      NODE_ENV: development
       DATABASE_URL: postgresql://space_user:space_password@space-availability-db:5432/space_availability_db
       REDIS_HOST: redis
       REDIS_PORT: 6379
+      RABBITMQ_URL: amqp://guest:guest@rabbitmq:5672
+      RABBITMQ_EXCHANGE: smart-campus.events
+      JWT_SERVICE: change_me
     depends_on:
       - space-availability-db
       - redis
+      - rabbitmq
+
   web-app:
     build:
       context: ../../

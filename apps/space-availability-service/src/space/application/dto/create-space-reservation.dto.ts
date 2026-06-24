@@ -5,7 +5,7 @@ export class CreateSpaceReservationDto {
   @ApiProperty({ example: 'b0c0702f-d62d-4c64-8227-6df50d0716b3' })
   @IsString()
   @IsNotEmpty()
-  spaceId: string;
+  spaceId!: string;
 
   @ApiProperty({ example: 'user-123', required: false })
   @IsOptional()

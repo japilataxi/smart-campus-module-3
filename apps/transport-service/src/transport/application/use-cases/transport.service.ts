@@ -8,6 +8,7 @@ import { CreateTransportScheduleDto } from '../dto/create-transport-schedule.dto
 import { UpdateTransportRouteDto } from '../dto/update-transport-route.dto';
 import { TRANSPORT_REPOSITORY } from '../ports/transport-repository.port';
 import type { TransportRepositoryPort } from '../ports/transport-repository.port';
+import { RabbitmqPublisherService } from '../../../rabbitmq/rabbitmq-publisher.service';
 
 @Injectable()
 export class TransportService {
@@ -17,11 +18,23 @@ export class TransportService {
     @Inject(TRANSPORT_REPOSITORY)
     private readonly repository: TransportRepositoryPort,
     private readonly cache: RedisCacheService,
+    private readonly rabbitmqPublisher: RabbitmqPublisherService,
   ) {}
 
   async createRoute(data: CreateTransportRouteDto) {
     const route = await this.repository.createRoute({ ...data, status: data.status || TransportRouteStatus.ACTIVE });
     await this.cache.del('transport:routes');
+    await this.rabbitmqPublisher.publish('transport.route.created', {
+    userId: 'admin',
+    title: 'Transport route created',
+    message: `Transport route ${route.name} was created.`,
+    type: 'INFO',
+    sourceService: 'transport-service',
+    eventType: 'TransportRouteCreated',
+    routeId: route.id,
+    routeName: route.name,
+    status: route.status,
+  });
     return route;
   }
 
@@ -44,12 +57,35 @@ export class TransportService {
     if (!route) throw new NotFoundException('Transport route not found');
     await this.cache.del('transport:routes');
     await this.cache.del(`transport:availability:${id}`);
+
+    await this.rabbitmqPublisher.publish('transport.route.updated', {
+    userId: 'admin',
+    title: 'Transport route updated',
+    message: `Transport route ${route.name} was updated.`,
+    type: 'INFO',
+    sourceService: 'transport-service',
+    eventType: 'TransportRouteUpdated',
+    routeId: route.id,
+    routeName: route.name,
+    status: route.status,
+  });
     return route;
   }
 
   async createStop(data: CreateTransportStopDto) {
     const stop = await this.repository.createStop(data);
     await this.cache.del(`transport:stops:${data.routeId || 'all'}`);
+
+    await this.rabbitmqPublisher.publish('transport.stop.created', {
+    userId: 'admin',
+    title: 'Transport stop created',
+    message: `A new transport stop was created.`,
+    type: 'INFO',
+    sourceService: 'transport-service',
+    eventType: 'TransportStopCreated',
+    stopId: stop.id,
+    routeId: data.routeId,
+  });
     return stop;
   }
 
@@ -63,8 +99,24 @@ export class TransportService {
   }
 
   async createVehicle(data: CreateTransportVehicleDto) {
-    return this.repository.createVehicle({ ...data, status: data.status || TransportVehicleStatus.AVAILABLE });
-  }
+  const vehicle = await this.repository.createVehicle({
+    ...data,
+    status: data.status || TransportVehicleStatus.AVAILABLE,
+  });
+
+  await this.rabbitmqPublisher.publish('transport.vehicle.created', {
+    userId: 'admin',
+    title: 'Transport vehicle created',
+    message: `A new transport vehicle was registered.`,
+    type: 'INFO',
+    sourceService: 'transport-service',
+    eventType: 'TransportVehicleCreated',
+    vehicleId: vehicle.id,
+    status: vehicle.status,
+  });
+
+  return vehicle;
+}
 
   async findVehicles() {
     return this.repository.findVehicles();
@@ -74,6 +126,17 @@ export class TransportService {
     const schedule = await this.repository.createSchedule({ ...data, status: data.status || TransportScheduleStatus.SCHEDULED });
     await this.cache.del(`transport:schedules:${data.routeId}`);
     await this.cache.del(`transport:availability:${data.routeId}`);
+    await this.rabbitmqPublisher.publish('transport.schedule.created', {
+    userId: 'admin',
+    title: 'Transport schedule created',
+    message: `A new transport schedule was created.`,
+    type: 'INFO',
+    sourceService: 'transport-service',
+    eventType: 'TransportScheduleCreated',
+    scheduleId: schedule.id,
+    routeId: data.routeId,
+    status: schedule.status,
+  });
     return schedule;
   }
 

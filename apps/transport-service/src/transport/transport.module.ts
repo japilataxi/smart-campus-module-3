@@ -9,6 +9,7 @@ import { TransportVehicleEntity } from './infrastructure/entities/transport-vehi
 import { TransportScheduleEntity } from './infrastructure/entities/transport-schedule.entity';
 import { TypeOrmTransportRepository } from './infrastructure/repositories/typeorm-transport.repository';
 import { TransportController } from './interfaces/http/transport.controller';
+import { RabbitmqPublisherModule } from '../rabbitmq/rabbitmq-publisher.module';
 
 @Module({
   imports: [
@@ -17,7 +18,7 @@ import { TransportController } from './interfaces/http/transport.controller';
       TransportStopEntity,
       TransportVehicleEntity,
       TransportScheduleEntity,
-    ]),
+    ]), RabbitmqPublisherModule
   ],
   controllers: [TransportController],
   providers: [

@@ -12,7 +12,11 @@ async function bootstrap() {
   });
 
   app.useLogger(app.get(StructuredLogger));
-  app.use(helmet());
+  app.use(
+  helmet({
+    contentSecurityPolicy: false,
+  }),
+);
   app.use(compression());
 
   app.enableCors({

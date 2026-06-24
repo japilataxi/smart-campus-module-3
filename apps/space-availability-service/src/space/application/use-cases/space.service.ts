@@ -14,6 +14,7 @@ import {
   SpaceStatus,
   SpaceType,
 } from '../../domain/space-status.enum';
+import { RabbitmqPublisherService } from '../../../rabbitmq/rabbitmq-publisher.service';
 
 @Injectable()
 export class SpaceService {
@@ -22,6 +23,7 @@ export class SpaceService {
     private readonly repository: SpaceRepositoryPort,
     private readonly cache: RedisCacheService,
     private readonly logger: StructuredLogger,
+    private readonly rabbitmqPublisher: RabbitmqPublisherService,
   ) {}
 
   async create(dto: CreateSpaceDto): Promise<Space> {
@@ -34,6 +36,19 @@ export class SpaceService {
 
     await this.invalidateCache();
     this.logger.log('Space created', 'SpaceService');
+    await this.rabbitmqPublisher.publish('space.created', {
+    userId: 'admin',
+    title: 'Space created',
+    message: `Space ${space.name} was created.`,
+    type: 'INFO',
+    sourceService: 'space-availability-service',
+    eventType: 'SpaceCreated',
+    spaceId: space.id,
+    name: space.name,
+    location: space.location,
+    status: space.status,
+    availabilityStatus: space.availabilityStatus,
+  });
     return space;
   }
 
@@ -65,6 +80,19 @@ export class SpaceService {
 
     await this.invalidateCache(id);
     this.logger.log('Space updated', 'SpaceService');
+    await this.rabbitmqPublisher.publish('space.updated', {
+    userId: 'admin',
+    title: 'Space updated',
+    message: `Space ${space.name} was updated.`,
+    type: 'INFO',
+    sourceService: 'space-availability-service',
+    eventType: 'SpaceUpdated',
+    spaceId: space.id,
+    name: space.name,
+    location: space.location,
+    status: space.status,
+    availabilityStatus: space.availabilityStatus,
+  });
     return space;
   }
 
@@ -74,6 +102,19 @@ export class SpaceService {
 
     await this.invalidateCache(id);
     this.logger.log('Space deactivated', 'SpaceService');
+    await this.rabbitmqPublisher.publish('space.deactivated', {
+    userId: 'admin',
+    title: 'Space deactivated',
+    message: `Space ${space.name} was deactivated.`,
+    type: 'WARNING',
+    sourceService: 'space-availability-service',
+    eventType: 'SpaceDeactivated',
+    spaceId: space.id,
+    name: space.name,
+    location: space.location,
+    status: space.status,
+    availabilityStatus: space.availabilityStatus,
+  });
     return space;
   }
 
@@ -98,6 +139,22 @@ export class SpaceService {
 
     await this.invalidateCache(id);
     this.logger.log('Space availability changed', 'SpaceService');
+    await this.rabbitmqPublisher.publish('space.availability.updated', {
+      userId: 'admin',
+      title: 'Space availability updated',
+      message: `Space ${space.name} availability changed to ${space.availabilityStatus}.`,
+      type:
+        space.availabilityStatus === SpaceAvailabilityStatus.Available
+          ? 'INFO'
+          : 'WARNING',
+      sourceService: 'space-availability-service',
+      eventType: 'SpaceAvailabilityUpdated',
+      spaceId: space.id,
+      name: space.name,
+      location: space.location,
+      status: space.status,
+      availabilityStatus: space.availabilityStatus,
+    });
     return space;
   }
 
@@ -144,6 +201,22 @@ export class SpaceService {
   }> {
     const space = await this.updateAvailability(dto.spaceId, {
       availabilityStatus: SpaceAvailabilityStatus.Reserved,
+    });
+
+    await this.rabbitmqPublisher.publish('space.reservation.created', {
+      userId: dto.userId || 'admin',
+      title: 'Space reservation created',
+      message: `Space ${space.name} was reserved.`,
+      type: 'INFO',
+      sourceService: 'space-availability-service',
+      eventType: 'SpaceReservationCreated',
+      spaceId: space.id,
+      name: space.name,
+      location: space.location,
+      purpose: dto.purpose,
+      startTime: dto.startTime,
+      endTime: dto.endTime,
+      availabilityStatus: space.availabilityStatus,
     });
 
     return {

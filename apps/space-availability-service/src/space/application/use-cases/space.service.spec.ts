@@ -9,6 +9,7 @@ import {
   SpaceStatus,
   SpaceType,
 } from '../../domain/space-status.enum';
+import { RabbitmqPublisherService } from '../../../rabbitmq/rabbitmq-publisher.service';
 
 const space = {
   id: 'space-1',
@@ -49,6 +50,13 @@ describe('SpaceService', () => {
         {
           provide: StructuredLogger,
           useValue: { log: jest.fn(), error: jest.fn(), warn: jest.fn() },
+        },
+
+        {
+          provide: RabbitmqPublisherService,
+          useValue: {
+            publish: jest.fn(),
+          },
         },
       ],
     }).compile();

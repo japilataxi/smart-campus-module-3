@@ -11,10 +11,18 @@ services:
       AUTH_SERVICE_URL: http://auth-service:3001
       LIBRARY_SERVICE_URL: http://library-service:3002
       CAMPUS_INCIDENT_SERVICE_URL: http://campus-incident-service:3020
+      NOTIFICATION_SERVICE_URL: http://notification-service:3010
+      QR_ACCESS_SERVICE_URL: http://qr-access-service:3021
+      TRANSPORT_SERVICE_URL: http://transport-service:3022
+      SPACE_AVAILABILITY_SERVICE_URL: http://space-availability-service:3023
     depends_on:
       - auth-service
       - library-service
       - campus-incident-service
+      - notification-service
+      - qr-access-service
+      - transport-service
+      - space-availability-service
     restart: unless-stopped
 
   auth-service:
@@ -31,9 +39,12 @@ services:
       JWT_SECRET: change_me
       JWT_REFRESH_SECRET: change_me_refresh
       ADMIN_EMAILS: kevin.amaguana@uce.edu.ec,japilataxi@uce.edu.ec,admin2026@uce.edu.ec
+      RABBITMQ_URL: amqp://guest:guest@rabbitmq:5672
+      RABBITMQ_EXCHANGE: smart-campus.events 
     depends_on:
       - auth-db
       - redis
+      - rabbitmq
     restart: unless-stopped
 
   library-service:
@@ -48,9 +59,12 @@ services:
       REDIS_HOST: redis
       REDIS_PORT: 6379
       JWT_SECRET: change_me
+      RABBITMQ_URL: amqp://guest:guest@rabbitmq:5672
+      RABBITMQ_EXCHANGE: smart-campus.events
     depends_on:
       - library-db
       - redis
+      - rabbitmq
     restart: unless-stopped
 
   campus-incident-service:
@@ -65,11 +79,88 @@ services:
       REDIS_HOST: redis
       REDIS_PORT: 6379
       JWT_SECRET: change_me
+      RABBITMQ_URL: amqp://guest:guest@rabbitmq:5672
+      RABBITMQ_EXCHANGE: smart-campus.events
     depends_on:
       - campus-incident-db
       - redis
+      - rabbitmq
     restart: unless-stopped
 
+  notification-service:
+    image: japilataxi/notification-service:qa
+    container_name: smart-campus-notification-service-qa
+    ports:
+      - "3010:3010"
+    environment:
+      SERVICE_NAME: notification-service
+      PORT: 3010
+      DATABASE_URL: postgresql://notification_user:notification_password@notification-db:5432/notification_db
+      REDIS_HOST: redis
+      REDIS_PORT: 6379
+      RABBITMQ_URL: amqp://guest:guest@rabbitmq:5672
+      RABBITMQ_EXCHANGE: smart-campus.events
+      JWT_SECRET: change_me
+    depends_on:
+      - redis
+      - rabbitmq
+      - notification-db
+  qr-access-service:
+    image: japilataxi/qr-access-service:qa
+    container_name: smart-campus-qr-access-service-qa
+    ports:
+      - "3021:3021"
+    environment:
+      SERVICE_NAME: qr-access-service
+      PORT: 3021
+      DATABASE_URL: postgresql://qr_access_user:qr_access_password@qr-access-db:5432/qr_access_db
+      REDIS_HOST: redis
+      REDIS_PORT: 6379
+      RABBITMQ_URL: amqp://guest:guest@rabbitmq:5672
+      RABBITMQ_EXCHANGE: smart-campus.events
+    depends_on:
+      - qr-access-db
+      - redis
+      - rabbitmq
+    restart: unless-stopped
+
+  transport-service:
+    image: japilataxi/transport-service:qa
+    container_name: smart-campus-transport-service-qa
+    ports:
+      - "3022:3022"
+    environment:
+      SERVICE_NAME: transport-service
+      PORT: 3022
+      DATABASE_URL: postgresql://transport_user:transport_password@transport-db:5432/transport_db
+      REDIS_HOST: redis
+      REDIS_PORT: 6379
+      RABBITMQ_URL: amqp://guest:guest@rabbitmq:5672
+      RABBITMQ_EXCHANGE: smart-campus.events
+    depends_on:
+      - transport-db
+      - redis
+      - rabbitmq
+    restart: unless-stopped
+
+  space-availability-service:
+    image: japilataxi/space-availability-service:qa
+    container_name: smart-campus-space-availability-service-qa
+    ports:
+      - "3023:3023"
+    environment:
+      SERVICE_NAME: space-availability-service
+      PORT: 3023
+      DATABASE_URL: postgresql://space_user:space_password@space-availability-db:5432/space_availability_db
+      REDIS_HOST: redis
+      REDIS_PORT: 6379
+      RABBITMQ_URL: amqp://guest:guest@rabbitmq:5672
+      RABBITMQ_EXCHANGE: smart-campus.events
+    depends_on:
+      - space-availability-db
+      - redis
+      - rabbitmq
+    restart: unless-stopped
   web-app:
     image: japilataxi/web-app:qa
     container_name: smart-campus-web-app-qa
@@ -78,7 +169,7 @@ services:
     environment:
       PORT: 3003
       HOSTNAME: 0.0.0.0
-      NEXT_PUBLIC_API_URL: http://smart-campus-qa-alb-1189508831.us-east-1.elb.amazonaws.com/api
+      NEXT_PUBLIC_API_URL: http://localhost:3000/api
     depends_on:
       - api-gateway
     restart: unless-stopped
@@ -122,6 +213,76 @@ services:
       - campus_incident_db_data:/var/lib/postgresql/data
     restart: unless-stopped
 
+  notification-db:
+    image: postgres:16
+    container_name: smart-campus-notification-db-qa
+    environment:
+      POSTGRES_DB: notification_db
+      POSTGRES_USER: notification_user
+      POSTGRES_PASSWORD: notification_password
+    ports:
+      - "5436:5432"
+    volumes:
+      - notification_db_data:/var/lib/postgresql/data
+    restart: unless-stopped
+
+  qr-access-db:
+    image: postgres:16
+    container_name: smart-campus-qr-access-db-qa
+    environment:
+      POSTGRES_DB: qr_access_db
+      POSTGRES_USER: qr_access_user
+      POSTGRES_PASSWORD: qr_access_password
+    ports:
+      - "5437:5432"
+    volumes:
+      - qr_access_db_data:/var/lib/postgresql/data
+    restart: unless-stopped
+
+  transport-db:
+    image: postgres:16
+    container_name: smart-campus-transport-db-qa
+    environment:
+      POSTGRES_DB: transport_db
+      POSTGRES_USER: transport_user
+      POSTGRES_PASSWORD: transport_password
+    ports:
+      - "5438:5432"
+    volumes:
+      - transport_db_data:/var/lib/postgresql/data
+    restart: unless-stopped
+
+
+  space-availability-db:
+    image: postgres:16
+    container_name: smart-campus-space-availability-db-qa
+    environment:
+      POSTGRES_DB: space_availability_db
+      POSTGRES_USER: space_user
+      POSTGRES_PASSWORD: space_password
+    ports:
+      - "5439:5432"
+    volumes:
+      - space_availability_db_data:/var/lib/postgresql/data
+    restart: unless-stopped
+  rabbitmq:
+    image: rabbitmq:3-management-alpine
+    container_name: smart-campus-rabbitmq-qa
+    ports:
+      - "5672:5672"
+      - "15672:15672"
+    environment:
+      RABBITMQ_DEFAULT_USER: guest
+      RABBITMQ_DEFAULT_PASS: guest
+      RABBITMQ_ERLANG_COOKIE: smart-campus-cookie
+    healthcheck:
+      test: ["CMD", "rabbitmq-diagnostics", "check_running"]
+      interval: 10s
+      timeout: 30s
+      retries: 5
+      start_period: 30s
+    restart: unless-stopped
+
   redis:
     image: redis:7-alpine
     container_name: smart-campus-redis-qa
@@ -134,6 +295,17 @@ services:
     container_name: smart-campus-prometheus-qa
     ports:
       - "9090:9090"
+    volumes:
+        - ../monitoring/prometheus.yml:/etc/prometheus/prometheus.yml
+    depends_on:
+        - api-gateway
+        - auth-service
+        - library-service
+        - campus-incident-service
+        - notification-service
+        - qr-access-service
+        - transport-service
+        - space-availability-service
     restart: unless-stopped
 
   grafana:
@@ -141,9 +313,18 @@ services:
     container_name: smart-campus-grafana-qa
     ports:
       - "3005:3000"
+    environment:
+      GF_SECURITY_ADMIN_USER: admin 
+      GF_SECURITY_ADMIN_PASSWORD: admin
+    depends_on: 
+      - prometheus
     restart: unless-stopped
 
 volumes:
   auth_db_data:
   library_db_data:
   campus_incident_db_data:
+  notification_db_data:
+  qr_access_db_data:
+  transport_db_data:
+  space_availability_db_data:

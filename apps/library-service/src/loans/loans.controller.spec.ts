@@ -1,6 +1,7 @@
 import { Test } from '@nestjs/testing';
 import { LoansController } from './loans.controller';
 import { LoansService } from './loans.service';
+import { RabbitmqPublisherService } from '../rabbitmq/rabbitmq-publisher.service';
 
 describe('LoansController', () => {
   let controller: LoansController;
@@ -13,6 +14,14 @@ describe('LoansController', () => {
           provide: LoansService,
           useValue: {},
         },
+
+        {
+          provide: RabbitmqPublisherService,
+          useValue: {
+            publish: jest.fn(),
+            emit: jest.fn(),
+          },
+        }
       ],
     }).compile();
 

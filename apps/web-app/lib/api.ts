@@ -55,12 +55,78 @@ async function request<T>(path: string, options: RequestInit = {}): Promise<T> {
 
   if (!response.ok) {
     const message = await response.text();
-    throw new Error(message || "Request failed");
+    const error = new Error(message || "Request failed");
+    error.name = String(response.status);
+    throw error;
+  }
+
+  if (response.status === 204) {
+    return undefined as T;
   }
 
   return response.json();
 }
 
+export type CreateQrAccessRequest = {
+  userId: string;
+  expirationDate: string;
+  accessType: string;
+  location: string;
+};
+
+export type ValidateQrAccessRequest = {
+  qrCode: string;
+};
+
+
+
+export type CreateTransportRouteRequest = {
+  name: string;
+  description?: string;
+  origin: string;
+  destination: string;
+  status?: string;
+};
+
+export type CreateTransportStopRequest = {
+  name: string;
+  location: string;
+  latitude?: number;
+  longitude?: number;
+  routeId?: string;
+};
+
+export type CreateTransportVehicleRequest = {
+  code: string;
+  plate: string;
+  capacity: number;
+  status?: string;
+  currentRouteId?: string;
+};
+
+export type CreateTransportScheduleRequest = {
+  routeId: string;
+  vehicleId?: string;
+  departureTime: string;
+  arrivalTime: string;
+  status?: string;
+};
+
+
+export type CreateSpaceRequest = {
+  name: string;
+  type: string;
+  location: string;
+  capacity: number;
+  status?: string;
+  availabilityStatus?: string;
+  openingTime: string;
+  closingTime: string;
+};
+
+export type UpdateSpaceAvailabilityRequest = {
+  availabilityStatus: string;
+};
 export const api = {
   login: (data: LoginRequest) =>
     request<any>("/auth/login", {
@@ -159,4 +225,120 @@ export const api = {
     request<any>(`/incidents/${id}`, {
       method: "DELETE",
     }),
+
+  getQrAccessCodes: () => request<any[]>("/qr-access"),
+
+  createQrAccessCode: (data: CreateQrAccessRequest) =>
+    request<any>("/qr-access", {
+      method: "POST",
+      body: JSON.stringify(data),
+    }),
+
+  validateQrAccessCode: (data: ValidateQrAccessRequest) =>
+    request<any>("/qr-access/validate", {
+      method: "POST",
+      body: JSON.stringify(data),
+    }),
+
+  revokeQrAccessCode: (id: string) =>
+    request<any>(`/qr-access/${id}/revoke`, {
+      method: "PATCH",
+    }),
+
+  getQrAccessLogs: () => request<any[]>("/qr-access/logs"),
+
+  getTransportRoutes: () => request<any[]>("/transport/routes"),
+
+  getTransportRouteById: (id: string) => request<any>(`/transport/routes/${id}`),
+
+  createTransportRoute: (data: CreateTransportRouteRequest) =>
+    request<any>("/transport/routes", {
+      method: "POST",
+      body: JSON.stringify(data),
+    }),
+
+  updateTransportRoute: (id: string, data: Partial<CreateTransportRouteRequest>) =>
+    request<any>(`/transport/routes/${id}`, {
+      method: "PATCH",
+      body: JSON.stringify(data),
+    }),
+
+  getTransportRouteAvailability: (id: string) =>
+    request<any>(`/transport/routes/${id}/availability`),
+
+  getTransportStops: (routeId?: string) =>
+    request<any[]>(`/transport/stops${routeId ? `?routeId=${routeId}` : ""}`),
+
+  createTransportStop: (data: CreateTransportStopRequest) =>
+    request<any>("/transport/stops", {
+      method: "POST",
+      body: JSON.stringify(data),
+    }),
+
+  getTransportVehicles: () => request<any[]>("/transport/vehicles"),
+
+  createTransportVehicle: (data: CreateTransportVehicleRequest) =>
+    request<any>("/transport/vehicles", {
+      method: "POST",
+      body: JSON.stringify(data),
+    }),
+
+  getTransportSchedules: (routeId?: string) =>
+    request<any[]>(`/transport/schedules${routeId ? `?routeId=${routeId}` : ""}`),
+
+  createTransportSchedule: (data: CreateTransportScheduleRequest) =>
+    request<any>("/transport/schedules", {
+      method: "POST",
+      body: JSON.stringify(data),
+    }),
+
+  getSpaces: (filters?: { type?: string; availabilityStatus?: string; location?: string }) => {
+    const params = new URLSearchParams();
+    if (filters?.type) params.set("type", filters.type);
+    if (filters?.availabilityStatus) params.set("availabilityStatus", filters.availabilityStatus);
+    if (filters?.location) params.set("location", filters.location);
+    const query = params.toString() ? `?${params.toString()}` : "";
+    return request<any[]>(`/space-availability/spaces${query}`);
+  },
+
+  getSpaceById: (id: string) => request<any>(`/space-availability/spaces/${id}`),
+
+  createSpace: (data: CreateSpaceRequest) =>
+    request<any>("/space-availability/spaces", {
+      method: "POST",
+      body: JSON.stringify(data),
+    }),
+
+  updateSpace: (id: string, data: Partial<CreateSpaceRequest>) =>
+    request<any>(`/space-availability/spaces/${id}`, {
+      method: "PATCH",
+      body: JSON.stringify(data),
+    }),
+
+  deleteSpace: (id: string) =>
+    request<any>(`/space-availability/spaces/${id}`, {
+      method: "DELETE",
+    }),
+
+  deactivateSpace: (id: string) =>
+    request<any>(`/space-availability/spaces/${id}/deactivate`, {
+      method: "PATCH",
+    }),
+
+  updateSpaceAvailability: (id: string, data: UpdateSpaceAvailabilityRequest) =>
+    request<any>(`/space-availability/spaces/${id}/availability`, {
+      method: "PATCH",
+      body: JSON.stringify(data),
+    }),
+
+  getAvailableSpaces: () => request<any[]>("/space-availability/availability"),
+
+  getSpacesByType: (type: string) => request<any[]>(`/space-availability/spaces/type/${type}`),
+
+  getSpacesByLocation: (location: string) =>
+    request<any[]>(`/space-availability/spaces/location/${encodeURIComponent(location)}`),
+
+  checkSpaceAvailability: (id: string) =>
+    request<any>(`/space-availability/spaces/${id}/check-availability`),
 };
+

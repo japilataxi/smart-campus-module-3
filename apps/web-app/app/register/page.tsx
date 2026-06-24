@@ -12,8 +12,8 @@ export default function RegisterPage() {
   const [form, setForm] = useState({
     firstName: "",
     lastName: "",
-    email: "example@uce.edu.ec",
-    password: "Password123",
+    email: "",
+    password: "",
   });
 
   const [error, setError] = useState("");

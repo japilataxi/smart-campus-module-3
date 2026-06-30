@@ -1,23 +1,80 @@
 services:
+  notification-service:
+    image: japilataxi/notification-service:qa
+    container_name: smart-campus-notification-service-qa
+    ports:
+      - "3010:3010"
+    environment:
+      SERVICE_NAME: notification-service
+      PORT: 3010
+      DATABASE_URL: postgresql://notification_user:notification_password@notification-db:5432/notification_db
+      REDIS_HOST: monitoring-redis
+      REDIS_PORT: 6379
+      RABBITMQ_URL: amqp://guest:guest@rabbitmq:5672
+      RABBITMQ_EXCHANGE: smart-campus.events
+      JWT_SECRET: change_me
+    depends_on:
+      - notification-db
+      - monitoring-redis
+      - rabbitmq
+    restart: unless-stopped
+
+  notification-db:
+    image: postgres:16
+    container_name: smart-campus-notification-db-qa
+    environment:
+      POSTGRES_DB: notification_db
+      POSTGRES_USER: notification_user
+      POSTGRES_PASSWORD: notification_password
+    volumes:
+      - notification_db_data:/var/lib/postgresql/data
+    restart: unless-stopped
+
+  monitoring-redis:
+    image: redis:7-alpine
+    container_name: smart-campus-monitoring-redis-qa
+    restart: unless-stopped
+
+  rabbitmq:
+    image: rabbitmq:3-management-alpine
+    container_name: smart-campus-rabbitmq-qa
+    ports:
+      - "5672:5672"
+      - "15672:15672"
+    environment:
+      RABBITMQ_DEFAULT_USER: guest
+      RABBITMQ_DEFAULT_PASS: guest
+      RABBITMQ_ERLANG_COOKIE: smart-campus-cookie
+    healthcheck:
+      test: ["CMD", "rabbitmq-diagnostics", "check_running"]
+      interval: 10s
+      timeout: 30s
+      retries: 5
+      start_period: 30s
+    restart: unless-stopped
+
   prometheus:
     image: prom/prometheus
     container_name: smart-campus-prometheus-qa
     ports:
       - "9090:9090"
-    restart: unless-stopped
     volumes:
       - ./prometheus.yml:/etc/prometheus/prometheus.yml
-    command:
-      - "--config.file=/etc/prometheus/prometheus.yml"
+    depends_on:
+      - notification-service
+    restart: unless-stopped
 
   grafana:
     image: grafana/grafana
     container_name: smart-campus-grafana-qa
     ports:
       - "3005:3000"
+    environment:
+      GF_SECURITY_ADMIN_USER: admin
+      GF_SECURITY_ADMIN_PASSWORD: admin
+    depends_on:
+      - prometheus
     restart: unless-stopped
-    volumes:
-      - grafana-storage:/var/lib/grafana
 
 volumes:
-  grafana-storage:
+  notification_db_data:

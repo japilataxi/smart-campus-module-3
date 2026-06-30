@@ -17,6 +17,7 @@ cd /opt/smart-campus
 cat > docker-compose.yml <<'EOF'
 ${compose_content}
 EOF
+
 cat > .env <<EOF
 CORS_ORIGIN=http://${alb_dns}
 AUTH_SERVICE_URL=http://${auth_private_ip}:3001
@@ -29,4 +30,3 @@ SPACE_AVAILABILITY_SERVICE_URL=http://${space_availability_private_ip}:3023
 EOF
 
 docker compose up -d
-

@@ -1,64 +1,4 @@
 ############################################
-# MONITORING (Prometheus / Grafana)
-############################################
-resource "aws_security_group" "monitoring" {
-  name   = "${var.project_name}-${var.environment}-monitoring-sg"
-  vpc_id = aws_vpc.main.id
-
-  egress {
-    from_port   = 0
-    to_port     = 0
-    protocol    = "-1"
-    cidr_blocks = ["0.0.0.0/0"]
-  }
-}
-
-############################################
-# NOTIFICATION (FALTANTE)
-############################################
-resource "aws_security_group" "notification" {
-  name   = "${var.project_name}-${var.environment}-notification-sg"
-  vpc_id = aws_vpc.main.id
-
-  ingress {
-    from_port       = 3010
-    to_port         = 3010
-    protocol        = "tcp"
-    security_groups = [aws_security_group.gateway.id]
-  }
-
-  ingress {
-    description     = "Allow notification port from bastion for Swagger tunnel"
-    from_port       = 3010
-    to_port         = 3010
-    protocol        = "tcp"
-    security_groups = [aws_security_group.bastion.id]
-  }
-
-  ingress {
-    from_port       = 22
-    to_port         = 22
-    protocol        = "tcp"
-    security_groups = [aws_security_group.bastion.id]
-  }
-
-  ingress {
-    description     = "Metrics from monitoring"
-    from_port       = 3010
-    to_port         = 3010
-    protocol        = "tcp"
-    security_groups = [aws_security_group.monitoring.id]
-  }
-
-  egress {
-    from_port   = 0
-    to_port     = 0
-    protocol    = "-1"
-    cidr_blocks = ["0.0.0.0/0"]
-  }
-}
-
-############################################
 # ALB
 ############################################
 resource "aws_security_group" "alb" {
@@ -88,6 +28,7 @@ resource "aws_security_group" "bastion" {
   vpc_id = aws_vpc.main.id
 
   ingress {
+    description = "SSH from my IP"
     from_port   = 22
     to_port     = 22
     protocol    = "tcp"
@@ -103,13 +44,14 @@ resource "aws_security_group" "bastion" {
 }
 
 ############################################
-# GATEWAY
+# API GATEWAY
 ############################################
 resource "aws_security_group" "gateway" {
   name   = "${var.project_name}-${var.environment}-gateway-sg"
   vpc_id = aws_vpc.main.id
 
   ingress {
+    description     = "API Gateway from ALB"
     from_port       = 3000
     to_port         = 3000
     protocol        = "tcp"
@@ -117,14 +59,7 @@ resource "aws_security_group" "gateway" {
   }
 
   ingress {
-    description     = "Allow gateway port from bastion for SSH tunnel"
-    from_port       = 3000
-    to_port         = 3000
-    protocol        = "tcp"
-    security_groups = [aws_security_group.bastion.id]
-  }
-
-  ingress {
+    description     = "SSH from Bastion"
     from_port       = 22
     to_port         = 22
     protocol        = "tcp"
@@ -132,57 +67,12 @@ resource "aws_security_group" "gateway" {
   }
 
   ingress {
-    description     = "Metrics from monitoring"
+    description     = "Metrics from Monitoring"
     from_port       = 3000
     to_port         = 3000
     protocol        = "tcp"
     security_groups = [aws_security_group.monitoring.id]
   }
-  egress {
-    from_port   = 0
-    to_port     = 0
-    protocol    = "-1"
-    cidr_blocks = ["0.0.0.0/0"]
-  }
-}
-
-############################################
-# AUTH (con metrics)
-############################################
-resource "aws_security_group" "auth" {
-  name   = "${var.project_name}-${var.environment}-auth-sg"
-  vpc_id = aws_vpc.main.id
-
-  ingress {
-    description     = "Allow auth port from bastion for Swagger tunnel"
-    from_port       = 3001
-    to_port         = 3001
-    protocol        = "tcp"
-    security_groups = [aws_security_group.bastion.id]
-  }
-
-  ingress {
-    from_port       = 3001
-    to_port         = 3001
-    protocol        = "tcp"
-    security_groups = [aws_security_group.gateway.id]
-  }
-
-  ingress {
-    from_port       = 22
-    to_port         = 22
-    protocol        = "tcp"
-    security_groups = [aws_security_group.bastion.id]
-  }
-
-  # METRICS
-  ingress {
-    description     = "Metrics from monitoring"
-    from_port       = 3001
-    to_port         = 3001
-    protocol        = "tcp"
-    security_groups = [aws_security_group.monitoring.id]
-  }
 
   egress {
     from_port   = 0
@@ -193,59 +83,14 @@ resource "aws_security_group" "auth" {
 }
 
 ############################################
-# LIBRARY (metrics)
-############################################
-resource "aws_security_group" "library" {
-  name   = "${var.project_name}-${var.environment}-library-sg"
-  vpc_id = aws_vpc.main.id
-
-  ingress {
-    from_port       = 3002
-    to_port         = 3002
-    protocol        = "tcp"
-    security_groups = [aws_security_group.gateway.id]
-  }
-
-  ingress {
-    description     = "Allow library port from bastion for Swagger tunnel"
-    from_port       = 3002
-    to_port         = 3002
-    protocol        = "tcp"
-    security_groups = [aws_security_group.bastion.id]
-  }
-
-  ingress {
-    from_port       = 22
-    to_port         = 22
-    protocol        = "tcp"
-    security_groups = [aws_security_group.bastion.id]
-  }
-
-  # METRICS
-  ingress {
-    description     = "Metrics from monitoring"
-    from_port       = 3002
-    to_port         = 3002
-    protocol        = "tcp"
-    security_groups = [aws_security_group.monitoring.id]
-  }
-
-  egress {
-    from_port   = 0
-    to_port     = 0
-    protocol    = "-1"
-    cidr_blocks = ["0.0.0.0/0"]
-  }
-}
-
-############################################
-# WEB
+# WEB APP
 ############################################
 resource "aws_security_group" "web" {
   name   = "${var.project_name}-${var.environment}-web-sg"
   vpc_id = aws_vpc.main.id
 
   ingress {
+    description     = "Web App from ALB"
     from_port       = 3003
     to_port         = 3003
     protocol        = "tcp"
@@ -253,6 +98,7 @@ resource "aws_security_group" "web" {
   }
 
   ingress {
+    description     = "SSH from Bastion"
     from_port       = 22
     to_port         = 22
     protocol        = "tcp"
@@ -268,13 +114,85 @@ resource "aws_security_group" "web" {
 }
 
 ############################################
-# INCIDENT (metrics)
+# CORE 1: AUTH + LIBRARY
 ############################################
-resource "aws_security_group" "incident" {
-  name   = "${var.project_name}-${var.environment}-incident-sg"
+resource "aws_security_group" "core1" {
+  name   = "${var.project_name}-${var.environment}-core1-sg"
   vpc_id = aws_vpc.main.id
 
   ingress {
+    description     = "Auth from Gateway"
+    from_port       = 3001
+    to_port         = 3001
+    protocol        = "tcp"
+    security_groups = [aws_security_group.gateway.id]
+  }
+
+  ingress {
+    description     = "Library from Gateway"
+    from_port       = 3002
+    to_port         = 3002
+    protocol        = "tcp"
+    security_groups = [aws_security_group.gateway.id]
+  }
+
+  ingress {
+    description     = "Auth metrics from Monitoring"
+    from_port       = 3001
+    to_port         = 3001
+    protocol        = "tcp"
+    security_groups = [aws_security_group.monitoring.id]
+  }
+
+  ingress {
+    description     = "Library metrics from Monitoring"
+    from_port       = 3002
+    to_port         = 3002
+    protocol        = "tcp"
+    security_groups = [aws_security_group.monitoring.id]
+  }
+
+  ingress {
+    description     = "SSH from Bastion"
+    from_port       = 22
+    to_port         = 22
+    protocol        = "tcp"
+    security_groups = [aws_security_group.bastion.id]
+  }
+
+  ingress {
+    description     = "Auth Swagger from Bastion"
+    from_port       = 3001
+    to_port         = 3001
+    protocol        = "tcp"
+    security_groups = [aws_security_group.bastion.id]
+  }
+
+  ingress {
+    description     = "Library Swagger from Bastion"
+    from_port       = 3002
+    to_port         = 3002
+    protocol        = "tcp"
+    security_groups = [aws_security_group.bastion.id]
+  }
+
+  egress {
+    from_port   = 0
+    to_port     = 0
+    protocol    = "-1"
+    cidr_blocks = ["0.0.0.0/0"]
+  }
+}
+
+############################################
+# CORE 2: INCIDENT + QR ACCESS
+############################################
+resource "aws_security_group" "core2" {
+  name   = "${var.project_name}-${var.environment}-core2-sg"
+  vpc_id = aws_vpc.main.id
+
+  ingress {
+    description     = "Incident from Gateway"
     from_port       = 3020
     to_port         = 3020
     protocol        = "tcp"
@@ -282,45 +200,7 @@ resource "aws_security_group" "incident" {
   }
 
   ingress {
-    description     = "Allow incident port from bastion for Swagger tunnel"
-    from_port       = 3020
-    to_port         = 3020
-    protocol        = "tcp"
-    security_groups = [aws_security_group.bastion.id]
-  }
-
-  ingress {
-    from_port       = 22
-    to_port         = 22
-    protocol        = "tcp"
-    security_groups = [aws_security_group.bastion.id]
-  }
-
-  # METRICS
-  ingress {
-    description     = "Metrics from monitoring"
-    from_port       = 3020
-    to_port         = 3020
-    protocol        = "tcp"
-    security_groups = [aws_security_group.monitoring.id]
-  }
-
-  egress {
-    from_port   = 0
-    to_port     = 0
-    protocol    = "-1"
-    cidr_blocks = ["0.0.0.0/0"]
-  }
-}
-
-############################################
-# QR ACCESS (metrics)
-############################################
-resource "aws_security_group" "qr_access" {
-  name   = "${var.project_name}-${var.environment}-qr-access-sg"
-  vpc_id = aws_vpc.main.id
-
-  ingress {
+    description     = "QR Access from Gateway"
     from_port       = 3021
     to_port         = 3021
     protocol        = "tcp"
@@ -328,21 +208,44 @@ resource "aws_security_group" "qr_access" {
   }
 
   ingress {
-    from_port       = 22
-    to_port         = 22
+    description     = "Incident metrics from Monitoring"
+    from_port       = 3020
+    to_port         = 3020
     protocol        = "tcp"
-    security_groups = [aws_security_group.bastion.id]
+    security_groups = [aws_security_group.monitoring.id]
   }
 
-  # METRICS
   ingress {
-    description     = "Metrics from monitoring"
+    description     = "QR Access metrics from Monitoring"
     from_port       = 3021
     to_port         = 3021
     protocol        = "tcp"
     security_groups = [aws_security_group.monitoring.id]
   }
 
+  ingress {
+    description     = "SSH from Bastion"
+    from_port       = 22
+    to_port         = 22
+    protocol        = "tcp"
+    security_groups = [aws_security_group.bastion.id]
+  }
+
+  ingress {
+  description     = "Incident Swagger from Bastion"
+  from_port       = 3020
+  to_port         = 3020
+  protocol        = "tcp"
+  security_groups = [aws_security_group.bastion.id]
+  }
+
+  ingress {
+    description     = "QR Swagger from Bastion"
+    from_port       = 3021
+    to_port         = 3021
+    protocol        = "tcp"
+    security_groups = [aws_security_group.bastion.id]
+  }
   egress {
     from_port   = 0
     to_port     = 0
@@ -352,13 +255,14 @@ resource "aws_security_group" "qr_access" {
 }
 
 ############################################
-# TRANSPORT (metrics)
+# CORE 3: TRANSPORT + SPACE
 ############################################
-resource "aws_security_group" "transport" {
-  name   = "${var.project_name}-${var.environment}-transport-sg"
+resource "aws_security_group" "core3" {
+  name   = "${var.project_name}-${var.environment}-core3-sg"
   vpc_id = aws_vpc.main.id
 
   ingress {
+    description     = "Transport from Gateway"
     from_port       = 3022
     to_port         = 3022
     protocol        = "tcp"
@@ -366,45 +270,7 @@ resource "aws_security_group" "transport" {
   }
 
   ingress {
-    description     = "Allow transport port from bastion for Swagger tunnel"
-    from_port       = 3022
-    to_port         = 3022
-    protocol        = "tcp"
-    security_groups = [aws_security_group.bastion.id]
-  }
-
-  ingress {
-    from_port       = 22
-    to_port         = 22
-    protocol        = "tcp"
-    security_groups = [aws_security_group.bastion.id]
-  }
-
-  # METRICS
-  ingress {
-    description     = "Metrics from monitoring"
-    from_port       = 3022
-    to_port         = 3022
-    protocol        = "tcp"
-    security_groups = [aws_security_group.monitoring.id]
-  }
-
-  egress {
-    from_port   = 0
-    to_port     = 0
-    protocol    = "-1"
-    cidr_blocks = ["0.0.0.0/0"]
-  }
-}
-
-############################################
-# SPACE AVAILABILITY (metrics)
-############################################
-resource "aws_security_group" "space_availability" {
-  name   = "${var.project_name}-${var.environment}-space-availability-sg"
-  vpc_id = aws_vpc.main.id
-
-  ingress {
+    description     = "Space Availability from Gateway"
     from_port       = 3023
     to_port         = 3023
     protocol        = "tcp"
@@ -412,27 +278,43 @@ resource "aws_security_group" "space_availability" {
   }
 
   ingress {
-    description     = "Allow space availability port from bastion for Swagger tunnel"
-    from_port       = 3023
-    to_port         = 3023
+    description     = "Transport metrics from Monitoring"
+    from_port       = 3022
+    to_port         = 3022
     protocol        = "tcp"
-    security_groups = [aws_security_group.bastion.id]
+    security_groups = [aws_security_group.monitoring.id]
   }
 
   ingress {
+    description     = "Space metrics from Monitoring"
+    from_port       = 3023
+    to_port         = 3023
+    protocol        = "tcp"
+    security_groups = [aws_security_group.monitoring.id]
+  }
+
+  ingress {
+    description     = "SSH from Bastion"
     from_port       = 22
     to_port         = 22
     protocol        = "tcp"
     security_groups = [aws_security_group.bastion.id]
   }
 
-  # METRICS
   ingress {
-    description     = "Metrics from monitoring"
+    description     = "Transport Swagger from Bastion"
+    from_port       = 3022
+    to_port         = 3022
+    protocol        = "tcp"
+    security_groups = [aws_security_group.bastion.id]
+  }
+
+  ingress {
+    description     = "Space Swagger from Bastion"
     from_port       = 3023
     to_port         = 3023
     protocol        = "tcp"
-    security_groups = [aws_security_group.monitoring.id]
+    security_groups = [aws_security_group.bastion.id]
   }
 
   egress {
@@ -444,30 +326,46 @@ resource "aws_security_group" "space_availability" {
 }
 
 ############################################
-# RABBITMQ (actualizado)
+# MONITORING + NOTIFICATION + RABBITMQ
 ############################################
-resource "aws_security_group" "rabbitmq" {
-  name   = "${var.project_name}-${var.environment}-rabbitmq-sg"
+resource "aws_security_group" "monitoring" {
+  name   = "${var.project_name}-${var.environment}-monitoring-sg"
   vpc_id = aws_vpc.main.id
 
   ingress {
-    description = "RabbitMQ AMQP from services"
+  description = "Notification from VPC"
+  from_port   = 3010
+  to_port     = 3010
+  protocol    = "tcp"
+  cidr_blocks = [aws_vpc.main.cidr_block]
+  }
+
+  ingress {
+    description = "RabbitMQ AMQP from VPC"
     from_port   = 5672
     to_port     = 5672
     protocol    = "tcp"
-    security_groups = [
-      aws_security_group.auth.id,
-      aws_security_group.library.id,
-      aws_security_group.incident.id,
-      aws_security_group.notification.id,
-      aws_security_group.qr_access.id,
-      aws_security_group.transport.id,
-      aws_security_group.space_availability.id
-    ]
+    cidr_blocks = [aws_vpc.main.cidr_block]
   }
 
   ingress {
-    description     = "RabbitMQ management from bastion"
+    description     = "Prometheus from Bastion"
+    from_port       = 9090
+    to_port         = 9090
+    protocol        = "tcp"
+    security_groups = [aws_security_group.bastion.id]
+  }
+
+  ingress {
+    description     = "Grafana from Bastion"
+    from_port       = 3005
+    to_port         = 3005
+    protocol        = "tcp"
+    security_groups = [aws_security_group.bastion.id]
+  }
+
+  ingress {
+    description     = "RabbitMQ Management from Bastion"
     from_port       = 15672
     to_port         = 15672
     protocol        = "tcp"
@@ -475,13 +373,20 @@ resource "aws_security_group" "rabbitmq" {
   }
 
   ingress {
-    description     = "SSH from bastion"
+    description     = "SSH from Bastion"
     from_port       = 22
     to_port         = 22
     protocol        = "tcp"
     security_groups = [aws_security_group.bastion.id]
   }
 
+  ingress {
+    description     = "Notification Swagger from Bastion"
+    from_port       = 3010
+    to_port         = 3010
+    protocol        = "tcp"
+    security_groups = [aws_security_group.bastion.id]
+  }
   egress {
     from_port   = 0
     to_port     = 0

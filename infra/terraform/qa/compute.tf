@@ -21,11 +21,12 @@ resource "aws_instance" "bastion" {
   }
 }
 
-resource "aws_instance" "rabbitmq" {
+
+resource "aws_instance" "core1" {
   ami                    = data.aws_ami.amazon_linux.id
   instance_type          = "t2.micro"
   subnet_id              = aws_subnet.private_a.id
-  vpc_security_group_ids = [aws_security_group.rabbitmq.id]
+  vpc_security_group_ids = [aws_security_group.core1.id]
   key_name               = var.key_name
 
   root_block_device {
@@ -34,48 +35,22 @@ resource "aws_instance" "rabbitmq" {
     delete_on_termination = true
   }
 
-  user_data = templatefile("${path.module}/templates/service-user-data.sh.tpl", {
-    compose_content = file("${path.module}/../../docker/docker-compose.rabbitmq.qa.yml")
+  user_data = templatefile("${path.module}/templates/core-user-data.sh.tpl", {
+    compose_content     = file("${path.module}/../../docker/docker-compose.core1.qa.yml")
+    rabbitmq_private_ip = aws_instance.monitoring.private_ip
   })
 
   tags = {
-    Name = "${var.project_name}-${var.environment}-rabbitmq"
+    Name = "${var.project_name}-${var.environment}-core1-auth-library"
   }
 }
 
-resource "aws_instance" "auth" {
-  ami                    = data.aws_ami.amazon_linux.id
-  instance_type          = "t2.micro"
-  subnet_id              = aws_subnet.private_a.id
-  vpc_security_group_ids = [aws_security_group.auth.id]
-  key_name               = var.key_name
-
-  root_block_device {
-    volume_size           = 20
-    volume_type           = "gp3"
-    delete_on_termination = true
-  }
-
-  user_data = templatefile("${path.module}/templates/auth-user-data.sh.tpl", {
-    compose_content     = file("${path.module}/../../docker/docker-compose.auth.qa.yml")
-    rabbitmq_private_ip = aws_instance.rabbitmq.private_ip
-  })
-
-  depends_on = [
-    aws_instance.rabbitmq
-  ]
-  tags = {
-    Name = "${var.project_name}-${var.environment}-auth-service"
-  }
-}
-
-resource "aws_instance" "library" {
+resource "aws_instance" "core2" {
   ami                    = data.aws_ami.amazon_linux.id
   instance_type          = "t2.micro"
   subnet_id              = aws_subnet.private_b.id
-  vpc_security_group_ids = [aws_security_group.library.id]
+  vpc_security_group_ids = [aws_security_group.core2.id]
   key_name               = var.key_name
-
 
   root_block_device {
     volume_size           = 20
@@ -83,17 +58,39 @@ resource "aws_instance" "library" {
     delete_on_termination = true
   }
 
-  user_data = templatefile("${path.module}/templates/auth-user-data.sh.tpl", {
-    compose_content     = file("${path.module}/../../docker/docker-compose.library.qa.yml")
-    rabbitmq_private_ip = aws_instance.rabbitmq.private_ip
+  user_data = templatefile("${path.module}/templates/core-user-data.sh.tpl", {
+    compose_content     = file("${path.module}/../../docker/docker-compose.core2.qa.yml")
+    rabbitmq_private_ip = aws_instance.monitoring.private_ip
   })
-  depends_on = [
-    aws_instance.rabbitmq
-  ]
+
   tags = {
-    Name = "${var.project_name}-${var.environment}-library-service"
+    Name = "${var.project_name}-${var.environment}-core2-incident-qr"
   }
 }
+
+resource "aws_instance" "core3" {
+  ami                    = data.aws_ami.amazon_linux.id
+  instance_type          = "t2.micro"
+  subnet_id              = aws_subnet.private_a.id
+  vpc_security_group_ids = [aws_security_group.core3.id]
+  key_name               = var.key_name
+
+  root_block_device {
+    volume_size           = 20
+    volume_type           = "gp3"
+    delete_on_termination = true
+  }
+
+  user_data = templatefile("${path.module}/templates/core-user-data.sh.tpl", {
+    compose_content     = file("${path.module}/../../docker/docker-compose.core3.qa.yml")
+    rabbitmq_private_ip = aws_instance.monitoring.private_ip
+  })
+
+  tags = {
+    Name = "${var.project_name}-${var.environment}-core3-transport-space"
+  }
+}
+
 
 resource "aws_instance" "gateway" {
   ami                    = data.aws_ami.amazon_linux.id
@@ -109,26 +106,16 @@ resource "aws_instance" "gateway" {
   }
 
   user_data = templatefile("${path.module}/templates/gateway-user-data.sh.tpl", {
-    auth_private_ip               = aws_instance.auth.private_ip
-    library_private_ip            = aws_instance.library.private_ip
-    incident_private_ip           = aws_instance.incident.private_ip
-    notification_private_ip       = aws_instance.notification.private_ip
-    qr_access_private_ip          = aws_instance.qr_access.private_ip
-    transport_private_ip          = aws_instance.transport.private_ip
-    space_availability_private_ip = aws_instance.space_availability.private_ip
+    auth_private_ip               = aws_instance.core1.private_ip
+    library_private_ip            = aws_instance.core1.private_ip
+    incident_private_ip           = aws_instance.core2.private_ip
+    notification_private_ip       = aws_instance.monitoring.private_ip
+    qr_access_private_ip          = aws_instance.core2.private_ip
+    transport_private_ip          = aws_instance.core3.private_ip
+    space_availability_private_ip = aws_instance.core3.private_ip
     alb_dns                       = aws_lb.app.dns_name
     compose_content               = file("${path.module}/../../docker/docker-compose.gateway.qa.yml")
   })
-
-  depends_on = [
-    aws_instance.auth,
-    aws_instance.library,
-    aws_instance.incident,
-    aws_instance.qr_access,
-    aws_instance.notification,
-    aws_instance.transport,
-    aws_instance.space_availability
-  ]
 
   tags = {
     Name = "${var.project_name}-${var.environment}-api-gateway"
@@ -158,140 +145,6 @@ resource "aws_instance" "web" {
   }
 }
 
-resource "aws_instance" "incident" {
-  ami                    = data.aws_ami.amazon_linux.id
-  instance_type          = "t2.micro"
-  subnet_id              = aws_subnet.private_a.id
-  vpc_security_group_ids = [aws_security_group.incident.id]
-  key_name               = var.key_name
-
-  root_block_device {
-    volume_size           = 20
-    volume_type           = "gp3"
-    delete_on_termination = true
-  }
-
-  user_data = templatefile("${path.module}/templates/incident-user-data.sh.tpl", {
-    compose_content     = file("${path.module}/../../docker/docker-compose.incident.qa.yml")
-    rabbitmq_private_ip = aws_instance.rabbitmq.private_ip
-  })
-
-  depends_on = [
-    aws_instance.rabbitmq
-  ]
-
-  tags = {
-    Name = "${var.project_name}-${var.environment}-campus-incident-service"
-  }
-}
-
-resource "aws_instance" "notification" {
-  ami                    = data.aws_ami.amazon_linux.id
-  instance_type          = "t2.micro"
-  subnet_id              = aws_subnet.private_a.id
-  vpc_security_group_ids = [aws_security_group.notification.id]
-  key_name               = var.key_name
-
-  root_block_device {
-    volume_size           = 20
-    volume_type           = "gp3"
-    delete_on_termination = true
-  }
-
-  user_data = templatefile("${path.module}/templates/notification-user-data.sh.tpl", {
-    compose_content     = file("${path.module}/../../docker/docker-compose.notification.qa.yml")
-    rabbitmq_private_ip = aws_instance.rabbitmq.private_ip
-  })
-
-  depends_on = [
-    aws_instance.rabbitmq
-  ]
-
-  tags = {
-    Name = "${var.project_name}-${var.environment}-notification-service"
-  }
-}
-
-resource "aws_instance" "qr_access" {
-  ami                    = data.aws_ami.amazon_linux.id
-  instance_type          = "t2.micro"
-  subnet_id              = aws_subnet.private_b.id
-  vpc_security_group_ids = [aws_security_group.qr_access.id]
-  key_name               = var.key_name
-
-  root_block_device {
-    volume_size           = 20
-    volume_type           = "gp3"
-    delete_on_termination = true
-  }
-
-  user_data = templatefile("${path.module}/templates/qr-access-user-data.sh.tpl", {
-    compose_content     = file("${path.module}/../../docker/docker-compose.qr-access.qa.yml")
-    rabbitmq_private_ip = aws_instance.rabbitmq.private_ip
-  })
-
-  depends_on = [
-    aws_instance.rabbitmq
-  ]
-
-  tags = {
-    Name = "${var.project_name}-${var.environment}-qr-access-service"
-  }
-}
-
-resource "aws_instance" "transport" {
-  ami                    = data.aws_ami.amazon_linux.id
-  instance_type          = "t2.micro"
-  subnet_id              = aws_subnet.private_a.id
-  vpc_security_group_ids = [aws_security_group.transport.id]
-  key_name               = var.key_name
-
-  root_block_device {
-    volume_size           = 20
-    volume_type           = "gp3"
-    delete_on_termination = true
-  }
-
-  user_data = templatefile("${path.module}/templates/transport-user-data.sh.tpl", {
-    compose_content     = file("${path.module}/../../docker/docker-compose.transport.qa.yml")
-    rabbitmq_private_ip = aws_instance.rabbitmq.private_ip
-  })
-
-  depends_on = [
-    aws_instance.rabbitmq
-  ]
-
-  tags = {
-    Name = "${var.project_name}-${var.environment}-transport-service"
-  }
-}
-
-resource "aws_instance" "space_availability" {
-  ami                    = data.aws_ami.amazon_linux.id
-  instance_type          = "t2.micro"
-  subnet_id              = aws_subnet.private_b.id
-  vpc_security_group_ids = [aws_security_group.space_availability.id]
-  key_name               = var.key_name
-
-  root_block_device {
-    volume_size           = 20
-    volume_type           = "gp3"
-    delete_on_termination = true
-  }
-
-  user_data = templatefile("${path.module}/templates/space-availability-user-data.sh.tpl", {
-    compose_content     = file("${path.module}/../../docker/docker-compose.space-availability.qa.yml")
-    rabbitmq_private_ip = aws_instance.rabbitmq.private_ip
-  })
-
-  depends_on = [
-    aws_instance.rabbitmq
-  ]
-
-  tags = {
-    Name = "${var.project_name}-${var.environment}-space-availability-service"
-  }
-}
 
 resource "aws_instance" "monitoring" {
   ami                    = data.aws_ami.amazon_linux.id
@@ -300,22 +153,28 @@ resource "aws_instance" "monitoring" {
   vpc_security_group_ids = [aws_security_group.monitoring.id]
   key_name               = var.key_name
 
+  root_block_device {
+    volume_size           = 20
+    volume_type           = "gp3"
+    delete_on_termination = true
+  }
+
   user_data = templatefile("${path.module}/templates/monitoring-user-data.sh.tpl", {
     compose_content = file("${path.module}/../../docker/docker-compose.monitoring.qa.yml")
 
-    prometheus_content = templatefile("${path.module}/../../monitoring/prometheus.yml.tpl", {
-      api_gateway_private_ip        = aws_instance.gateway.private_ip
-      auth_private_ip               = aws_instance.auth.private_ip
-      library_private_ip            = aws_instance.library.private_ip
-      incident_private_ip           = aws_instance.incident.private_ip
-      notification_private_ip       = aws_instance.notification.private_ip
-      qr_access_private_ip          = aws_instance.qr_access.private_ip
-      transport_private_ip          = aws_instance.transport.private_ip
-      space_availability_private_ip = aws_instance.space_availability.private_ip
-    })
+    prometheus_content = <<EOF
+global:
+  scrape_interval: 15s
+
+scrape_configs:
+  - job_name: notification-service
+    metrics_path: /metrics
+    static_configs:
+      - targets: ['localhost:3010']
+EOF
   })
 
   tags = {
-    Name = "${var.project_name}-${var.environment}-monitoring"
+    Name = "${var.project_name}-${var.environment}-monitoring-notification-rabbitmq"
   }
 }

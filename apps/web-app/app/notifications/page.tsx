@@ -4,18 +4,29 @@ import { useEffect, useState } from "react";
 import { AppShell } from "@/components/AppShell";
 import { io } from "socket.io-client";
 
+const API_URL =
+  process.env.NEXT_PUBLIC_API_URL || "http://localhost:3000/api";
+
+const SOCKET_URL =
+  process.env.NEXT_PUBLIC_SOCKET_URL || "http://localhost:3010";
+
 export default function NotificationsPage() {
   const [notifications, setNotifications] = useState<any[]>([]);
 
   useEffect(() => {
     async function load() {
       try {
-        const response = await fetch(
-          "http://localhost:3000/api/notifications"
-        );
+        const response = await fetch(`${API_URL}/notifications`);
 
         const data = await response.json();
-        setNotifications(data);
+
+          if (!response.ok) {
+            console.error("Notifications API error:", data);
+            setNotifications([]);
+            return;
+          }
+
+          setNotifications(Array.isArray(data) ? data : []);
       } catch (error) {
         console.error(error);
       }
@@ -32,7 +43,7 @@ export default function NotificationsPage() {
 
     if (!token) return;
 
-    const socket = io("http://localhost:3010", {
+    const socket = io(SOCKET_URL, {
       auth: {
         token,
       },

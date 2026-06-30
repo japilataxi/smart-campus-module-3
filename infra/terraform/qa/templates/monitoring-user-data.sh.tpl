@@ -1,8 +1,8 @@
 #!/bin/bash
 set -eux
 
-dnf update -y
-dnf install -y docker git
+yum update -y
+yum install -y docker git --allowerasing
 
 systemctl enable docker
 systemctl start docker

@@ -2,7 +2,7 @@
 set -eux
 
 yum update -y
-yum install -y docker git
+yum install -y docker git --allowerasing
 
 systemctl enable docker
 systemctl start docker
@@ -23,6 +23,10 @@ CORS_ORIGIN=http://${alb_dns}
 AUTH_SERVICE_URL=http://${auth_private_ip}:3001
 LIBRARY_SERVICE_URL=http://${library_private_ip}:3002
 CAMPUS_INCIDENT_SERVICE_URL=http://${incident_private_ip}:3020
+NOTIFICATION_SERVICE_URL=http://${notification_private_ip}:3010
+QR_ACCESS_SERVICE_URL=http://${qr_access_private_ip}:3021
+TRANSPORT_SERVICE_URL=http://${transport_private_ip}:3022
+SPACE_AVAILABILITY_SERVICE_URL=http://${space_availability_private_ip}:3023
 EOF
 
 docker compose up -d

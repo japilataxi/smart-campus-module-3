@@ -16,7 +16,7 @@ resource "aws_lb" "app" {
 }
 
 resource "aws_lb_target_group" "gateway" {
-  name     = "${var.project_name}-${var.environment}-gateway-tg"
+  name     = "${var.project_name}-${var.environment}-gt-tg"
   port     = 3000
   protocol = "HTTP"
   vpc_id   = aws_vpc.main.id
@@ -98,6 +98,45 @@ resource "aws_lb_listener_rule" "gateway_docs" {
   condition {
     path_pattern {
       values = ["/docs", "/docs/*"]
+    }
+  }
+}
+
+resource "aws_lb_target_group" "notification" {
+  name     = "${var.project_name}-${var.environment}-notif-tg"
+  port     = 3010
+  protocol = "HTTP"
+  vpc_id   = aws_vpc.main.id
+
+  health_check {
+    path                = "/health"
+    protocol            = "HTTP"
+    matcher             = "200"
+    interval            = 30
+    timeout             = 5
+    healthy_threshold   = 2
+    unhealthy_threshold = 2
+  }
+}
+
+resource "aws_lb_target_group_attachment" "notification" {
+  target_group_arn = aws_lb_target_group.notification.arn
+  target_id        = aws_instance.monitoring.id
+  port             = 3010
+}
+
+resource "aws_lb_listener_rule" "socket_io" {
+  listener_arn = aws_lb_listener.http.arn
+  priority     = 20
+
+  action {
+    type             = "forward"
+    target_group_arn = aws_lb_target_group.notification.arn
+  }
+
+  condition {
+    path_pattern {
+      values = ["/socket.io/*"]
     }
   }
 }

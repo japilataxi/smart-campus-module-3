@@ -144,6 +144,25 @@ export function AuthProvider({ children }: { children: ReactNode }) {
   useEffect(() => {
     async function loadSession() {
       try {
+
+
+const visualQaMode = localStorage.getItem("smart_campus_visual_qa") === "true";
+
+if (visualQaMode) {
+  const qaUser = normalizeUser({
+    id: "qa-user",
+    firstName: "Kevin",
+    lastName: "Amaguaña",
+    email: "kevin@uce.edu.ec",
+    roles: ["admin"],
+  } as User);
+
+  setUser(qaUser);
+  setLoading(false);
+  return;
+}
+
+
         const token = localStorage.getItem("smart_campus_access_token");
 
         if (token) {

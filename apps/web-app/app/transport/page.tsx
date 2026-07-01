@@ -143,12 +143,25 @@ function formatDate(value?: string) {
 
 function getErrorMessage(error: unknown) {
   if (error instanceof Error) {
-    if (error.name === "401") return "Session expired. Please log in again.";
-    if (error.name === "403") return "You do not have permission to perform this action.";
-    return error.message;
+    if (error.name === "401") {
+      return "Your session has expired. Please sign in again.";
+    }
+
+    if (error.name === "403") {
+      return "You do not have permission to perform this action.";
+    }
+
+    if (
+      error.message === "Failed to fetch" ||
+      error.message.toLowerCase().includes("fetch")
+    ) {
+      return "Transport Service is currently unavailable. Please try again in a few moments.";
+    }
+
+    return "Unable to complete the requested operation. Please try again.";
   }
 
-  return "Unexpected request error.";
+  return "An unexpected error occurred. Please try again.";
 }
 
 function routeBadgeClass(status: RouteStatus) {

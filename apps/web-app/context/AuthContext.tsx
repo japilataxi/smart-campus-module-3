@@ -144,6 +144,7 @@ export function AuthProvider({ children }: { children: ReactNode }) {
   useEffect(() => {
     async function loadSession() {
       try {
+        
         const token = localStorage.getItem("smart_campus_access_token");
 
         if (token) {

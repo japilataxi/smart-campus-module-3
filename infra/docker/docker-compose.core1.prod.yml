@@ -1,0 +1,71 @@
+services:
+  auth-service:
+    image: japilataxi/auth-service:prod
+    container_name: smart-campus-auth-service-prod
+    ports:
+      - "3001:3001"
+    environment:
+      SERVICE_NAME: auth-service
+      PORT: 3001
+      DATABASE_URL: postgresql://auth_user:auth_password@auth-db:5432/auth_db
+      REDIS_HOST: core1-redis
+      REDIS_PORT: 6379
+      JWT_SECRET: change_me
+      JWT_REFRESH_SECRET: change_me_refresh
+      ADMIN_EMAILS: kevin.amaguana@uce.edu.ec,japilataxi@uce.edu.ec,admin2026@uce.edu.ec
+      RABBITMQ_URL: amqp://guest:guest@${RABBITMQ_HOST}:5672
+      RABBITMQ_EXCHANGE: smart-campus.events
+    depends_on:
+      - auth-db
+      - core1-redis
+    restart: unless-stopped
+
+  library-service:
+    image: japilataxi/library-service:prod
+    container_name: smart-campus-library-service-prod
+    ports:
+      - "3002:3002"
+    environment:
+      SERVICE_NAME: library-service
+      PORT: 3002
+      DATABASE_URL: postgresql://library_user:library_password@library-db:5432/library_db
+      REDIS_HOST: core1-redis
+      REDIS_PORT: 6379
+      JWT_SECRET: change_me
+      RABBITMQ_URL: amqp://guest:guest@${RABBITMQ_HOST}:5672
+      RABBITMQ_EXCHANGE: smart-campus.events
+    depends_on:
+      - library-db
+      - core1-redis
+    restart: unless-stopped
+
+  auth-db:
+    image: postgres:16
+    container_name: smart-campus-auth-db-prod
+    environment:
+      POSTGRES_DB: auth_db
+      POSTGRES_USER: auth_user
+      POSTGRES_PASSWORD: auth_password
+    volumes:
+      - auth_db_data:/var/lib/postgresql/data
+    restart: unless-stopped
+
+  library-db:
+    image: postgres:16
+    container_name: smart-campus-library-db-prod
+    environment:
+      POSTGRES_DB: library_db
+      POSTGRES_USER: library_user
+      POSTGRES_PASSWORD: library_password
+    volumes:
+      - library_db_data:/var/lib/postgresql/data
+    restart: unless-stopped
+
+  core1-redis:
+    image: redis:7-alpine
+    container_name: smart-campus-core1-redis-prod
+    restart: unless-stopped
+
+volumes:
+  auth_db_data:
+  library_db_data:

@@ -20,7 +20,7 @@ export default function LoginPage() {
     try {
       await login({ email, password });
     } catch {
-      setError("Invalid credentials or API Gateway is not available.");
+      setError("We could not sign you in. Please check your email and password.");
     }
   }
 
@@ -30,7 +30,7 @@ export default function LoginPage() {
         <div className="absolute inset-0 bg-gradient-to-br from-[#002b5c] via-[#003b7a] to-[#8b0000]" />
         <div className="absolute -right-32 top-0 h-full w-80 rotate-6 bg-[#f4c430]" />
 
-        <div className="relative z-10 p-12">
+        <div className="relative z-10 px-12 pt-8">
           <div className="flex items-center gap-5">
             <div className="rounded-full bg-white p-3 shadow-xl">
               <Image
@@ -51,26 +51,26 @@ export default function LoginPage() {
           </div>
         </div>
 
-        <div className="relative z-10 px-12 pb-20">
+        <div className="relative z-10 px-12 pb-12">
           <p className="mb-4 text-sm font-bold uppercase tracking-[0.3em] text-[#f4c430]">
             Module 3
           </p>
 
-          <h2 className="max-w-2xl text-6xl font-extrabold leading-tight">
-            University services connected in one platform.
+          <h2 className="max-w-xl text-5xl font-extrabold leading-tight">
+            Access your Smart Campus services securely.
           </h2>
 
-          <div className="mt-8 h-1 w-40 rounded-full bg-[#f4c430]" />
+          <div className="mt-7 h-1 w-40 rounded-full bg-[#f4c430]" />
 
-          <p className="mt-8 max-w-xl text-lg leading-8 text-white/85">
-            Access library resources, manage loans, and explore academic
-            services through a distributed microservices architecture.
+          <p className="mt-7 max-w-xl text-lg leading-8 text-white/85">
+            Sign in to manage academic services, notifications, incidents,
+            QR access, transport and campus resources from one platform.
           </p>
 
-          <div className="mt-12 grid max-w-2xl grid-cols-3 gap-5">
-            <Feature icon={<BookOpen />} title="Library" text="Books and loans" />
-            <Feature icon={<ShieldCheck />} title="Secure" text="JWT and RBAC" />
-            <Feature icon={<Server />} title="Gateway" text="Microservices API" />
+          <div className="mt-10 grid max-w-2xl grid-cols-3 gap-5">
+            <Feature icon={<BookOpen />} title="Services" text="Academic modules" />
+            <Feature icon={<ShieldCheck />} title="Secure" text="JWT and roles" />
+            <Feature icon={<Server />} title="Platform" text="Smart Campus" />
           </div>
         </div>
       </section>
@@ -113,10 +113,11 @@ export default function LoginPage() {
               <div className="mt-2 flex items-center gap-3 rounded-xl border border-slate-300 px-4 py-3 focus-within:border-[#f4c430]">
                 <Mail size={20} className="text-slate-400" />
                 <input
-                  className="w-full outline-none"
+                  className="w-full bg-transparent outline-none"
                   value={email}
                   onChange={(e) => setEmail(e.target.value)}
                   type="email"
+                  placeholder="student@uce.edu.ec"
                   required
                 />
               </div>
@@ -130,10 +131,11 @@ export default function LoginPage() {
               <div className="mt-2 flex items-center gap-3 rounded-xl border border-slate-300 px-4 py-3 focus-within:border-[#f4c430]">
                 <Lock size={20} className="text-slate-400" />
                 <input
-                  className="w-full outline-none"
+                  className="w-full bg-transparent outline-none"
                   value={password}
                   onChange={(e) => setPassword(e.target.value)}
                   type="password"
+                  placeholder="Enter your password"
                   required
                 />
               </div>
@@ -166,10 +168,11 @@ function Feature({
   text: string;
 }) {
   return (
-    <div className="rounded-2xl bg-white/10 p-4 backdrop-blur">
+    <div className="rounded-2xl bg-white/10 p-4 backdrop-blur transition hover:bg-white/20">
       <div className="mb-3 flex h-11 w-11 items-center justify-center rounded-xl bg-white/20 text-[#f4c430]">
         {icon}
       </div>
+
       <p className="font-bold">{title}</p>
       <p className="text-sm text-white/70">{text}</p>
     </div>

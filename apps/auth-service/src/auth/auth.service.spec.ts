@@ -4,6 +4,7 @@ import { JwtService } from '@nestjs/jwt';
 import { AuthService } from './auth.service';
 import { UsersService } from '../users/users.service';
 import { AuditService } from '../audit/audit.service';
+import { RabbitmqPublisherService } from '../rabbitmq/rabbitmq-publisher.service';
 
 describe('AuthService', () => {
   let service: AuthService;
@@ -22,6 +23,7 @@ describe('AuthService', () => {
     log: jest.fn().mockResolvedValue(undefined),
   };
 
+
   beforeEach(async () => {
     const moduleRef = await Test.createTestingModule({
       providers: [
@@ -38,6 +40,14 @@ describe('AuthService', () => {
           provide: AuditService,
           useValue: mockAuditService,
         },
+
+        {
+          provide: RabbitmqPublisherService,
+          useValue: {
+            publish: jest.fn(),
+            emit: jest.fn(),
+          },
+        }
       ],
     }).compile();
 

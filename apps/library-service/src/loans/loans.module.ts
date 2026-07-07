@@ -8,10 +8,13 @@ import { LoansService } from './loans.service';
 
 import { BooksModule } from '../books/books.module';
 
+import { RabbitmqModule } from '../rabbitmq/rabbitmq.module';
+
 @Module({
   imports: [
     TypeOrmModule.forFeature([Loan]),
     BooksModule,
+    RabbitmqModule,
   ],
   controllers: [LoansController],
   providers: [LoansService],

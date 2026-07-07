@@ -10,12 +10,15 @@ import { AuditService } from '../audit/audit.service';
 import { RegisterDto } from './dto/register.dto';
 import { LoginDto } from './dto/login.dto';
 
+import { RabbitmqPublisherService } from '../rabbitmq/rabbitmq-publisher.service';
+
 @Injectable()
 export class AuthService {
   constructor(
     private readonly usersService: UsersService,
     private readonly jwtService: JwtService,
     private readonly auditService: AuditService,
+    private readonly rabbitmqPublisher: RabbitmqPublisherService,
   ) {}
 
   async register(registerDto: RegisterDto) {
@@ -32,6 +35,19 @@ export class AuthService {
       action: 'USER_REGISTERED',
       userId: user.id,
       email: user.email,
+    });
+
+
+    await this.rabbitmqPublisher.publish('user.registered', {
+      userId: user.id,
+      title: 'New user registered',
+      message: `${user.email} registered in Smart Campus`,
+      type: 'INFO',
+      sourceService: 'auth-service',
+      eventType: 'UserRegistered',
+      email: user.email,
+      firstName: user.firstName,
+      lastName: user.lastName,
     });
 
     const tokens = await this.generateTokens(

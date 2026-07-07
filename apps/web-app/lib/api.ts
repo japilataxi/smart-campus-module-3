@@ -1,4 +1,4 @@
-﻿import { LoginRequest, RegisterRequest } from "./types";
+import { LoginRequest, RegisterRequest } from "./types";
 
 const API_BASE_URL =
   process.env.NEXT_PUBLIC_API_URL || "http://localhost:3000/api";
@@ -127,6 +127,7 @@ export type CreateSpaceRequest = {
 export type UpdateSpaceAvailabilityRequest = {
   availabilityStatus: string;
 };
+
 export type TriggerWorkflowRequest = {
   workflowName: string;
   sourceService: string;
@@ -135,6 +136,20 @@ export type TriggerWorkflowRequest = {
   triggeredByUserId?: string;
   idempotencyKey?: string;
 };
+
+export type CreateAnnouncementRequest = {
+  title: string;
+  content: string;
+  category: string;
+  priority: string;
+  targetAudience: string;
+  createdByUserId: string;
+
+};
+
+export type UpdateAnnouncementRequest =
+  Partial<CreateAnnouncementRequest>;
+
 export const api = {
   login: (data: LoginRequest) =>
     request<any>("/auth/login", {
@@ -348,7 +363,8 @@ export const api = {
 
   checkSpaceAvailability: (id: string) =>
     request<any>(`/space-availability/spaces/${id}/check-availability`),
-  getWorkflowExecutions: (limit = 50) =>
+
+getWorkflowExecutions: (limit = 50) =>
     request<any[]>(`/workflows/executions?limit=${limit}`),
 
   getWorkflowExecutionById: (id: string) =>
@@ -359,6 +375,39 @@ export const api = {
       method: "POST",
       body: JSON.stringify(data),
     }),
+
+// ==========================
+  // ANNOUNCEMENTS
+  // ==========================
+
+  getAnnouncements: () =>
+    request<any>("/announcements"),
+
+  getAnnouncementById: (id: string) =>
+    request<any>(`/announcements/${id}`),
+
+  createAnnouncement: (data: CreateAnnouncementRequest) =>
+    request<any>("/announcements", {
+      method: "POST",
+      body: JSON.stringify(data),
+    }),
+
+  updateAnnouncement: (id: string, data: UpdateAnnouncementRequest) =>
+    request<any>(`/announcements/${id}`, {
+      method: "PATCH",
+      body: JSON.stringify(data),
+    }),
+
+  publishAnnouncement: (id: string) =>
+    request<any>(`/announcements/${id}/publish`, {
+      method: "PATCH",
+    }),
+
+  deleteAnnouncement: (id: string) =>
+    request<any>(`/announcements/${id}`, {
+      method: "DELETE",
+    }),
+
 };
 
 

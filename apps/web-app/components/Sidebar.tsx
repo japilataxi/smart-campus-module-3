@@ -1,4 +1,4 @@
-﻿"use client";
+"use client";
 
 import Link from "next/link";
 import { usePathname } from "next/navigation";
@@ -20,7 +20,8 @@ import {
   Users,
   WalletCards,
   Info,
-  Workflow,
+Workflow,
+  Megaphone,
 } from "lucide-react";
 import { useAuth } from "@/context/AuthContext";
 import clsx from "clsx";
@@ -47,6 +48,7 @@ const groupedMenuByRole = {
           label: "Space Service",
           icon: Building2,
         },
+        { href: "/announcements", label: "Announcement Service", icon: Megaphone },
       ],
     },
     {
@@ -78,6 +80,7 @@ const groupedMenuByRole = {
           label: "Space Service",
           icon: Building2,
         },
+        { href: "/announcements", label: "Announcement Service", icon: Megaphone },
       ],
     },
     {
@@ -115,6 +118,7 @@ const groupedMenuByRole = {
           label: "Space Service",
           icon: Building2,
         },
+        { href: "/announcements", label: "Announcement Service", icon: Megaphone },
       ],
     },
     {

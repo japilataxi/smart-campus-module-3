@@ -128,6 +128,15 @@ export type UpdateSpaceAvailabilityRequest = {
   availabilityStatus: string;
 };
 
+export type TriggerWorkflowRequest = {
+  workflowName: string;
+  sourceService: string;
+  eventType: string;
+  requestPayload: Record<string, unknown>;
+  triggeredByUserId?: string;
+  idempotencyKey?: string;
+};
+
 export type CreateAnnouncementRequest = {
   title: string;
   content: string;
@@ -355,8 +364,19 @@ export const api = {
   checkSpaceAvailability: (id: string) =>
     request<any>(`/space-availability/spaces/${id}/check-availability`),
 
+getWorkflowExecutions: (limit = 50) =>
+    request<any[]>(`/workflows/executions?limit=${limit}`),
 
-  // ==========================
+  getWorkflowExecutionById: (id: string) =>
+    request<any>(`/workflows/executions/${id}`),
+
+  triggerWorkflow: (data: TriggerWorkflowRequest) =>
+    request<any>("/workflows/trigger", {
+      method: "POST",
+      body: JSON.stringify(data),
+    }),
+
+// ==========================
   // ANNOUNCEMENTS
   // ==========================
 
@@ -387,6 +407,7 @@ export const api = {
     request<any>(`/announcements/${id}`, {
       method: "DELETE",
     }),
+
 };
 
 

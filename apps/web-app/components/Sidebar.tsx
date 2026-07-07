@@ -20,7 +20,8 @@ import {
   Users,
   WalletCards,
   Info,
-  Megaphone, 
+Workflow,
+  Megaphone,
 } from "lucide-react";
 import { useAuth } from "@/context/AuthContext";
 import clsx from "clsx";
@@ -108,6 +109,7 @@ const groupedMenuByRole = {
         { href: "/admin/users", label: "Auth Service", icon: Shield },
         { href: "/library", label: "Library Service", icon: BookOpen },
         { href: "/notifications", label: "Notification Service", icon: Bell },
+        { href: "/workflows", label: "Workflow Service", icon: Workflow },
         { href: "/incidents", label: "Incident Service", icon: AlertTriangle },
         { href: "/qr-access", label: "QR Access Service", icon: QrCode },
         { href: "/transport", label: "Transport Service", icon: BusFront },

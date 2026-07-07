@@ -65,6 +65,58 @@ services:
       - announcement_db_data:/var/lib/postgresql/data
     restart: unless-stopped
 
+
+  workflow-service:
+    image: japilataxi/workflow-service:qa
+    container_name: smart-campus-workflow-service-qa
+    ports:
+      - "3024:3024"
+    environment:
+      SERVICE_NAME: workflow-service
+      NODE_ENV: development
+      PORT: 3024
+      DATABASE_URL: postgresql://workflow_user:workflow_password@workflow-db:5432/workflow_db
+      REDIS_HOST: core3-redis
+      REDIS_PORT: 6379
+      JWT_SECRET: change_me
+      N8N_BASE_URL: http://n8n:5678
+      N8N_INCIDENT_WEBHOOK_URL: http://n8n:5678/webhook/incident-created-workflow
+      N8N_USER_REGISTERED_WEBHOOK_URL: http://n8n:5678/webhook/user-registered-workflow
+      N8N_LIBRARY_LOAN_WEBHOOK_URL: http://n8n:5678/webhook/library-loan-created-workflow
+      N8N_CRITICAL_NOTIFICATION_WEBHOOK_URL: http://n8n:5678/webhook/critical-notification-workflow
+    depends_on:
+      - workflow-db
+      - core3-redis
+      - n8n
+    restart: unless-stopped
+
+  workflow-db:
+    image: postgres:16
+    container_name: smart-campus-workflow-db-qa
+    environment:
+      POSTGRES_DB: workflow_db
+      POSTGRES_USER: workflow_user
+      POSTGRES_PASSWORD: workflow_password
+    volumes:
+      - workflow_db_data:/var/lib/postgresql/data
+    restart: unless-stopped
+
+  n8n:
+    image: n8nio/n8n:latest
+    container_name: smart-campus-n8n-qa
+    ports:
+      - "5678:5678"
+    environment:
+      N8N_BASIC_AUTH_ACTIVE: "true"
+      N8N_BASIC_AUTH_USER: admin
+      N8N_BASIC_AUTH_PASSWORD: admin
+      N8N_HOST: localhost
+      N8N_PORT: 5678
+      N8N_PROTOCOL: http
+      WEBHOOK_URL: http://localhost:5678
+    volumes:
+      - n8n_data:/home/node/.n8n
+    restart: unless-stopped
   transport-db:
     image: postgres:16
     container_name: smart-campus-transport-db-qa
@@ -95,4 +147,6 @@ services:
 volumes:
   transport_db_data:
   space_availability_db_data:
+  workflow_db_data:
+  n8n_data:
   announcement_db_data:

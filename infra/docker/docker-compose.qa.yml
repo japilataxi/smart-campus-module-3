@@ -1,4 +1,4 @@
-services:
+﻿services:
 
   api-gateway:
     build:
@@ -18,6 +18,7 @@ services:
       QR_ACCESS_SERVICE_URL: http://qr-access-service:3021
       TRANSPORT_SERVICE_URL: http://transport-service:3022
       SPACE_AVAILABILITY_SERVICE_URL: http://space-availability-service:3023
+      WORKFLOW_SERVICE_URL: http://workflow-service:3024
     depends_on:
       - auth-service
       - library-service
@@ -26,6 +27,7 @@ services:
       - qr-access-service
       - transport-service
       - space-availability-service
+      - workflow-service
 
   auth-service:
     build:
@@ -182,6 +184,32 @@ services:
       - redis
       - rabbitmq
 
+  workflow-service:
+    build:
+      context: ../../
+      dockerfile: apps/workflow-service/Dockerfile
+      args:
+        APP_NAME: workflow-service
+    ports:
+      - "3024:3024"
+    environment:
+      SERVICE_NAME: workflow-service
+      PORT: 3024
+      NODE_ENV: development
+      DATABASE_URL: postgresql://workflow_user:workflow_password@workflow-db:5432/workflow_db
+      REDIS_HOST: redis
+      REDIS_PORT: 6379
+      JWT_SECRET: change_me
+      N8N_BASE_URL: http://n8n:5678
+      N8N_INCIDENT_WEBHOOK_URL: http://n8n:5678/webhook/incident-created-workflow
+      N8N_USER_REGISTERED_WEBHOOK_URL: http://n8n:5678/webhook/user-registered-workflow
+      N8N_LIBRARY_LOAN_WEBHOOK_URL: http://n8n:5678/webhook/library-loan-created-workflow
+      N8N_CRITICAL_NOTIFICATION_WEBHOOK_URL: http://n8n:5678/webhook/critical-notification-workflow
+    depends_on:
+      - workflow-db
+      - redis
+      - n8n
+
   web-app:
     build:
       context: ../../
@@ -257,6 +285,30 @@ services:
       POSTGRES_PASSWORD: space_password
     ports:
       - "5439:5432"
+  workflow-db:
+    image: postgres:16
+    environment:
+      POSTGRES_DB: workflow_db
+      POSTGRES_USER: workflow_user
+      POSTGRES_PASSWORD: workflow_password
+    ports:
+      - "5440:5432"
+
+  n8n:
+    image: n8nio/n8n:latest
+    ports:
+      - "5678:5678"
+    environment:
+      N8N_BASIC_AUTH_ACTIVE: "true"
+      N8N_BASIC_AUTH_USER: admin
+      N8N_BASIC_AUTH_PASSWORD: admin
+      N8N_HOST: localhost
+      N8N_PORT: 5678
+      N8N_PROTOCOL: http
+      WEBHOOK_URL: http://localhost:5678
+    volumes:
+      - n8n_data:/home/node/.n8n
+
   rabbitmq:
     image: rabbitmq:3-management-alpine
     container_name: smart-campus-rabbitmq-qa
@@ -294,6 +346,7 @@ services:
       - qr-access-service
       - transport-service
       - space-availability-service
+      - workflow-service
 
   grafana:
     image: grafana/grafana
@@ -305,5 +358,10 @@ services:
     depends_on:
       - prometheus
 
+
+
+
+volumes:
+  n8n_data:
 
 

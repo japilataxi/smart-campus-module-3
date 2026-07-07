@@ -1,4 +1,4 @@
-import { LoginRequest, RegisterRequest } from "./types";
+﻿import { LoginRequest, RegisterRequest } from "./types";
 
 const API_BASE_URL =
   process.env.NEXT_PUBLIC_API_URL || "http://localhost:3000/api";
@@ -126,6 +126,14 @@ export type CreateSpaceRequest = {
 
 export type UpdateSpaceAvailabilityRequest = {
   availabilityStatus: string;
+};
+export type TriggerWorkflowRequest = {
+  workflowName: string;
+  sourceService: string;
+  eventType: string;
+  requestPayload: Record<string, unknown>;
+  triggeredByUserId?: string;
+  idempotencyKey?: string;
 };
 export const api = {
   login: (data: LoginRequest) =>
@@ -340,5 +348,17 @@ export const api = {
 
   checkSpaceAvailability: (id: string) =>
     request<any>(`/space-availability/spaces/${id}/check-availability`),
+  getWorkflowExecutions: (limit = 50) =>
+    request<any[]>(`/workflows/executions?limit=${limit}`),
+
+  getWorkflowExecutionById: (id: string) =>
+    request<any>(`/workflows/executions/${id}`),
+
+  triggerWorkflow: (data: TriggerWorkflowRequest) =>
+    request<any>("/workflows/trigger", {
+      method: "POST",
+      body: JSON.stringify(data),
+    }),
 };
+
 

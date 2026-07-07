@@ -15,7 +15,7 @@ function createWindow() {
   });
 
   const APP_URL =
-    "http://smart-campus-qa-alb-1189508831.us-east-1.elb.amazonaws.com";
+    "http://smart-campus-qa-alb-1174325889.us-east-1.elb.amazonaws.com/api";
 
   mainWindow.loadURL(APP_URL);
   mainWindow.setMenuBarVisibility(false);

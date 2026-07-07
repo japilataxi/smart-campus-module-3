@@ -20,6 +20,7 @@ import {
   Users,
   WalletCards,
   Info,
+  Megaphone, 
 } from "lucide-react";
 import { useAuth } from "@/context/AuthContext";
 import clsx from "clsx";
@@ -46,6 +47,7 @@ const groupedMenuByRole = {
           label: "Space Service",
           icon: Building2,
         },
+        { href: "/announcements", label: "Announcement Service", icon: Megaphone },
       ],
     },
     {
@@ -77,6 +79,7 @@ const groupedMenuByRole = {
           label: "Space Service",
           icon: Building2,
         },
+        { href: "/announcements", label: "Announcement Service", icon: Megaphone },
       ],
     },
     {
@@ -113,6 +116,7 @@ const groupedMenuByRole = {
           label: "Space Service",
           icon: Building2,
         },
+        { href: "/announcements", label: "Announcement Service", icon: Megaphone },
       ],
     },
     {

@@ -18,6 +18,7 @@ services:
       QR_ACCESS_SERVICE_URL: http://qr-access-service:3021
       TRANSPORT_SERVICE_URL: http://transport-service:3022
       SPACE_AVAILABILITY_SERVICE_URL: http://space-availability-service:3023
+      ANNOUNCEMENT_SERVICE_URL: http://announcement-service:3007
     depends_on:
       - auth-service
       - library-service
@@ -26,6 +27,7 @@ services:
       - qr-access-service
       - transport-service
       - space-availability-service
+      - announcement-service
 
   auth-service:
     build:
@@ -109,10 +111,14 @@ services:
       RABBITMQ_URL: amqp://guest:guest@rabbitmq:5672
       RABBITMQ_EXCHANGE: smart-campus.events
       JWT_SECRET: change_me
+      KAFKA_CLIENT_ID: notification-service
+      KAFKA_BROKERS: kafka:9092
+      KAFKA_ANNOUNCEMENTS_TOPIC: campus.announcements
     depends_on:
       - notification-db
       - redis
       - rabbitmq
+      - kafka
 
   qr-access-service:
     build:
@@ -136,6 +142,29 @@ services:
       - redis
       - rabbitmq
 
+  announcement-service:
+    build:
+      context: ../../
+      dockerfile: apps/announcement-service/Dockerfile
+      args:
+        APP_NAME: announcement-service
+    container_name: smart-campus-announcement-service-qa
+    ports:
+      - "3007:3007"
+    environment:
+      SERVICE_NAME: announcement-service
+      PORT: 3007
+      DATABASE_URL: postgresql://announcement_user:announcement_password@announcement-db:5432/announcement_db
+      REDIS_HOST: redis
+      REDIS_PORT: 6379
+      KAFKA_CLIENT_ID: announcement-service
+      KAFKA_BROKERS: kafka:9092
+      KAFKA_ANNOUNCEMENTS_TOPIC: campus.announcements
+      JWT_SECRET: change_me
+    depends_on:
+      - announcement-db
+      - redis
+      - kafka
 
   transport-service:
     build:
@@ -239,6 +268,19 @@ services:
       POSTGRES_PASSWORD: qr_access_password
     ports:
       - "5437:5432"
+  announcement-db:
+    image: postgres:16
+    container_name: smart-campus-announcement-db-qa
+    environment:
+      POSTGRES_DB: announcement_db
+      POSTGRES_USER: announcement_user
+      POSTGRES_PASSWORD: announcement_password
+    ports:
+      - "5440:5432"
+    volumes:
+      - announcement_db_data:/var/lib/postgresql/data
+    restart: unless-stopped
+    
 
   transport-db:
     image: postgres:16
@@ -294,6 +336,36 @@ services:
       - qr-access-service
       - transport-service
       - space-availability-service
+      - announcement-service
+      
+  zookeeper:
+    image: confluentinc/cp-zookeeper:7.6.1
+    container_name: smart-campus-zookeeper-qa
+    environment:
+      ZOOKEEPER_CLIENT_PORT: 2181
+      ZOOKEEPER_TICK_TIME: 2000
+    ports:
+      - "2181:2181"
+
+  kafka:
+    image: confluentinc/cp-kafka:7.6.1
+    container_name: smart-campus-kafka-qa
+    depends_on:
+      - zookeeper
+    ports:
+      - "9092:9092"
+    environment:
+      KAFKA_BROKER_ID: 1
+      KAFKA_ZOOKEEPER_CONNECT: zookeeper:2181
+      KAFKA_ADVERTISED_LISTENERS: PLAINTEXT://kafka:9092,PLAINTEXT_HOST://localhost:29092
+      KAFKA_LISTENER_SECURITY_PROTOCOL_MAP: PLAINTEXT:PLAINTEXT,PLAINTEXT_HOST:PLAINTEXT
+      KAFKA_INTER_BROKER_LISTENER_NAME: PLAINTEXT
+      KAFKA_OFFSETS_TOPIC_REPLICATION_FACTOR: 1
+    healthcheck:
+      test: ["CMD", "kafka-broker-api-versions", "--bootstrap-server", "kafka:9092"]
+      interval: 10s
+      timeout: 10s
+      retries: 10
 
   grafana:
     image: grafana/grafana
@@ -304,6 +376,9 @@ services:
       GF_SECURITY_ADMIN_PASSWORD: admin
     depends_on:
       - prometheus
+
+volumes:
+    announcement_db_data:
 
 
 

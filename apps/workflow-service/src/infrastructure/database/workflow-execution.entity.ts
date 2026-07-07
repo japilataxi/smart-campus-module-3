@@ -1,4 +1,4 @@
-﻿import { Column, CreateDateColumn, Entity, PrimaryGeneratedColumn, UpdateDateColumn } from 'typeorm';
+import { Column, CreateDateColumn, Entity, PrimaryGeneratedColumn, UpdateDateColumn } from 'typeorm';
 import { WorkflowStatus } from '../../domain/enums/workflow-status.enum';
 
 @Entity('workflow_executions')
@@ -27,7 +27,7 @@ export class WorkflowExecutionEntity {
   @Column({ type: 'text', nullable: true })
   errorMessage?: string | null;
 
-  @Column({ nullable: true })
+  @Column({ type: 'varchar', nullable: true })
   triggeredByUserId?: string | null;
 
   @Column({ type: 'timestamptz', nullable: true })

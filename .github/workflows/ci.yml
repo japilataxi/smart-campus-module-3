@@ -1,4 +1,4 @@
-name: CI
+﻿name: CI
 
 on:
   push:
@@ -55,6 +55,15 @@ jobs:
         ports:
           - 5438:5432
 
+      postgres-workflow:
+        image: postgres:16
+        env:
+          POSTGRES_DB: workflow_db
+          POSTGRES_USER: workflow_user
+          POSTGRES_PASSWORD: workflow_password
+        ports:
+          - 5440:5432
+
       postgres-space-availability:
         image: postgres:16
         env:
@@ -98,6 +107,7 @@ jobs:
       QR_ACCESS_DATABASE_URL: postgresql://qr_access_user:qr_access_password@localhost:5437/qr_access_db
       TRANSPORT_DATABASE_URL: postgresql://transport_user:transport_password@localhost:5438/transport_db
       SPACE_AVAILABILITY_DATABASE_URL: postgresql://space_user:space_password@localhost:5439/space_availability_db
+      WORKFLOW_DATABASE_URL: postgresql://workflow_user:workflow_password@localhost:5440/workflow_db
       DATABASE_URL: postgresql://auth_user:auth_password@localhost:5433/auth_db
       REDIS_HOST: localhost
       REDIS_PORT: 6379
@@ -111,6 +121,11 @@ jobs:
       RABBITMQ_EXCHANGE: smart-campus.events
       NOTIFICATION_SERVICE_URL: http://localhost:3010
       CAMPUS_INCIDENT_SERVICE_URL: http://localhost:3020
+      WORKFLOW_SERVICE_URL: http://localhost:3024
+      N8N_INCIDENT_WEBHOOK_URL: http://localhost:5678/webhook/incident-created-workflow
+      N8N_USER_REGISTERED_WEBHOOK_URL: http://localhost:5678/webhook/user-registered-workflow
+      N8N_LIBRARY_LOAN_WEBHOOK_URL: http://localhost:5678/webhook/library-loan-created-workflow
+      N8N_CRITICAL_NOTIFICATION_WEBHOOK_URL: http://localhost:5678/webhook/critical-notification-workflow
 
     steps:
       - uses: actions/checkout@v4
@@ -135,6 +150,7 @@ jobs:
           pnpm --filter qr-access-service build
           pnpm --filter transport-service build
           pnpm --filter space-availability-service build
+          pnpm --filter workflow-service build
           pnpm --filter web-app build
           pnpm --filter campus-incident-service build
           pnpm --filter notification-service build
@@ -147,6 +163,7 @@ jobs:
           pnpm --filter qr-access-service test
           pnpm --filter transport-service test
           pnpm --filter space-availability-service test
+          pnpm --filter workflow-service test
           pnpm --filter campus-incident-service test
           pnpm --filter notification-service test
 
@@ -156,8 +173,10 @@ jobs:
           pnpm --filter library-service test:e2e
           pnpm --filter qr-access-service test:e2e
           pnpm --filter transport-service test
-          pnpm --filter space-availability-service test:e2e
+          pnpm --filter space-availability-service test
+          pnpm --filter workflow-service test:e2e
           pnpm --filter campus-incident-service test:e2e
           pnpm --filter notification-service test:e2e
+
 
 

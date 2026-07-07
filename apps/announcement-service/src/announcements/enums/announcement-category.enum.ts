@@ -1,0 +1,7 @@
+export enum AnnouncementCategory {
+  ACADEMIC = 'ACADEMIC',
+  GENERAL = 'GENERAL',
+  EMERGENCY = 'EMERGENCY',
+  MAINTENANCE = 'MAINTENANCE',
+  EVENT = 'EVENT',
+}

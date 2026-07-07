@@ -1,4 +1,4 @@
-
+﻿
 ---
 
 # Design Principles
@@ -129,13 +129,13 @@ Each microservice groups functionality belonging to a single bounded context.
 
 Examples:
 
-* auth-service → Identity and Access Management.
-* library-service → Library Management.
-* campus-incident-service → Campus Incident Management.
-* notification-service → Notification Management.
-* qr-access-service → QR Access Control.
-* transport-service → Campus Transportation.
-* space-availability-service → Space Availability Management.
+* auth-service â†’ Identity and Access Management.
+* library-service â†’ Library Management.
+* campus-incident-service â†’ Campus Incident Management.
+* notification-service â†’ Notification Management.
+* qr-access-service â†’ QR Access Control.
+* transport-service â†’ Campus Transportation.
+* space-availability-service â†’ Space Availability Management.
 
 ---
 
@@ -241,3 +241,6 @@ The application is designed for cloud deployment using:
 The infrastructure supports automated deployments, monitoring and scalable service orchestration.
 
 ---
+## Workflow Service Design Principles
+
+`workflow-service` applies SOLID, DRY, KISS, YAGNI, encapsulation, cohesion, low coupling, and GRASP by isolating workflow orchestration in application use cases, keeping n8n behind a webhook port/adapter, storing execution state through a repository port, and exposing only REST endpoints required by current Smart Campus workflows. Event consumers for Kafka, RabbitMQ, MQTT, or WebSocket broadcasting are intentionally left as future adapters.

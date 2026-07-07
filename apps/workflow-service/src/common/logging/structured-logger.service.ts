@@ -5,7 +5,7 @@ export class StructuredLogger extends ConsoleLogger {
   private write(level: string, message: unknown, context?: string) {
     const payload = {
       level,
-      service: process.env.SERVICE_NAME || 'space-availability-service',
+      service: process.env.SERVICE_NAME || 'workflow-service',
       context,
       message,
       timestamp: new Date().toISOString(),

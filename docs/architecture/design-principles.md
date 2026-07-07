@@ -1,117 +1,246 @@
+﻿
+---
+
 # Design Principles
 
 ## SOLID
 
 ### Single Responsibility Principle (SRP)
 
-Each microservice has a single business responsibility:
+Each microservice is responsible for a single business capability.
 
-* auth-service: authentication and authorization.
-* library-service: library management.
-* campus-incident-service: incident management.
-* notification-service: event processing and notification delivery.
+* **auth-service:** Authentication, authorization, user management and JWT security.
+* **library-service:** Book catalog, authors, categories and loan management.
+* **campus-incident-service:** Campus incident reporting and resolution.
+* **notification-service:** Event consumption, notification persistence and WebSocket delivery.
+* **qr-access-service:** QR code generation, validation, revocation and access logging.
+* **transport-service:** Transport routes, stops, vehicles, schedules and availability.
+* **space-availability-service:** Campus spaces, reservations and availability management.
+
+---
 
 ### Open/Closed Principle (OCP)
 
-The platform is designed to be extended through new endpoints, modules and microservices without modifying existing business logic.
+The platform is designed to be extended by adding new:
+
+* REST endpoints
+* Modules
+* RabbitMQ events
+* Microservices
+
+without modifying existing business logic.
+
+---
 
 ### Liskov Substitution Principle (LSP)
 
-DTOs, interfaces and service contracts are respected across the application, allowing interchangeable implementations.
+Business services depend on repository interfaces rather than concrete implementations.
+
+Infrastructure components such as TypeORM repositories can be replaced without affecting business logic.
+
+---
 
 ### Interface Segregation Principle (ISP)
 
-Each module exposes only the operations required by its consumers.
+Each application module exposes only the operations required by its consumers.
+
+Repository interfaces, DTOs and services are separated according to their responsibilities.
+
+---
 
 ### Dependency Inversion Principle (DIP)
 
-NestJS Dependency Injection is used throughout the system to decouple business logic from infrastructure concerns.
+NestJS Dependency Injection is used throughout the platform.
+
+Business services depend on abstractions (Ports) while infrastructure components implement those contracts.
 
 ---
 
-## DRY (Don't Repeat Yourself)
+# Hexagonal Architecture
 
-* Shared DTOs and reusable services.
-* Centralized configuration management.
-* Reusable Docker, CI/CD and infrastructure patterns.
+All business microservices follow the **Hexagonal Architecture (Ports and Adapters)**.
+
+Each service is organized into:
+
+* Domain
+* Application
+* Infrastructure
+* Interfaces
+
+This architecture isolates business logic from databases, messaging systems and frameworks.
 
 ---
 
-## KISS (Keep It Simple, Stupid)
+# DRY (Don't Repeat Yourself)
 
-The platform uses straightforward communication patterns:
+The platform promotes code reuse through:
+
+* Shared DTOs
+* Shared cache services
+* Shared logging modules
+* Shared health modules
+* Shared metrics modules
+* Reusable Docker configurations
+* Reusable Terraform templates
+* Common CI/CD workflows
+
+---
+
+# KISS (Keep It Simple)
+
+The platform uses simple communication patterns:
 
 * REST APIs for synchronous communication.
 * RabbitMQ for asynchronous communication.
+* Redis for caching.
 * API Gateway as the single entry point.
 
 ---
 
-## Encapsulation
+# Encapsulation
 
 Each microservice owns:
 
-* Its business logic.
-* Its database.
-* Its configuration.
-* Its internal implementation details.
+* Its own business logic.
+* Its own PostgreSQL database.
+* Its own Redis cache.
+* Its own configuration.
+* Its own RabbitMQ publishers.
+* Its own implementation details.
 
-No service accesses another service's database directly.
+No service directly accesses another service's database.
 
 ---
 
-## Low Coupling
+# Low Coupling
 
 Services communicate through:
 
-* API Gateway (synchronous requests).
-* RabbitMQ events (asynchronous communication).
+* API Gateway (REST)
+* RabbitMQ (Event-Driven Architecture)
 
-This minimizes direct dependencies between services.
+Each service can evolve independently with minimal dependencies.
 
 ---
 
-## High Cohesion
+# High Cohesion
 
-All functionality inside a microservice belongs to the same business domain and bounded context.
+Each microservice groups functionality belonging to a single bounded context.
 
 Examples:
 
-* auth-service contains only authentication and authorization logic.
-* library-service contains only library operations.
-* campus-incident-service contains only incident management.
-* notification-service contains only notification-related functionality.
+* auth-service â†’ Identity and Access Management.
+* library-service â†’ Library Management.
+* campus-incident-service â†’ Campus Incident Management.
+* notification-service â†’ Notification Management.
+* qr-access-service â†’ QR Access Control.
+* transport-service â†’ Campus Transportation.
+* space-availability-service â†’ Space Availability Management.
 
 ---
 
-## Observability
+# Event-Driven Architecture
 
-The platform includes monitoring and diagnostics capabilities:
+RabbitMQ enables asynchronous communication between microservices.
 
-* Health Checks (/health)
-* Prometheus Metrics (/metrics)
+Current published events include:
+
+* user.registered
+* library.loan.created
+* library.loan.returned
+* incident.created
+* incident.status.updated
+* qr.access.generated
+* qr.access.granted
+* qr.access.denied
+* qr.access.revoked
+* transport.route.created
+* transport.route.updated
+* transport.stop.created
+* transport.vehicle.created
+* transport.schedule.created
+* space.created
+* space.updated
+* space.deactivated
+* space.availability.updated
+* space.reservation.created
+
+The Notification Service consumes these events and delivers real-time notifications via WebSockets.
+
+---
+
+# Caching Strategy
+
+Redis is used to improve application performance by caching frequently accessed data.
+
+Examples include:
+
+* Active QR codes
+* Transport routes
+* Transport schedules
+* Space availability
+* Notification counters
+
+This reduces database queries and improves response times.
+
+---
+
+# Observability
+
+The platform includes comprehensive monitoring capabilities.
+
+* Health Checks (`/health`)
+* Prometheus Metrics (`/metrics`)
 * Grafana Dashboards
 * Docker Container Monitoring
+* Structured Logging
 
-This allows operational visibility across all services.
-
----
-
-## Scalability
-
-Services are independently deployable and scalable through Docker containers and cloud infrastructure.
-
-Future services can be added without impacting existing services.
+These components provide operational visibility across all microservices.
 
 ---
 
-## Security
+# Scalability
 
-The platform implements:
+Each microservice can be deployed and scaled independently using:
+
+* Docker
+* Docker Compose
+* Docker Hub
+* AWS EC2
+
+Additional services can be incorporated without impacting existing components.
+
+---
+
+# Security
+
+The platform implements multiple security mechanisms.
 
 * JWT Authentication
 * Role-Based Access Control (RBAC)
-* CORS Protection
 * API Gateway Routing
-* Private Network Segmentation in AWS
-* Bastion Host Access
+* CORS Protection
+* Redis session support
+* RabbitMQ private messaging
+* Private AWS networking
+* Bastion Host for secure administration
+
+---
+
+# Cloud Infrastructure
+
+The application is designed for cloud deployment using:
+
+* AWS EC2
+* Docker
+* Docker Compose
+* Docker Hub
+* Terraform
+* GitHub Actions CI/CD
+
+The infrastructure supports automated deployments, monitoring and scalable service orchestration.
+
+---
+## Workflow Service Design Principles
+
+`workflow-service` applies SOLID, DRY, KISS, YAGNI, encapsulation, cohesion, low coupling, and GRASP by isolating workflow orchestration in application use cases, keeping n8n behind a webhook port/adapter, storing execution state through a repository port, and exposing only REST endpoints required by current Smart Campus workflows. Event consumers for Kafka, RabbitMQ, MQTT, or WebSocket broadcasting are intentionally left as future adapters.

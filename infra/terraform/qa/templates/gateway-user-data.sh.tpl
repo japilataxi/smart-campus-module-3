@@ -1,4 +1,4 @@
-#!/bin/bash
+﻿#!/bin/bash
 set -eux
 
 yum update -y
@@ -27,6 +27,7 @@ NOTIFICATION_SERVICE_URL=http://${notification_private_ip}:3010
 QR_ACCESS_SERVICE_URL=http://${qr_access_private_ip}:3021
 TRANSPORT_SERVICE_URL=http://${transport_private_ip}:3022
 SPACE_AVAILABILITY_SERVICE_URL=http://${space_availability_private_ip}:3023
+WORKFLOW_SERVICE_URL=http://${workflow_private_ip}:3024
 EOF
 
 docker compose up -d

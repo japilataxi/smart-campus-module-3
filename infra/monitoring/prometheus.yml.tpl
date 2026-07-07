@@ -1,4 +1,4 @@
-global:
+﻿global:
   scrape_interval: 15s
 
 scrape_configs:
@@ -41,3 +41,7 @@ scrape_configs:
     metrics_path: /metrics
     static_configs:
       - targets: ["${space_availability_private_ip}:3023"]
+  - job_name: workflow-service
+    metrics_path: /metrics
+    static_configs:
+      - targets: ["workflow-service:3024"]

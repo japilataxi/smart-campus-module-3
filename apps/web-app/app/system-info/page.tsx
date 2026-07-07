@@ -27,9 +27,8 @@ export default function SystemInfoPage() {
         </h1>
 
         <p className="mt-4 max-w-4xl text-lg text-white/80">
-          This page summarizes the architecture, microservices, communication
-          patterns and deployment strategy used in the Smart Campus Module 3
-          system.
+          This section provides technical information about the Smart Campus platform, 
+          including architecture, communication technologies, infrastructure and deployed services.
         </p>
       </section>
 

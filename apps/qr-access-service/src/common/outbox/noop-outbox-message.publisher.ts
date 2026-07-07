@@ -1,7 +1,7 @@
 ﻿import { Injectable, Logger } from '@nestjs/common';
 
 import { OutboxEvent } from './entities/outbox-event.entity';
-import { OutboxMessagePublisher } from './interfaces/outbox-message-publisher.interface';
+import type { OutboxMessagePublisher } from './interfaces/outbox-message-publisher.interface';
 
 @Injectable()
 export class NoopOutboxMessagePublisher implements OutboxMessagePublisher {
@@ -13,3 +13,4 @@ export class NoopOutboxMessagePublisher implements OutboxMessagePublisher {
     );
   }
 }
+

@@ -2,10 +2,8 @@
 
 import { OutboxEvent } from './entities/outbox-event.entity';
 import { OutboxStatus } from './enums/outbox-status.enum';
-import {
-  OUTBOX_MESSAGE_PUBLISHER,
-  OutboxMessagePublisher,
-} from './interfaces/outbox-message-publisher.interface';
+import { OUTBOX_MESSAGE_PUBLISHER } from './interfaces/outbox-message-publisher.interface';
+import type { OutboxMessagePublisher } from './interfaces/outbox-message-publisher.interface';
 import { OutboxMetricsService } from './outbox-metrics.service';
 import { OutboxRepository } from './outbox.repository';
 
@@ -84,3 +82,5 @@ export class OutboxPublisher implements OnModuleInit, OnModuleDestroy {
     }
   }
 }
+
+

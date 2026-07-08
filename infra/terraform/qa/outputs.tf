@@ -15,21 +15,26 @@ output "web_private_ip" {
 }
 
 output "core1_private_ip" {
-  description = "Auth + Library EC2 private IP"
+  description = "Auth + Library + Campus Incident EC2 private IP"
   value       = aws_instance.core1.private_ip
 }
 
-output "core2_private_ip" {
-  description = "Campus Incident + QR Access EC2 private IP"
-  value       = aws_instance.core2.private_ip
-}
-
 output "core3_private_ip" {
-  description = "Transport + Space Availability EC2 private IP"
+  description = "QR Access + Transport + Space Availability EC2 private IP"
   value       = aws_instance.core3.private_ip
 }
 
+output "core4_private_ip" {
+  description = "Kafka + Zookeeper + Announcement + Event EC2 private IP"
+  value       = aws_instance.core4.private_ip
+}
+
+output "core5_private_ip" {
+  description = "Workflow Service + n8n + Workflow DB + Redis EC2 private IP"
+  value       = aws_instance.core5.private_ip
+}
+
 output "monitoring_private_ip" {
-  description = "Notification + RabbitMQ + Monitoring EC2 private IP"
+  description = "Notification + RabbitMQ + Redis + Prometheus + Grafana EC2 private IP"
   value       = aws_instance.monitoring.private_ip
 }

@@ -26,3 +26,4 @@ coverage
 .turbo
 !.env.example
 !**/.env.example
+infra/terraform/**/terraform.tfstate*

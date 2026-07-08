@@ -39,6 +39,22 @@ services:
       - core1-redis
     restart: unless-stopped
 
+  campus-incident-service:
+    image: japilataxi/campus-incident-service:prod
+    container_name: smart-campus-incident-service-prod
+    ports:
+      - "3020:3020"
+    environment:
+      SERVICE_NAME: campus-incident-service
+      PORT: 3020
+      DATABASE_URL: postgresql://incident_user:incident_password@campus-incident-db:5432/campus_incidents_db
+      JWT_SECRET: change_me
+      RABBITMQ_URL: amqp://guest:guest@${RABBITMQ_HOST}:5672
+      RABBITMQ_EXCHANGE: smart-campus.events
+    depends_on:
+      - campus-incident-db
+    restart: unless-stopped
+
   auth-db:
     image: postgres:16
     container_name: smart-campus-auth-db-prod
@@ -61,6 +77,17 @@ services:
       - library_db_data:/var/lib/postgresql/data
     restart: unless-stopped
 
+  campus-incident-db:
+    image: postgres:16
+    container_name: smart-campus-incident-db-prod
+    environment:
+      POSTGRES_DB: campus_incidents_db
+      POSTGRES_USER: incident_user
+      POSTGRES_PASSWORD: incident_password
+    volumes:
+      - campus_incident_db_data:/var/lib/postgresql/data
+    restart: unless-stopped
+
   core1-redis:
     image: redis:7-alpine
     container_name: smart-campus-core1-redis-prod
@@ -69,3 +96,4 @@ services:
 volumes:
   auth_db_data:
   library_db_data:
+  campus_incident_db_data:

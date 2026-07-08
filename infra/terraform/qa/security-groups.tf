@@ -6,6 +6,7 @@ resource "aws_security_group" "alb" {
   vpc_id = aws_vpc.main.id
 
   ingress {
+    description = "HTTP public access"
     from_port   = 80
     to_port     = 80
     protocol    = "tcp"
@@ -51,11 +52,19 @@ resource "aws_security_group" "gateway" {
   vpc_id = aws_vpc.main.id
 
   ingress {
-    description     = "API Gateway from ALB"
+    description     = "Gateway from ALB"
     from_port       = 3000
     to_port         = 3000
     protocol        = "tcp"
     security_groups = [aws_security_group.alb.id]
+  }
+
+  ingress {
+    description     = "Gateway metrics from Monitoring"
+    from_port       = 3000
+    to_port         = 3000
+    protocol        = "tcp"
+    security_groups = [aws_security_group.monitoring.id]
   }
 
   ingress {
@@ -67,11 +76,11 @@ resource "aws_security_group" "gateway" {
   }
 
   ingress {
-    description     = "Metrics from Monitoring"
+    description     = "Debug Gateway from Bastion"
     from_port       = 3000
     to_port         = 3000
     protocol        = "tcp"
-    security_groups = [aws_security_group.monitoring.id]
+    security_groups = [aws_security_group.bastion.id]
   }
 
   egress {
@@ -90,7 +99,7 @@ resource "aws_security_group" "web" {
   vpc_id = aws_vpc.main.id
 
   ingress {
-    description     = "Web App from ALB"
+    description     = "Web from ALB"
     from_port       = 3003
     to_port         = 3003
     protocol        = "tcp"
@@ -105,6 +114,14 @@ resource "aws_security_group" "web" {
     security_groups = [aws_security_group.bastion.id]
   }
 
+  ingress {
+    description     = "Debug Web from Bastion"
+    from_port       = 3003
+    to_port         = 3003
+    protocol        = "tcp"
+    security_groups = [aws_security_group.bastion.id]
+  }
+
   egress {
     from_port   = 0
     to_port     = 0
@@ -114,7 +131,7 @@ resource "aws_security_group" "web" {
 }
 
 ############################################
-# CORE 1: AUTH + LIBRARY
+# CORE 1: AUTH + LIBRARY + INCIDENT
 ############################################
 resource "aws_security_group" "core1" {
   name   = "${var.project_name}-${var.environment}-core1-sg"
@@ -137,61 +154,6 @@ resource "aws_security_group" "core1" {
   }
 
   ingress {
-    description     = "Auth metrics from Monitoring"
-    from_port       = 3001
-    to_port         = 3001
-    protocol        = "tcp"
-    security_groups = [aws_security_group.monitoring.id]
-  }
-
-  ingress {
-    description     = "Library metrics from Monitoring"
-    from_port       = 3002
-    to_port         = 3002
-    protocol        = "tcp"
-    security_groups = [aws_security_group.monitoring.id]
-  }
-
-  ingress {
-    description     = "SSH from Bastion"
-    from_port       = 22
-    to_port         = 22
-    protocol        = "tcp"
-    security_groups = [aws_security_group.bastion.id]
-  }
-
-  ingress {
-    description     = "Auth Swagger from Bastion"
-    from_port       = 3001
-    to_port         = 3001
-    protocol        = "tcp"
-    security_groups = [aws_security_group.bastion.id]
-  }
-
-  ingress {
-    description     = "Library Swagger from Bastion"
-    from_port       = 3002
-    to_port         = 3002
-    protocol        = "tcp"
-    security_groups = [aws_security_group.bastion.id]
-  }
-
-  egress {
-    from_port   = 0
-    to_port     = 0
-    protocol    = "-1"
-    cidr_blocks = ["0.0.0.0/0"]
-  }
-}
-
-############################################
-# CORE 2: INCIDENT + QR ACCESS
-############################################
-resource "aws_security_group" "core2" {
-  name   = "${var.project_name}-${var.environment}-core2-sg"
-  vpc_id = aws_vpc.main.id
-
-  ingress {
     description     = "Incident from Gateway"
     from_port       = 3020
     to_port         = 3020
@@ -200,25 +162,9 @@ resource "aws_security_group" "core2" {
   }
 
   ingress {
-    description     = "QR Access from Gateway"
-    from_port       = 3021
-    to_port         = 3021
-    protocol        = "tcp"
-    security_groups = [aws_security_group.gateway.id]
-  }
-
-  ingress {
-    description     = "Incident metrics from Monitoring"
-    from_port       = 3020
+    description     = "Services metrics from Monitoring"
+    from_port       = 3001
     to_port         = 3020
-    protocol        = "tcp"
-    security_groups = [aws_security_group.monitoring.id]
-  }
-
-  ingress {
-    description     = "QR Access metrics from Monitoring"
-    from_port       = 3021
-    to_port         = 3021
     protocol        = "tcp"
     security_groups = [aws_security_group.monitoring.id]
   }
@@ -232,20 +178,13 @@ resource "aws_security_group" "core2" {
   }
 
   ingress {
-  description     = "Incident Swagger from Bastion"
-  from_port       = 3020
-  to_port         = 3020
-  protocol        = "tcp"
-  security_groups = [aws_security_group.bastion.id]
-  }
-
-  ingress {
-    description     = "QR Swagger from Bastion"
-    from_port       = 3021
-    to_port         = 3021
+    description     = "Debug Core1 services from Bastion"
+    from_port       = 3001
+    to_port         = 3020
     protocol        = "tcp"
     security_groups = [aws_security_group.bastion.id]
   }
+
   egress {
     from_port   = 0
     to_port     = 0
@@ -255,11 +194,19 @@ resource "aws_security_group" "core2" {
 }
 
 ############################################
-# CORE 3: TRANSPORT + SPACE
+# CORE 3: QR + TRANSPORT + SPACE
 ############################################
 resource "aws_security_group" "core3" {
   name   = "${var.project_name}-${var.environment}-core3-sg"
   vpc_id = aws_vpc.main.id
+
+  ingress {
+    description     = "QR Access from Gateway"
+    from_port       = 3021
+    to_port         = 3021
+    protocol        = "tcp"
+    security_groups = [aws_security_group.gateway.id]
+  }
 
   ingress {
     description     = "Transport from Gateway"
@@ -278,16 +225,8 @@ resource "aws_security_group" "core3" {
   }
 
   ingress {
-    description     = "Transport metrics from Monitoring"
-    from_port       = 3022
-    to_port         = 3022
-    protocol        = "tcp"
-    security_groups = [aws_security_group.monitoring.id]
-  }
-
-  ingress {
-    description     = "Space metrics from Monitoring"
-    from_port       = 3023
+    description     = "Services metrics from Monitoring"
+    from_port       = 3021
     to_port         = 3023
     protocol        = "tcp"
     security_groups = [aws_security_group.monitoring.id]
@@ -302,17 +241,167 @@ resource "aws_security_group" "core3" {
   }
 
   ingress {
-    description     = "Transport Swagger from Bastion"
-    from_port       = 3022
-    to_port         = 3022
+    description     = "Debug Core3 services from Bastion"
+    from_port       = 3021
+    to_port         = 3023
+    protocol        = "tcp"
+    security_groups = [aws_security_group.bastion.id]
+  }
+
+  egress {
+    from_port   = 0
+    to_port     = 0
+    protocol    = "-1"
+    cidr_blocks = ["0.0.0.0/0"]
+  }
+}
+
+############################################
+# CORE 4: KAFKA + ANNOUNCEMENT + EVENT
+############################################
+resource "aws_security_group" "core4" {
+  name   = "${var.project_name}-${var.environment}-core4-sg"
+  vpc_id = aws_vpc.main.id
+
+  ingress {
+    description = "Kafka external listener from VPC"
+    from_port   = 9092
+    to_port     = 9092
+    protocol    = "tcp"
+    cidr_blocks = [aws_vpc.main.cidr_block]
+  }
+
+  ingress {
+    description = "Kafka internal listener from VPC"
+    from_port   = 29092
+    to_port     = 29092
+    protocol    = "tcp"
+    cidr_blocks = [aws_vpc.main.cidr_block]
+  }
+
+  ingress {
+    description = "Zookeeper from VPC"
+    from_port   = 2181
+    to_port     = 2181
+    protocol    = "tcp"
+    cidr_blocks = [aws_vpc.main.cidr_block]
+  }
+
+  ingress {
+    description     = "Announcement from Gateway"
+    from_port       = 3007
+    to_port         = 3007
+    protocol        = "tcp"
+    security_groups = [aws_security_group.gateway.id]
+  }
+
+  ingress {
+    description     = "Event from Gateway"
+    from_port       = 3030
+    to_port         = 3030
+    protocol        = "tcp"
+    security_groups = [aws_security_group.gateway.id]
+  }
+
+  ingress {
+    description     = "Announcement metrics from Monitoring"
+    from_port       = 3007
+    to_port         = 3007
+    protocol        = "tcp"
+    security_groups = [aws_security_group.monitoring.id]
+  }
+
+  ingress {
+    description     = "Event metrics from Monitoring"
+    from_port       = 3030
+    to_port         = 3030
+    protocol        = "tcp"
+    security_groups = [aws_security_group.monitoring.id]
+  }
+
+  ingress {
+    description     = "SSH from Bastion"
+    from_port       = 22
+    to_port         = 22
     protocol        = "tcp"
     security_groups = [aws_security_group.bastion.id]
   }
 
   ingress {
-    description     = "Space Swagger from Bastion"
-    from_port       = 3023
-    to_port         = 3023
+    description     = "Debug Core4 services from Bastion"
+    from_port       = 2181
+    to_port         = 9092
+    protocol        = "tcp"
+    security_groups = [aws_security_group.bastion.id]
+  }
+
+  ingress {
+    description     = "Debug Event service from Bastion"
+    from_port       = 3030
+    to_port         = 3030
+    protocol        = "tcp"
+    security_groups = [aws_security_group.bastion.id]
+  }
+
+  ingress {
+    description     = "Debug Kafka internal listener from Bastion"
+    from_port       = 29092
+    to_port         = 29092
+    protocol        = "tcp"
+    security_groups = [aws_security_group.bastion.id]
+  }
+
+  egress {
+    from_port   = 0
+    to_port     = 0
+    protocol    = "-1"
+    cidr_blocks = ["0.0.0.0/0"]
+  }
+}
+
+############################################
+# CORE 5: WORKFLOW + N8N
+############################################
+resource "aws_security_group" "core5" {
+  name   = "${var.project_name}-${var.environment}-core5-sg"
+  vpc_id = aws_vpc.main.id
+
+  ingress {
+    description     = "Workflow from Gateway"
+    from_port       = 3024
+    to_port         = 3024
+    protocol        = "tcp"
+    security_groups = [aws_security_group.gateway.id]
+  }
+
+  ingress {
+    description = "n8n from VPC"
+    from_port   = 5678
+    to_port     = 5678
+    protocol    = "tcp"
+    cidr_blocks = [aws_vpc.main.cidr_block]
+  }
+
+  ingress {
+    description     = "Workflow metrics from Monitoring"
+    from_port       = 3024
+    to_port         = 3024
+    protocol        = "tcp"
+    security_groups = [aws_security_group.monitoring.id]
+  }
+
+  ingress {
+    description     = "SSH from Bastion"
+    from_port       = 22
+    to_port         = 22
+    protocol        = "tcp"
+    security_groups = [aws_security_group.bastion.id]
+  }
+
+  ingress {
+    description     = "Debug Workflow and n8n from Bastion"
+    from_port       = 3024
+    to_port         = 5678
     protocol        = "tcp"
     security_groups = [aws_security_group.bastion.id]
   }
@@ -333,17 +422,25 @@ resource "aws_security_group" "monitoring" {
   vpc_id = aws_vpc.main.id
 
   ingress {
-  description = "Notification from VPC"
-  from_port   = 3010
-  to_port     = 3010
-  protocol    = "tcp"
-  cidr_blocks = [aws_vpc.main.cidr_block]
+    description = "Notification from VPC"
+    from_port   = 3010
+    to_port     = 3010
+    protocol    = "tcp"
+    cidr_blocks = [aws_vpc.main.cidr_block]
   }
 
   ingress {
     description = "RabbitMQ AMQP from VPC"
     from_port   = 5672
     to_port     = 5672
+    protocol    = "tcp"
+    cidr_blocks = [aws_vpc.main.cidr_block]
+  }
+
+  ingress {
+    description = "Redis from VPC"
+    from_port   = 6379
+    to_port     = 6379
     protocol    = "tcp"
     cidr_blocks = [aws_vpc.main.cidr_block]
   }
@@ -381,12 +478,13 @@ resource "aws_security_group" "monitoring" {
   }
 
   ingress {
-    description     = "Notification Swagger from Bastion"
+    description     = "Debug Notification from Bastion"
     from_port       = 3010
     to_port         = 3010
     protocol        = "tcp"
     security_groups = [aws_security_group.bastion.id]
   }
+
   egress {
     from_port   = 0
     to_port     = 0

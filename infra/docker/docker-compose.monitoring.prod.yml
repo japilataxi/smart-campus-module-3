@@ -13,6 +13,10 @@ services:
       RABBITMQ_URL: amqp://guest:guest@rabbitmq:5672
       RABBITMQ_EXCHANGE: smart-campus.events
       JWT_SECRET: change_me
+      KAFKA_CLIENT_ID: notification-service
+      KAFKA_BROKERS: ${KAFKA_BROKERS}
+      KAFKA_ANNOUNCEMENTS_TOPIC: campus.announcements
+      KAFKA_EVENTS_TOPIC: campus.events
     depends_on:
       - notification-db
       - monitoring-redis

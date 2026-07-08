@@ -387,6 +387,45 @@ export const api = {
     request<any>(`/announcements/${id}`, {
       method: "DELETE",
     }),
+  // ==========================
+  // EVENTS
+  // ==========================
+
+  getEvents: () =>
+    request<any>("/events"),
+
+  getEventById: (id: string) =>
+    request<any>(`/events/${id}`),
+
+  createEvent: (data: any) =>
+    request<any>("/events", {
+      method: "POST",
+      body: JSON.stringify(data),
+    }),
+
+  updateEvent: (id: string, data: any) =>
+    request<any>(`/events/${id}`, {
+      method: "PATCH",
+      body: JSON.stringify(data),
+    }),
+
+  cancelEvent: (id: string) =>
+    request<any>(`/events/${id}/cancel`, {
+      method: "PATCH",
+    }),
+
+  registerEvent: (id: string) =>
+    request<any>(`/events/${id}/register`, {
+      method: "POST",
+    }),
+
+  unregisterEvent: (id: string) =>
+    request<any>(`/events/${id}/register`, {
+      method: "DELETE",
+    }),
+
+  getEventRegistrations: (id: string) =>
+    request<any>(`/events/${id}/registrations`),
 };
 
 

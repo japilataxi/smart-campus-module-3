@@ -21,6 +21,7 @@ import {
   WalletCards,
   Info,
   Megaphone, 
+  CalendarDays,
 } from "lucide-react";
 import { useAuth } from "@/context/AuthContext";
 import clsx from "clsx";
@@ -48,6 +49,7 @@ const groupedMenuByRole = {
           icon: Building2,
         },
         { href: "/announcements", label: "Announcement Service", icon: Megaphone },
+        { href: "/events", label: "Event Service", icon: CalendarDays },
       ],
     },
     {
@@ -80,6 +82,7 @@ const groupedMenuByRole = {
           icon: Building2,
         },
         { href: "/announcements", label: "Announcement Service", icon: Megaphone },
+        { href: "/events", label: "Event Service", icon: CalendarDays },
       ],
     },
     {
@@ -117,6 +120,7 @@ const groupedMenuByRole = {
           icon: Building2,
         },
         { href: "/announcements", label: "Announcement Service", icon: Megaphone },
+        { href: "/events", label: "Event Service", icon: CalendarDays },
       ],
     },
     {

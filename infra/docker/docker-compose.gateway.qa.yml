@@ -1,4 +1,4 @@
-services:
+﻿services:
   api-gateway:
     image: japilataxi/api-gateway:qa
     container_name: smart-campus-api-gateway-qa
@@ -15,6 +15,8 @@ services:
       QR_ACCESS_SERVICE_URL: ${QR_ACCESS_SERVICE_URL}
       TRANSPORT_SERVICE_URL: ${TRANSPORT_SERVICE_URL}
       SPACE_AVAILABILITY_SERVICE_URL: ${SPACE_AVAILABILITY_SERVICE_URL}
+      WORKFLOW_SERVICE_URL: ${WORKFLOW_SERVICE_URL}
     restart: unless-stopped
+
 
 

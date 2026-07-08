@@ -1,4 +1,4 @@
-data "aws_ami" "amazon_linux" {
+﻿data "aws_ami" "amazon_linux" {
   most_recent = true
   owners      = ["amazon"]
 
@@ -113,6 +113,7 @@ resource "aws_instance" "gateway" {
     qr_access_private_ip          = aws_instance.core2.private_ip
     transport_private_ip          = aws_instance.core3.private_ip
     space_availability_private_ip = aws_instance.core3.private_ip
+    workflow_private_ip           = aws_instance.core3.private_ip
     alb_dns                       = aws_lb.app.dns_name
     compose_content               = file("${path.module}/../../docker/docker-compose.gateway.qa.yml")
   })

@@ -1,3 +1,4 @@
+import { KafkaModule } from './kafka/kafka.module';
 import { Module } from '@nestjs/common';
 import { ConfigModule, ConfigService } from '@nestjs/config';
 import { TypeOrmModule } from '@nestjs/typeorm';
@@ -7,6 +8,7 @@ import { NotificationPreference } from './notifications/entities/notification-pr
 import { Notification } from './notifications/entities/notification.entity';
 import { NotificationsModule } from './notifications/notifications.module';
 import { RedisModule } from './cache/redis.module';
+// TEMPORAL: se volverá a activar cuando levantemos RabbitMQ.
 import { RabbitmqModule } from './rabbitmq/rabbitmq.module';
 import { WebsocketModule } from './websocket/websocket.module';
 
@@ -40,8 +42,10 @@ import { WebsocketModule } from './websocket/websocket.module';
     MetricsModule,
     NotificationsModule,
     RedisModule,
+    // TEMPORAL: se volverá a activar cuando levantemos RabbitMQ.
     RabbitmqModule,
     WebsocketModule,
+    KafkaModule,
   ],
 })
 export class AppModule {}

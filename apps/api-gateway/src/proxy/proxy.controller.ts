@@ -896,4 +896,228 @@ proxyIncidentDelete(
       authorization,
     });
   }
+
+@Post('workflows/trigger')
+  @ApiOperation({ summary: 'Forward manual workflow trigger to workflow-service' })
+  proxyWorkflowTrigger(
+    @Body() body: unknown,
+    @Headers('authorization') authorization?: string,
+  ) {
+    const baseUrl = process.env.WORKFLOW_SERVICE_URL || 'http://localhost:3024';
+
+    return this.proxyService.forwardRequest({
+      method: 'POST',
+      targetUrl: `${baseUrl}/workflows/trigger`,
+      body,
+      authorization,
+    });
+  }
+
+  @Post('workflows/incident-created')
+  @ApiOperation({ summary: 'Forward incident-created workflow event to workflow-service' })
+  proxyWorkflowIncidentCreated(
+    @Body() body: unknown,
+    @Headers('authorization') authorization?: string,
+  ) {
+    const baseUrl = process.env.WORKFLOW_SERVICE_URL || 'http://localhost:3024';
+
+    return this.proxyService.forwardRequest({
+      method: 'POST',
+      targetUrl: `${baseUrl}/workflows/incident-created`,
+      body,
+      authorization,
+    });
+  }
+
+  @Post('workflows/user-registered')
+  @ApiOperation({ summary: 'Forward user-registered workflow event to workflow-service' })
+  proxyWorkflowUserRegistered(
+    @Body() body: unknown,
+    @Headers('authorization') authorization?: string,
+  ) {
+    const baseUrl = process.env.WORKFLOW_SERVICE_URL || 'http://localhost:3024';
+
+    return this.proxyService.forwardRequest({
+      method: 'POST',
+      targetUrl: `${baseUrl}/workflows/user-registered`,
+      body,
+      authorization,
+    });
+  }
+
+  @Post('workflows/library-loan-created')
+  @ApiOperation({ summary: 'Forward library-loan-created workflow event to workflow-service' })
+  proxyWorkflowLibraryLoanCreated(
+    @Body() body: unknown,
+    @Headers('authorization') authorization?: string,
+  ) {
+    const baseUrl = process.env.WORKFLOW_SERVICE_URL || 'http://localhost:3024';
+
+    return this.proxyService.forwardRequest({
+      method: 'POST',
+      targetUrl: `${baseUrl}/workflows/library-loan-created`,
+      body,
+      authorization,
+    });
+  }
+
+  @Post('workflows/critical-notification')
+  @ApiOperation({ summary: 'Forward critical-notification workflow event to workflow-service' })
+  proxyWorkflowCriticalNotification(
+    @Body() body: unknown,
+    @Headers('authorization') authorization?: string,
+  ) {
+    const baseUrl = process.env.WORKFLOW_SERVICE_URL || 'http://localhost:3024';
+
+    return this.proxyService.forwardRequest({
+      method: 'POST',
+      targetUrl: `${baseUrl}/workflows/critical-notification`,
+      body,
+      authorization,
+    });
+  }
+
+  @Get('workflows/executions')
+  @ApiOperation({ summary: 'Forward workflow execution history to workflow-service' })
+  proxyWorkflowExecutions(
+    @Query('limit') limit?: string,
+    @Headers('authorization') authorization?: string,
+  ) {
+    const baseUrl = process.env.WORKFLOW_SERVICE_URL || 'http://localhost:3024';
+    const query = limit ? `?limit=${limit}` : '';
+
+    return this.proxyService.forwardRequest({
+      method: 'GET',
+      targetUrl: `${baseUrl}/workflows/executions${query}`,
+      authorization,
+    });
+  }
+
+  @Get('workflows/executions/:id')
+  @ApiOperation({ summary: 'Forward workflow execution detail to workflow-service' })
+  proxyWorkflowExecutionById(
+    @Param('id') id: string,
+    @Headers('authorization') authorization?: string,
+  ) {
+    const baseUrl = process.env.WORKFLOW_SERVICE_URL || 'http://localhost:3024';
+
+    return this.proxyService.forwardRequest({
+      method: 'GET',
+      targetUrl: `${baseUrl}/workflows/executions/${id}`,
+      authorization,
+    });
+  }
+
+@Get('announcements')
+@ApiOperation({ summary: 'Forward GET announcements to announcement-service' })
+proxyAnnouncementGet(
+  @Headers('authorization') authorization?: string,
+) {
+  const baseUrl =
+    process.env.ANNOUNCEMENT_SERVICE_URL || 'http://localhost:3007';
+
+  return this.proxyService.forwardRequest({
+    method: 'GET',
+    targetUrl: `${baseUrl}/announcements`,
+    authorization,
+  });
 }
+@Post('announcements')
+@ApiOperation({ summary: 'Forward POST announcements to announcement-service' })
+proxyAnnouncementPost(
+  @Body() body: unknown,
+  @Headers('authorization') authorization?: string,
+) {
+  const baseUrl =
+    process.env.ANNOUNCEMENT_SERVICE_URL || 'http://localhost:3007';
+
+  return this.proxyService.forwardRequest({
+    method: 'POST',
+    targetUrl: `${baseUrl}/announcements`,
+    body,
+    authorization,
+  });
+}
+@Get('announcements/:id')
+@ApiOperation({ summary: 'Forward GET announcement by ID to announcement-service' })
+proxyAnnouncementGetById(
+  @Param('id') id: string,
+  @Headers('authorization') authorization?: string,
+) {
+  const baseUrl =
+    process.env.ANNOUNCEMENT_SERVICE_URL || 'http://localhost:3007';
+
+  return this.proxyService.forwardRequest({
+    method: 'GET',
+    targetUrl: `${baseUrl}/announcements/${id}`,
+    authorization,
+  });
+}
+
+@Patch('announcements/:id')
+@ApiOperation({ summary: 'Forward PATCH announcement to announcement-service' })
+proxyAnnouncementPatch(
+  @Param('id') id: string,
+  @Body() body: unknown,
+  @Headers('authorization') authorization?: string,
+) {
+  const baseUrl =
+    process.env.ANNOUNCEMENT_SERVICE_URL || 'http://localhost:3007';
+
+  return this.proxyService.forwardRequest({
+    method: 'PATCH',
+    targetUrl: `${baseUrl}/announcements/${id}`,
+    body,
+    authorization,
+  });
+}
+
+@Patch('announcements/:id/publish')
+@ApiOperation({ summary: 'Forward publish announcement to announcement-service' })
+proxyAnnouncementPublish(
+  @Param('id') id: string,
+  @Headers('authorization') authorization?: string,
+) {
+  const baseUrl =
+    process.env.ANNOUNCEMENT_SERVICE_URL || 'http://localhost:3007';
+
+  return this.proxyService.forwardRequest({
+    method: 'PATCH',
+    targetUrl: `${baseUrl}/announcements/${id}/publish`,
+    authorization,
+  });
+}
+
+@Patch('announcements/:id/archive')
+@ApiOperation({ summary: 'Forward archive announcement to announcement-service' })
+proxyAnnouncementArchive(
+  @Param('id') id: string,
+  @Headers('authorization') authorization?: string,
+) {
+  const baseUrl =
+    process.env.ANNOUNCEMENT_SERVICE_URL || 'http://localhost:3007';
+
+  return this.proxyService.forwardRequest({
+    method: 'PATCH',
+    targetUrl: `${baseUrl}/announcements/${id}/archive`,
+    authorization,
+  });
+}
+
+@Delete('announcements/:id')
+@ApiOperation({ summary: 'Forward DELETE announcement to announcement-service' })
+proxyAnnouncementDelete(
+  @Param('id') id: string,
+  @Headers('authorization') authorization?: string,
+) {
+  const baseUrl =
+    process.env.ANNOUNCEMENT_SERVICE_URL || 'http://localhost:3007';
+
+  return this.proxyService.forwardRequest({
+    method: 'DELETE',
+    targetUrl: `${baseUrl}/announcements/${id}`,
+    authorization,
+  });
+}
+}
+

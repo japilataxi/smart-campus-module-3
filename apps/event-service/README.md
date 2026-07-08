@@ -1,98 +1,160 @@
-# Announcement Service
+# Event Service
 
-Microservice responsible for managing institutional announcements in Smart Campus Module 3.
+## Descripción
 
-## Responsibilities
+El **Event Service** es un microservicio del proyecto **Smart Campus Module 3** encargado de la gestión de eventos universitarios. Permite crear, consultar, actualizar, cancelar eventos y administrar el registro de participantes.
 
-- Create announcements
-- Update announcements
-- Delete announcements
-- Publish announcements
-- Archive announcements
-- List announcements
-- Filter announcements
-- Search announcements
-- Emit Kafka events for announcement changes
+Además, publica eventos mediante Kafka para integrarse con otros microservicios siguiendo una arquitectura orientada a eventos.
 
-## Tech Stack
+---
+
+## Funcionalidades
+
+- Crear eventos.
+- Obtener todos los eventos.
+- Obtener un evento por ID.
+- Actualizar eventos.
+- Cancelar eventos.
+- Registrar participantes.
+- Consultar participantes registrados.
+- Integración con Kafka.
+- Métricas con Prometheus.
+- Endpoint de Health Check.
+- Documentación Swagger.
+
+---
+
+## Tecnologías
 
 - NestJS
 - TypeScript
 - PostgreSQL
 - TypeORM
-- KafkaJS
+- Kafka
+- Redis
 - Docker
 - Swagger
-- Prometheus Metrics
+- Jest
 
-## Local Port
+---
 
-```txt
-3007
-
-##  Environment Variables
+## Variables de entorno
 
 ```env
-PORT=3007
-DATABASE_URL=postgresql://announcement_user:announcement_password@announcement-db:5432/announcement_db
-KAFKA_CLIENT_ID=announcement-service
-KAFKA_BROKERS=localhost:9092
-KAFKA_ANNOUNCEMENTS_TOPIC=campus.announcements
-CORS_ORIGIN=*
-NODE_ENV=development
+PORT=3030
+
+DATABASE_URL=postgresql://postgres:postgres@event-db:5432/event_db
+
+KAFKA_BROKERS=kafka:9092
+
+REDIS_HOST=redis
+REDIS_PORT=6379
+
+JWT_SECRET=your-secret-key
 ```
 
-PORT=3007
-DATABASE_URL=postgresql://announcement_user:announcement_password@announcement-db:5432/announcement_db
-KAFKA_CLIENT_ID=announcement-service
-KAFKA_BROKERS=localhost:9092
-KAFKA_ANNOUNCEMENTS_TOPIC=campus.announcements
-CORS_ORIGIN=*
-NODE_ENV=development
+---
 
-| Method | Endpoint                     | Description             |
-| ------ | ---------------------------- | ----------------------- |
-| POST   | `/announcements`             | Create announcement     |
-| GET    | `/announcements`             | List announcements      |
-| GET    | `/announcements/:id`         | Get announcement detail |
-| PATCH  | `/announcements/:id`         | Update announcement     |
-| PATCH  | `/announcements/:id/publish` | Publish announcement    |
-| PATCH  | `/announcements/:id/archive` | Archive announcement    |
-| DELETE | `/announcements/:id`         | Delete announcement     |
-| GET    | `/health`                    | Health check            |
-| GET    | `/metrics`                   | Prometheus metrics      |
-| GET    | `/docs`                      | Swagger documentation   |
+## Instalación
 
-campus.announcements
+```bash
+pnpm install
+```
 
-AnnouncementCreated
-AnnouncementUpdated
-AnnouncementPublished
-AnnouncementArchived
-AnnouncementDeleted
+---
 
-notification-service consumes AnnouncementPublished events to create notifications and emit WebSocket updates.
+## Ejecutar en desarrollo
 
-Run Locally
-pnpm --dir apps/announcement-service start:dev
-Build
-pnpm --dir apps/announcement-service build
-Docker Build
-docker build -f apps/announcement-service/Dockerfile -t announcement-service:local .
-Swagger
-http://localhost:3007/docs
-Health
-http://localhost:3007/health
-Metrics
-http://localhost:3007/metrics
-Important Notes
+```bash
+pnpm start:dev
+```
 
-During local development, the service may temporarily use an existing PostgreSQL database until announcement-db is added to Docker Compose and Terraform.
+---
 
-Before production deployment, the service must use its own database:
+## Ejecutar pruebas
 
-announcement_db
+```bash
+pnpm test
+```
 
-Después guarda y verifica:
+Resultado esperado:
 
+```
+Test Suites: 2 passed
+Tests: 4 passed
+```
 
+---
+
+## Docker
+
+Construir imagen:
+
+```bash
+docker build -t event-service .
+```
+
+Ejecutar:
+
+```bash
+docker compose -f infra/docker/docker-compose.qa.yml up -d event-service
+```
+
+---
+
+## Endpoints
+
+| Método | Endpoint | Descripción |
+|---------|----------|-------------|
+| GET | /events | Obtener todos los eventos |
+| GET | /events/:id | Obtener evento por ID |
+| POST | /events | Crear evento |
+| PATCH | /events/:id | Actualizar evento |
+| PATCH | /events/:id/cancel | Cancelar evento |
+| GET | /events/:id/registrations | Obtener registros |
+| POST | /events/:id/registrations | Registrar participante |
+| DELETE | /events/:id/registrations/:registrationId | Eliminar registro |
+
+---
+
+## Health Check
+
+```
+GET /health
+```
+
+---
+
+## Métricas
+
+```
+GET /metrics
+```
+
+---
+
+## Swagger
+
+```
+http://localhost:3030/docs
+```
+
+---
+
+## Arquitectura
+
+```
+src/
+├── application/
+├── domain/
+├── infrastructure/
+├── interfaces/
+├── metrics/
+└── health/
+```
+
+---
+
+## Autor
+
+Proyecto desarrollado para la asignatura **Smart Campus Module 3**.

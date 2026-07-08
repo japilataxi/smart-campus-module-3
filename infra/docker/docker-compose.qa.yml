@@ -20,6 +20,7 @@ services:
       SPACE_AVAILABILITY_SERVICE_URL: http://space-availability-service:3023
       WORKFLOW_SERVICE_URL: http://workflow-service:3024
       ANNOUNCEMENT_SERVICE_URL: http://announcement-service:3007
+      EVENT_SERVICE_URL: http://event-service:3030
     depends_on:
       - auth-service
       - library-service
@@ -30,6 +31,7 @@ services:
       - space-availability-service
       - workflow-service
       - announcement-service
+      - event-service
 
   auth-service:
     build:
@@ -116,6 +118,7 @@ services:
       KAFKA_CLIENT_ID: notification-service
       KAFKA_BROKERS: kafka:9092
       KAFKA_ANNOUNCEMENTS_TOPIC: campus.announcements
+      KAFKA_EVENTS_TOPIC: campus.events
     depends_on:
       - notification-db
       - redis
@@ -167,7 +170,29 @@ services:
       - announcement-db
       - redis
       - kafka
-
+  event-service:
+    build:
+      context: ../../
+      dockerfile: apps/event-service/Dockerfile
+      args:
+        APP_NAME: event-service
+    container_name: smart-campus-event-service-qa
+    ports:
+      - "3030:3030"
+    environment:
+      SERVICE_NAME: event-service
+      PORT: 3030
+      DATABASE_URL: postgresql://event_user:event_password@event-db:5432/event_db
+      REDIS_HOST: redis
+      REDIS_PORT: 6379
+      KAFKA_CLIENT_ID: event-service
+      KAFKA_BROKERS: kafka:9092
+      KAFKA_TOPIC: campus.events
+      JWT_SECRET: change_me
+    depends_on:
+      - event-db
+      - redis
+      - kafka
   transport-service:
     build:
       context: ../../
@@ -309,6 +334,18 @@ services:
       - announcement_db_data:/var/lib/postgresql/data
     restart: unless-stopped
     
+  event-db:
+    image: postgres:16
+    container_name: smart-campus-event-db-qa
+    environment:
+      POSTGRES_DB: event_db
+      POSTGRES_USER: event_user
+      POSTGRES_PASSWORD: event_password
+    ports:
+      - "5441:5432"
+    volumes:
+      - event_db_data:/var/lib/postgresql/data
+    restart: unless-stopped
 
   transport-db:
     image: postgres:16
@@ -392,6 +429,7 @@ services:
       - space-availability-service
       - workflow-service
       - announcement-service
+      - event-service
       
   zookeeper:
     image: confluentinc/cp-zookeeper:7.6.1
@@ -434,5 +472,6 @@ services:
 
 volumes:
   announcement_db_data:
+  event_db_data:
   workflow_db_data:
   n8n_data:

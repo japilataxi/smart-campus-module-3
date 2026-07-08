@@ -1,23 +1,5 @@
 services:
-  announcement-service:
-    image: japilataxi/announcement-service:qa
-    container_name: smart-campus-announcement-service-qa
-    ports:
-      - "3007:3007"
-    environment:
-      SERVICE_NAME: announcement-service
-      PORT: 3007
-      DATABASE_URL: postgresql://announcement_user:announcement_password@announcement-db:5432/announcement_db
-      REDIS_HOST: core3-redis
-      REDIS_PORT: 6379
-      KAFKA_CLIENT_ID: announcement-service
-      KAFKA_BROKERS: ${KAFKA_BROKERS:-kafka:9092}
-      KAFKA_ANNOUNCEMENTS_TOPIC: campus.announcements
-      JWT_SECRET: ${JWT_SECRET:-change_me}
-    depends_on:
-      - announcement-db
-      - core3-redis
-    restart: unless-stopped
+  
   transport-service:
     image: japilataxi/transport-service:qa
     container_name: smart-campus-transport-service-qa
@@ -53,16 +35,6 @@ services:
     depends_on:
       - space-availability-db
       - core3-redis
-    restart: unless-stopped
-  announcement-db:
-    image: postgres:16
-    container_name: smart-campus-announcement-db-qa
-    environment:
-      POSTGRES_DB: announcement_db
-      POSTGRES_USER: announcement_user
-      POSTGRES_PASSWORD: announcement_password
-    volumes:
-      - announcement_db_data:/var/lib/postgresql/data
     restart: unless-stopped
 
 

@@ -1,0 +1,8 @@
+export enum CampusEventCategory {
+  ACADEMIC = 'ACADEMIC',
+  CULTURAL = 'CULTURAL',
+  SPORTS = 'SPORTS',
+  TECHNOLOGY = 'TECHNOLOGY',
+  SOCIAL = 'SOCIAL',
+  GENERAL = 'GENERAL',
+}

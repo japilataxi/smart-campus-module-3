@@ -1119,5 +1119,127 @@ proxyAnnouncementDelete(
     authorization,
   });
 }
+@Get('events')
+@ApiOperation({ summary: 'Forward GET events to event-service' })
+proxyEventGet(@Headers('authorization') authorization?: string) {
+  const baseUrl = process.env.EVENT_SERVICE_URL || 'http://localhost:3030';
+
+  return this.proxyService.forwardRequest({
+    method: 'GET',
+    targetUrl: `${baseUrl}/events`,
+    authorization,
+  });
 }
 
+@Post('events')
+@ApiOperation({ summary: 'Forward POST events to event-service' })
+proxyEventPost(
+  @Body() body: unknown,
+  @Headers('authorization') authorization?: string,
+) {
+  const baseUrl = process.env.EVENT_SERVICE_URL || 'http://localhost:3030';
+
+  return this.proxyService.forwardRequest({
+    method: 'POST',
+    targetUrl: `${baseUrl}/events`,
+    body,
+    authorization,
+  });
+}
+
+@Get('events/:id')
+@ApiOperation({ summary: 'Forward GET event by ID to event-service' })
+proxyEventGetById(
+  @Param('id') id: string,
+  @Headers('authorization') authorization?: string,
+) {
+  const baseUrl = process.env.EVENT_SERVICE_URL || 'http://localhost:3030';
+
+  return this.proxyService.forwardRequest({
+    method: 'GET',
+    targetUrl: `${baseUrl}/events/${id}`,
+    authorization,
+  });
+}
+
+@Patch('events/:id')
+@ApiOperation({ summary: 'Forward PATCH event to event-service' })
+proxyEventPatch(
+  @Param('id') id: string,
+  @Body() body: unknown,
+  @Headers('authorization') authorization?: string,
+) {
+  const baseUrl = process.env.EVENT_SERVICE_URL || 'http://localhost:3030';
+
+  return this.proxyService.forwardRequest({
+    method: 'PATCH',
+    targetUrl: `${baseUrl}/events/${id}`,
+    body,
+    authorization,
+  });
+}
+
+@Patch('events/:id/cancel')
+@ApiOperation({ summary: 'Forward cancel event to event-service' })
+proxyEventCancel(
+  @Param('id') id: string,
+  @Headers('authorization') authorization?: string,
+) {
+  const baseUrl = process.env.EVENT_SERVICE_URL || 'http://localhost:3030';
+
+  return this.proxyService.forwardRequest({
+    method: 'PATCH',
+    targetUrl: `${baseUrl}/events/${id}/cancel`,
+    authorization,
+  });
+}
+
+@Post('events/:id/register')
+@ApiOperation({ summary: 'Forward event registration to event-service' })
+proxyEventRegister(
+  @Param('id') id: string,
+  @Body() body: unknown,
+  @Headers('authorization') authorization?: string,
+) {
+  const baseUrl = process.env.EVENT_SERVICE_URL || 'http://localhost:3030';
+
+  return this.proxyService.forwardRequest({
+    method: 'POST',
+    targetUrl: `${baseUrl}/events/${id}/register`,
+    body,
+    authorization,
+  });
+}
+
+@Delete('events/:id/register')
+@ApiOperation({ summary: 'Forward cancel event registration to event-service' })
+proxyEventCancelRegistration(
+  @Param('id') id: string,
+  @Body() body: unknown,
+  @Headers('authorization') authorization?: string,
+) {
+  const baseUrl = process.env.EVENT_SERVICE_URL || 'http://localhost:3030';
+
+  return this.proxyService.forwardRequest({
+    method: 'DELETE',
+    targetUrl: `${baseUrl}/events/${id}/register`,
+    body,
+    authorization,
+  });
+}
+
+@Get('events/:id/registrations')
+@ApiOperation({ summary: 'Forward GET event registrations to event-service' })
+proxyEventRegistrations(
+  @Param('id') id: string,
+  @Headers('authorization') authorization?: string,
+) {
+  const baseUrl = process.env.EVENT_SERVICE_URL || 'http://localhost:3030';
+
+  return this.proxyService.forwardRequest({
+    method: 'GET',
+    targetUrl: `${baseUrl}/events/${id}/registrations`,
+    authorization,
+  });
+}
+}

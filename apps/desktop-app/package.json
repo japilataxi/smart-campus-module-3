@@ -2,11 +2,12 @@
   "name": "desktop-app",
   "version": "1.0.0",
   "private": true,
+  "author": "Smart Campus Team",
   "main": "src/main.js",
   "scripts": {
     "dev": "electron src/main.js",
     "start": "electron .",
-    "dist": "electron-builder --win portable --config.win.sign=false"
+    "dist": "electron-builder"
   },
   "devDependencies": {
     "electron": "^28.3.3",

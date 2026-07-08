@@ -24,4 +24,10 @@ cat > docker-compose.yml <<'EOF'
 ${compose_content}
 EOF
 
-docker compose up -d
+cat > .env <<EOF
+COMPOSE_PROJECT_NAME=smart-campus-monitoring
+KAFKA_BROKERS=${kafka_private_ip}:9092
+EOF
+
+docker compose --env-file .env down || true
+docker compose --env-file .env up -d

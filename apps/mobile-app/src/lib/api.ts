@@ -1,6 +1,6 @@
 import AsyncStorage from "@react-native-async-storage/async-storage";
 
-const API_BASE_URL = "http://smart-campus-qa-alb-1189508831.us-east-1.elb.amazonaws.com/api";
+const API_BASE_URL = "http://smart-campus-qa-alb-1174325889.us-east-1.elb.amazonaws.com/api";
 
 export async function getToken() {
   return AsyncStorage.getItem("smart_campus_token");

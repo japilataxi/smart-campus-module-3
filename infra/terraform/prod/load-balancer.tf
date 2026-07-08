@@ -16,7 +16,7 @@ resource "aws_lb" "app" {
 }
 
 resource "aws_lb_target_group" "gateway" {
-  name     = "${var.project_name}-${var.environment}-gt-tg"
+  name     = "${var.project_name}-${var.environment}-gateway-tg"
   port     = 3000
   protocol = "HTTP"
   vpc_id   = aws_vpc.main.id
@@ -103,7 +103,7 @@ resource "aws_lb_listener_rule" "gateway_docs" {
 }
 
 resource "aws_lb_target_group" "notification" {
-  name     = "${var.project_name}-${var.environment}-notif-tg"
+  name     = "${var.project_name}-${var.environment}-not-tg"
   port     = 3010
   protocol = "HTTP"
   vpc_id   = aws_vpc.main.id
@@ -111,11 +111,11 @@ resource "aws_lb_target_group" "notification" {
   health_check {
     path                = "/health"
     protocol            = "HTTP"
-    matcher             = "200"
+    matcher             = "200-399"
     interval            = 30
     timeout             = 5
     healthy_threshold   = 2
-    unhealthy_threshold = 2
+    unhealthy_threshold = 3
   }
 }
 

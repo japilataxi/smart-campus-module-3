@@ -1,0 +1,34 @@
+name: Auditoría de Seguridad - Dependency-Check
+
+on:
+  push:
+    branches: [ main, master ]
+  pull_request:
+    branches: [ main, master ]
+
+jobs:
+  security-scan:
+    runs-on: ubuntu-latest
+    steps:
+      - name: Checkout del código fuente
+        uses: actions/checkout@v3
+
+      - name: Ejecutar OWASP Dependency-Check
+        uses: dependency-check/Dependency-Check_Action@main
+        id: Dependency-Check
+        continue-on-error: true # Garantiza que el pipeline no se caiga si fallan las conexiones de red externas
+        with:
+          project: 'Proyecto de QA - Grupo ${{ github.repository }}' # Genera el nombre del reporte dinámicamente
+          path: '.' # Escanea de forma recursiva todo el contenido del repositorio
+          format: 'HTML'
+          out: 'reports'
+          # Argumentos optimizados para evitar errores de API en monorrepositorios de Node/PNPM
+          args: >
+            --disableNodeAudit
+            --disablePnpmAudit
+
+      - name: Subir Reporte de Vulnerabilidades como Artefacto
+        uses: actions/upload-artifact@v4
+        with:
+          name: reporte-seguridad-owasp
+          path: reports/dependency-check-report.html 

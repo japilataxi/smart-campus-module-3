@@ -1,0 +1,24 @@
+{
+    "name":  "smart-campus-qa-selenium",
+    "version":  "1.0.0",
+    "private":  true,
+    "description":  "Selenium WebDriver functional QA tests for Smart Campus Module 3.",
+    "type":  "module",
+    "scripts":  {
+                    "test":  "tsx --test tests/**/*.test.ts",
+                    "test:headed":  "tsx --test tests/**/*.test.ts",
+                    "test:report":  "tsx --test tests/**/*.test.ts",
+                    "typecheck":  "tsc --noEmit"
+                },
+    "dependencies":  {
+                         "chromedriver":  "^151.0.0",
+                         "dotenv":  "^17.4.2",
+                         "selenium-webdriver":  "^4.46.0"
+                     },
+    "devDependencies":  {
+                            "@types/node":  "^26.1.1",
+                            "@types/selenium-webdriver":  "^4.35.6",
+                            "tsx":  "^4.23.1",
+                            "typescript":  "^7.0.2"
+                        }
+}

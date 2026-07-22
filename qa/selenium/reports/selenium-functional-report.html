@@ -1,0 +1,193 @@
+<!doctype html>
+<html lang="es">
+<head>
+  <meta charset="utf-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1" />
+  <title>Reporte Selenium - Smart Campus UCE</title>
+  <style>
+    body {
+      margin: 0;
+      background: #eef3f8;
+      color: #172033;
+      font-family: Arial, Helvetica, sans-serif;
+    }
+
+    main {
+      max-width: 1120px;
+      margin: 32px auto;
+      padding: 0 24px;
+    }
+
+    header {
+      background: #002b5c;
+      color: #ffffff;
+      border-radius: 8px;
+      padding: 28px 32px;
+    }
+
+    h1 {
+      margin: 0;
+      font-size: 28px;
+    }
+
+    .subtitle {
+      margin: 10px 0 0;
+      color: #d7e3f4;
+    }
+
+    .summary {
+      display: grid;
+      grid-template-columns: repeat(4, minmax(0, 1fr));
+      gap: 16px;
+      margin: 24px 0;
+    }
+
+    .card {
+      background: #ffffff;
+      border: 1px solid #d8e0ea;
+      border-radius: 8px;
+      padding: 18px;
+    }
+
+    .card span {
+      display: block;
+      color: #5d6b82;
+      font-size: 13px;
+      font-weight: 700;
+      text-transform: uppercase;
+    }
+
+    .card strong {
+      display: block;
+      margin-top: 8px;
+      color: #002b5c;
+      font-size: 24px;
+    }
+
+    table {
+      width: 100%;
+      border-collapse: collapse;
+      background: #ffffff;
+      border: 1px solid #d8e0ea;
+      border-radius: 8px;
+      overflow: hidden;
+    }
+
+    th, td {
+      padding: 14px 16px;
+      border-bottom: 1px solid #e5ebf2;
+      text-align: left;
+      font-size: 14px;
+    }
+
+    th {
+      background: #f5f8fb;
+      color: #002b5c;
+      font-size: 12px;
+      text-transform: uppercase;
+    }
+
+    tr:last-child td {
+      border-bottom: 0;
+    }
+
+    a {
+      color: #8b0000;
+      font-weight: 700;
+      text-decoration: none;
+    }
+
+    .status {
+      display: inline-block;
+      border-radius: 999px;
+      padding: 5px 10px;
+      font-size: 12px;
+      font-weight: 700;
+      text-transform: uppercase;
+    }
+
+    .status-passed {
+      background: #dcfce7;
+      color: #166534;
+    }
+
+    .status-failed {
+      background: #fee2e2;
+      color: #991b1b;
+    }
+
+    .meta {
+      margin-top: 18px;
+      color: #5d6b82;
+      font-size: 14px;
+    }
+  </style>
+</head>
+<body>
+  <main>
+    <header>
+      <h1>Smart Campus UCE - Modulo 3</h1>
+      <p class="subtitle">Pruebas funcionales automatizadas con Selenium</p>
+      <p class="subtitle">Herramienta: Selenium WebDriver | Navegador: chrome</p>
+    </header>
+
+    <section class="summary">
+      <div class="card"><span>Total de pruebas</span><strong>5</strong></div>
+      <div class="card"><span>Aprobadas</span><strong>5</strong></div>
+      <div class="card"><span>Fallidas</span><strong>0</strong></div>
+      <div class="card"><span>Duracion total</span><strong>10.38 s</strong></div>
+    </section>
+
+    <table>
+      <thead>
+        <tr>
+          <th>Codigo</th>
+          <th>Nombre del caso</th>
+          <th>Estado</th>
+          <th>Duracion</th>
+          <th>Evidencia</th>
+        </tr>
+      </thead>
+      <tbody>
+        <tr>
+          <td>CP-001</td>
+          <td>Open Landing Page and verify it loads correctly</td>
+          <td><span class="status status-passed">aprobado</span></td>
+          <td>1.59 s</td>
+          <td><a href="../screenshots/CP-001-landing-page-aprobado.png" target="_blank">Ver captura</a></td>
+        </tr>
+        <tr>
+          <td>CP-002</td>
+          <td>Navigate from Landing Page to Login</td>
+          <td><span class="status status-passed">aprobado</span></td>
+          <td>1.30 s</td>
+          <td><a href="../screenshots/CP-002-login-navigation-aprobado.png" target="_blank">Ver captura</a></td>
+        </tr>
+        <tr>
+          <td>CP-012</td>
+          <td>Login successfully as Administrator</td>
+          <td><span class="status status-passed">aprobado</span></td>
+          <td>2.42 s</td>
+          <td><a href="../screenshots/CP-012-login-admin-aprobado.png" target="_blank">Ver captura</a></td>
+        </tr>
+        <tr>
+          <td>CP-013</td>
+          <td>Login with invalid credentials and verify error message</td>
+          <td><span class="status status-passed">aprobado</span></td>
+          <td>1.61 s</td>
+          <td><a href="../screenshots/CP-013-credenciales-invalidas-aprobado.png" target="_blank">Ver captura</a></td>
+        </tr>
+        <tr>
+          <td>CP-016</td>
+          <td>Verify Dashboard loads after login</td>
+          <td><span class="status status-passed">aprobado</span></td>
+          <td>3.46 s</td>
+          <td><a href="../screenshots/CP-016-dashboard-aprobado.png" target="_blank">Ver captura</a></td>
+        </tr>
+      </tbody>
+    </table>
+
+    <p class="meta">Fecha y hora de ejecucion: 2026-07-22T18:58:19.438Z</p>
+  </main>
+</body>
+</html>

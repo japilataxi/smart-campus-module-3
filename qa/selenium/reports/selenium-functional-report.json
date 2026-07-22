@@ -1,0 +1,55 @@
+{
+  "project": "Smart Campus UCE - Modulo 3",
+  "testType": "Pruebas funcionales automatizadas con Selenium",
+  "tool": "Selenium WebDriver",
+  "browser": "chrome",
+  "generatedAt": "2026-07-22T18:58:19.438Z",
+  "summary": {
+    "total": 5,
+    "passed": 5,
+    "failed": 0,
+    "totalDurationMs": 10378
+  },
+  "tests": [
+    {
+      "code": "CP-001",
+      "name": "Open Landing Page and verify it loads correctly",
+      "status": "aprobado",
+      "durationMs": 1588,
+      "executedAt": "2026-07-22T18:57:59.507Z",
+      "evidencePath": "C:\\Users\\Usuario\\Desktop\\smart-campus-module-3\\qa\\selenium\\screenshots\\CP-001-landing-page-aprobado.png"
+    },
+    {
+      "code": "CP-002",
+      "name": "Navigate from Landing Page to Login",
+      "status": "aprobado",
+      "durationMs": 1298,
+      "executedAt": "2026-07-22T18:58:04.486Z",
+      "evidencePath": "C:\\Users\\Usuario\\Desktop\\smart-campus-module-3\\qa\\selenium\\screenshots\\CP-002-login-navigation-aprobado.png"
+    },
+    {
+      "code": "CP-012",
+      "name": "Login successfully as Administrator",
+      "status": "aprobado",
+      "durationMs": 2416,
+      "executedAt": "2026-07-22T18:58:07.641Z",
+      "evidencePath": "C:\\Users\\Usuario\\Desktop\\smart-campus-module-3\\qa\\selenium\\screenshots\\CP-012-login-admin-aprobado.png"
+    },
+    {
+      "code": "CP-013",
+      "name": "Login with invalid credentials and verify error message",
+      "status": "aprobado",
+      "durationMs": 1614,
+      "executedAt": "2026-07-22T18:58:11.968Z",
+      "evidencePath": "C:\\Users\\Usuario\\Desktop\\smart-campus-module-3\\qa\\selenium\\screenshots\\CP-013-credenciales-invalidas-aprobado.png"
+    },
+    {
+      "code": "CP-016",
+      "name": "Verify Dashboard loads after login",
+      "status": "aprobado",
+      "durationMs": 3462,
+      "executedAt": "2026-07-22T18:58:15.785Z",
+      "evidencePath": "C:\\Users\\Usuario\\Desktop\\smart-campus-module-3\\qa\\selenium\\screenshots\\CP-016-dashboard-aprobado.png"
+    }
+  ]
+}

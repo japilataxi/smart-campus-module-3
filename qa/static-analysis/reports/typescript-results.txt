@@ -1,0 +1,106 @@
+Static Analysis Report - TypeScript Compiler
+Generated: 2026-07-22 16:33:28
+
+============================================================
+Application: apps/api-gateway
+Command: pnpm exec tsc --noEmit
+Exit code: 0
+TypeScript errors: 0
+---------------- Full output ----------------
+
+
+============================================================
+Application: apps/auth-service
+Command: pnpm exec tsc --noEmit
+Exit code: 0
+TypeScript errors: 0
+---------------- Full output ----------------
+
+
+============================================================
+Application: apps/library-service
+Command: pnpm exec tsc --noEmit
+Exit code: 0
+TypeScript errors: 0
+---------------- Full output ----------------
+
+
+============================================================
+Application: apps/campus-incident-service
+Command: pnpm exec tsc --noEmit
+Exit code: 0
+TypeScript errors: 0
+---------------- Full output ----------------
+
+
+============================================================
+Application: apps/notification-service
+Command: pnpm exec tsc --noEmit
+Exit code: 0
+TypeScript errors: 0
+---------------- Full output ----------------
+
+
+============================================================
+Application: apps/qr-access-service
+Command: pnpm exec tsc --noEmit
+Exit code: 0
+TypeScript errors: 0
+---------------- Full output ----------------
+
+
+============================================================
+Application: apps/space-availability-service
+Command: pnpm exec tsc --noEmit
+Exit code: 0
+TypeScript errors: 0
+---------------- Full output ----------------
+
+
+============================================================
+Application: apps/transport-service
+Command: pnpm exec tsc --noEmit
+Exit code: 0
+TypeScript errors: 0
+---------------- Full output ----------------
+
+
+============================================================
+Application: apps/workflow-service
+Command: pnpm exec tsc --noEmit
+Exit code: 0
+TypeScript errors: 0
+---------------- Full output ----------------
+
+
+============================================================
+Application: apps/announcement-service
+Command: pnpm exec tsc --noEmit
+Exit code: 0
+TypeScript errors: 0
+---------------- Full output ----------------
+
+
+============================================================
+Application: apps/web-app
+Command: pnpm exec tsc --noEmit
+Exit code: 0
+TypeScript errors: 0
+---------------- Full output ----------------
+
+
+============================================================
+Application: apps/mobile-app
+Command: pnpm exec tsc --noEmit
+Exit code: 0
+TypeScript errors: 0
+---------------- Full output ----------------
+
+
+============================================================
+Application: qa/selenium
+Command: pnpm exec tsc --noEmit
+Exit code: 0
+TypeScript errors: 0
+---------------- Full output ----------------
+

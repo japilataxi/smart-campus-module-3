@@ -1,0 +1,81 @@
+timeStamp,elapsed,label,responseCode,responseMessage,threadName,dataType,success,failureMessage,bytes,sentBytes,grpThreads,allThreads,URL,Latency,IdleTime,Connect
+1784754094120,85,CP-R01 - Health API Gateway,200,OK,Usuarios concurrentes - Carga inicial 1-1,text,true,,770,181,1,1,http://localhost:3000/health,71,0,49
+1784754094716,203,CP-R02 - Consultar libros,200,OK,Usuarios concurrentes - Carga inicial 1-1,text,true,,692,192,1,1,http://localhost:3000/api/library/books,203,0,0
+1784754095422,211,CP-R03 - Consultar rutas de transporte,200,OK,Usuarios concurrentes - Carga inicial 1-1,text,true,,692,195,1,1,http://localhost:3000/api/transport/routes,210,0,0
+1784754096134,236,CP-R04 - Consultar anuncios,200,OK,Usuarios concurrentes - Carga inicial 1-1,text,true,,1769,192,1,1,http://localhost:3000/api/announcements,236,0,0
+1784754096873,25,CP-R01 - Health API Gateway,200,OK,Usuarios concurrentes - Carga inicial 1-1,text,true,,770,181,2,2,http://localhost:3000/health,24,0,0
+1784754096921,72,CP-R01 - Health API Gateway,200,OK,Usuarios concurrentes - Carga inicial 1-2,text,true,,770,181,2,2,http://localhost:3000/health,72,0,2
+1784754097400,20,CP-R02 - Consultar libros,200,OK,Usuarios concurrentes - Carga inicial 1-1,text,true,,692,192,2,2,http://localhost:3000/api/library/books,19,0,0
+1784754097495,10,CP-R02 - Consultar libros,200,OK,Usuarios concurrentes - Carga inicial 1-2,text,true,,692,192,2,2,http://localhost:3000/api/library/books,10,0,0
+1784754097923,15,CP-R03 - Consultar rutas de transporte,200,OK,Usuarios concurrentes - Carga inicial 1-1,text,true,,692,195,2,2,http://localhost:3000/api/transport/routes,15,0,0
+1784754098007,18,CP-R03 - Consultar rutas de transporte,200,OK,Usuarios concurrentes - Carga inicial 1-2,text,true,,692,195,2,2,http://localhost:3000/api/transport/routes,18,0,0
+1784754098439,21,CP-R04 - Consultar anuncios,200,OK,Usuarios concurrentes - Carga inicial 1-1,text,true,,1769,192,2,2,http://localhost:3000/api/announcements,21,0,0
+1784754098527,11,CP-R04 - Consultar anuncios,200,OK,Usuarios concurrentes - Carga inicial 1-2,text,true,,1769,192,1,1,http://localhost:3000/api/announcements,11,0,0
+1784754099039,4,CP-R01 - Health API Gateway,200,OK,Usuarios concurrentes - Carga inicial 1-2,text,true,,770,181,1,1,http://localhost:3000/health,4,0,0
+1784754099545,10,CP-R02 - Consultar libros,200,OK,Usuarios concurrentes - Carga inicial 1-2,text,true,,692,192,2,2,http://localhost:3000/api/library/books,10,0,0
+1784754099917,4,CP-R01 - Health API Gateway,200,OK,Usuarios concurrentes - Carga inicial 1-3,text,true,,770,181,2,2,http://localhost:3000/health,4,0,1
+1784754100056,12,CP-R03 - Consultar rutas de transporte,200,OK,Usuarios concurrentes - Carga inicial 1-2,text,true,,692,195,2,2,http://localhost:3000/api/transport/routes,12,0,0
+1784754100423,7,CP-R02 - Consultar libros,200,OK,Usuarios concurrentes - Carga inicial 1-3,text,true,,692,192,2,2,http://localhost:3000/api/library/books,7,0,0
+1784754100570,19,CP-R04 - Consultar anuncios,200,OK,Usuarios concurrentes - Carga inicial 1-2,text,true,,1769,192,2,2,http://localhost:3000/api/announcements,19,0,0
+1784754100932,9,CP-R03 - Consultar rutas de transporte,200,OK,Usuarios concurrentes - Carga inicial 1-3,text,true,,692,195,1,1,http://localhost:3000/api/transport/routes,9,0,0
+1784754101443,16,CP-R04 - Consultar anuncios,200,OK,Usuarios concurrentes - Carga inicial 1-3,text,true,,1769,192,1,1,http://localhost:3000/api/announcements,16,0,0
+1784754101961,7,CP-R01 - Health API Gateway,200,OK,Usuarios concurrentes - Carga inicial 1-3,text,true,,770,181,1,1,http://localhost:3000/health,6,0,0
+1784754102472,10,CP-R02 - Consultar libros,200,OK,Usuarios concurrentes - Carga inicial 1-3,text,true,,692,192,2,2,http://localhost:3000/api/library/books,10,0,0
+1784754102919,6,CP-R01 - Health API Gateway,200,OK,Usuarios concurrentes - Carga inicial 1-4,text,true,,770,181,2,2,http://localhost:3000/health,6,0,2
+1784754102983,10,CP-R03 - Consultar rutas de transporte,200,OK,Usuarios concurrentes - Carga inicial 1-3,text,true,,692,195,2,2,http://localhost:3000/api/transport/routes,10,0,0
+1784754103425,9,CP-R02 - Consultar libros,200,OK,Usuarios concurrentes - Carga inicial 1-4,text,true,,692,192,2,2,http://localhost:3000/api/library/books,9,0,0
+1784754103495,10,CP-R04 - Consultar anuncios,200,OK,Usuarios concurrentes - Carga inicial 1-3,text,true,,1769,192,2,2,http://localhost:3000/api/announcements,10,0,0
+1784754103935,8,CP-R03 - Consultar rutas de transporte,200,OK,Usuarios concurrentes - Carga inicial 1-4,text,true,,692,195,1,1,http://localhost:3000/api/transport/routes,8,0,0
+1784754104444,15,CP-R04 - Consultar anuncios,200,OK,Usuarios concurrentes - Carga inicial 1-4,text,true,,1769,192,1,1,http://localhost:3000/api/announcements,15,0,0
+1784754104961,4,CP-R01 - Health API Gateway,200,OK,Usuarios concurrentes - Carga inicial 1-4,text,true,,770,181,1,1,http://localhost:3000/health,4,0,0
+1784754105466,18,CP-R02 - Consultar libros,200,OK,Usuarios concurrentes - Carga inicial 1-4,text,true,,692,192,2,2,http://localhost:3000/api/library/books,18,0,0
+1784754105921,6,CP-R01 - Health API Gateway,200,OK,Usuarios concurrentes - Carga inicial 1-5,text,true,,770,181,2,2,http://localhost:3000/health,5,0,2
+1784754105987,8,CP-R03 - Consultar rutas de transporte,200,OK,Usuarios concurrentes - Carga inicial 1-4,text,true,,692,195,2,2,http://localhost:3000/api/transport/routes,8,0,0
+1784754106428,10,CP-R02 - Consultar libros,200,OK,Usuarios concurrentes - Carga inicial 1-5,text,true,,692,192,2,2,http://localhost:3000/api/library/books,10,0,0
+1784754106496,12,CP-R04 - Consultar anuncios,200,OK,Usuarios concurrentes - Carga inicial 1-4,text,true,,1769,192,2,2,http://localhost:3000/api/announcements,12,0,0
+1784754106940,8,CP-R03 - Consultar rutas de transporte,200,OK,Usuarios concurrentes - Carga inicial 1-5,text,true,,692,195,1,1,http://localhost:3000/api/transport/routes,8,0,0
+1784754107451,29,CP-R04 - Consultar anuncios,200,OK,Usuarios concurrentes - Carga inicial 1-5,text,true,,1769,192,1,1,http://localhost:3000/api/announcements,29,0,0
+1784754107983,7,CP-R01 - Health API Gateway,200,OK,Usuarios concurrentes - Carga inicial 1-5,text,true,,770,181,1,1,http://localhost:3000/health,7,0,0
+1784754108491,20,CP-R02 - Consultar libros,200,OK,Usuarios concurrentes - Carga inicial 1-5,text,true,,692,192,2,2,http://localhost:3000/api/library/books,20,0,0
+1784754108921,18,CP-R01 - Health API Gateway,200,OK,Usuarios concurrentes - Carga inicial 1-6,text,true,,770,181,2,2,http://localhost:3000/health,18,0,3
+1784754109012,11,CP-R03 - Consultar rutas de transporte,200,OK,Usuarios concurrentes - Carga inicial 1-5,text,true,,692,195,2,2,http://localhost:3000/api/transport/routes,11,0,0
+1784754109441,15,CP-R02 - Consultar libros,200,OK,Usuarios concurrentes - Carga inicial 1-6,text,true,,692,192,2,2,http://localhost:3000/api/library/books,15,0,0
+1784754109524,18,CP-R04 - Consultar anuncios,200,OK,Usuarios concurrentes - Carga inicial 1-5,text,true,,1769,192,2,2,http://localhost:3000/api/announcements,18,0,0
+1784754109957,10,CP-R03 - Consultar rutas de transporte,200,OK,Usuarios concurrentes - Carga inicial 1-6,text,true,,692,195,1,1,http://localhost:3000/api/transport/routes,10,0,0
+1784754110469,31,CP-R04 - Consultar anuncios,200,OK,Usuarios concurrentes - Carga inicial 1-6,text,true,,1769,192,1,1,http://localhost:3000/api/announcements,31,0,0
+1784754111002,9,CP-R01 - Health API Gateway,200,OK,Usuarios concurrentes - Carga inicial 1-6,text,true,,770,181,1,1,http://localhost:3000/health,9,0,0
+1784754111512,15,CP-R02 - Consultar libros,200,OK,Usuarios concurrentes - Carga inicial 1-6,text,true,,692,192,2,2,http://localhost:3000/api/library/books,15,0,0
+1784754111921,7,CP-R01 - Health API Gateway,200,OK,Usuarios concurrentes - Carga inicial 1-7,text,true,,770,181,2,2,http://localhost:3000/health,7,0,1
+1784754112029,9,CP-R03 - Consultar rutas de transporte,200,OK,Usuarios concurrentes - Carga inicial 1-6,text,true,,692,195,2,2,http://localhost:3000/api/transport/routes,9,0,0
+1784754112430,20,CP-R02 - Consultar libros,200,OK,Usuarios concurrentes - Carga inicial 1-7,text,true,,692,192,2,2,http://localhost:3000/api/library/books,20,0,0
+1784754112540,29,CP-R04 - Consultar anuncios,200,OK,Usuarios concurrentes - Carga inicial 1-6,text,true,,1769,192,2,2,http://localhost:3000/api/announcements,28,0,0
+1784754112953,21,CP-R03 - Consultar rutas de transporte,200,OK,Usuarios concurrentes - Carga inicial 1-7,text,true,,692,195,1,1,http://localhost:3000/api/transport/routes,21,0,0
+1784754113476,24,CP-R04 - Consultar anuncios,200,OK,Usuarios concurrentes - Carga inicial 1-7,text,true,,1769,192,1,1,http://localhost:3000/api/announcements,24,0,0
+1784754114002,5,CP-R01 - Health API Gateway,200,OK,Usuarios concurrentes - Carga inicial 1-7,text,true,,770,181,1,1,http://localhost:3000/health,5,0,0
+1784754114508,25,CP-R02 - Consultar libros,200,OK,Usuarios concurrentes - Carga inicial 1-7,text,true,,692,192,2,2,http://localhost:3000/api/library/books,25,0,0
+1784754114920,14,CP-R01 - Health API Gateway,200,OK,Usuarios concurrentes - Carga inicial 1-8,text,true,,770,181,2,2,http://localhost:3000/health,14,0,1
+1784754115035,28,CP-R03 - Consultar rutas de transporte,200,OK,Usuarios concurrentes - Carga inicial 1-7,text,true,,692,195,2,2,http://localhost:3000/api/transport/routes,28,0,0
+1784754115435,10,CP-R02 - Consultar libros,200,OK,Usuarios concurrentes - Carga inicial 1-8,text,true,,692,192,2,2,http://localhost:3000/api/library/books,10,0,0
+1784754115566,16,CP-R04 - Consultar anuncios,200,OK,Usuarios concurrentes - Carga inicial 1-7,text,true,,1769,192,2,2,http://localhost:3000/api/announcements,15,0,0
+1784754115948,15,CP-R03 - Consultar rutas de transporte,200,OK,Usuarios concurrentes - Carga inicial 1-8,text,true,,692,195,1,1,http://localhost:3000/api/transport/routes,15,0,0
+1784754116466,16,CP-R04 - Consultar anuncios,200,OK,Usuarios concurrentes - Carga inicial 1-8,text,true,,1769,192,1,1,http://localhost:3000/api/announcements,16,0,0
+1784754116985,4,CP-R01 - Health API Gateway,200,OK,Usuarios concurrentes - Carga inicial 1-8,text,true,,770,181,1,1,http://localhost:3000/health,4,0,0
+1784754117492,9,CP-R02 - Consultar libros,200,OK,Usuarios concurrentes - Carga inicial 1-8,text,true,,692,192,2,2,http://localhost:3000/api/library/books,9,0,0
+1784754117915,23,CP-R01 - Health API Gateway,200,OK,Usuarios concurrentes - Carga inicial 1-9,text,true,,770,181,2,2,http://localhost:3000/health,23,0,1
+1784754118003,12,CP-R03 - Consultar rutas de transporte,200,OK,Usuarios concurrentes - Carga inicial 1-8,text,true,,692,195,2,2,http://localhost:3000/api/transport/routes,12,0,0
+1784754118440,8,CP-R02 - Consultar libros,200,OK,Usuarios concurrentes - Carga inicial 1-9,text,true,,692,192,2,2,http://localhost:3000/api/library/books,8,0,0
+1784754118516,11,CP-R04 - Consultar anuncios,200,OK,Usuarios concurrentes - Carga inicial 1-8,text,true,,1769,192,2,2,http://localhost:3000/api/announcements,11,0,0
+1784754118948,6,CP-R03 - Consultar rutas de transporte,200,OK,Usuarios concurrentes - Carga inicial 1-9,text,true,,692,195,1,1,http://localhost:3000/api/transport/routes,6,0,0
+1784754119458,24,CP-R04 - Consultar anuncios,200,OK,Usuarios concurrentes - Carga inicial 1-9,text,true,,1769,192,1,1,http://localhost:3000/api/announcements,24,0,0
+1784754119983,13,CP-R01 - Health API Gateway,200,OK,Usuarios concurrentes - Carga inicial 1-9,text,true,,770,181,1,1,http://localhost:3000/health,13,0,0
+1784754120498,13,CP-R02 - Consultar libros,200,OK,Usuarios concurrentes - Carga inicial 1-9,text,true,,692,192,2,2,http://localhost:3000/api/library/books,13,0,0
+1784754120921,9,CP-R01 - Health API Gateway,200,OK,Usuarios concurrentes - Carga inicial 1-10,text,true,,770,181,2,2,http://localhost:3000/health,8,0,1
+1784754121016,10,CP-R03 - Consultar rutas de transporte,200,OK,Usuarios concurrentes - Carga inicial 1-9,text,true,,692,195,2,2,http://localhost:3000/api/transport/routes,10,0,0
+1784754121431,15,CP-R02 - Consultar libros,200,OK,Usuarios concurrentes - Carga inicial 1-10,text,true,,692,192,2,2,http://localhost:3000/api/library/books,15,0,0
+1784754121527,13,CP-R04 - Consultar anuncios,200,OK,Usuarios concurrentes - Carga inicial 1-9,text,true,,1769,192,2,2,http://localhost:3000/api/announcements,13,0,0
+1784754121948,10,CP-R03 - Consultar rutas de transporte,200,OK,Usuarios concurrentes - Carga inicial 1-10,text,true,,692,195,1,1,http://localhost:3000/api/transport/routes,10,0,0
+1784754122460,15,CP-R04 - Consultar anuncios,200,OK,Usuarios concurrentes - Carga inicial 1-10,text,true,,1769,192,1,1,http://localhost:3000/api/announcements,15,0,0
+1784754122976,13,CP-R01 - Health API Gateway,200,OK,Usuarios concurrentes - Carga inicial 1-10,text,true,,770,181,1,1,http://localhost:3000/health,13,0,0
+1784754123491,24,CP-R02 - Consultar libros,200,OK,Usuarios concurrentes - Carga inicial 1-10,text,true,,692,192,1,1,http://localhost:3000/api/library/books,24,0,0
+1784754124016,19,CP-R03 - Consultar rutas de transporte,200,OK,Usuarios concurrentes - Carga inicial 1-10,text,true,,692,195,1,1,http://localhost:3000/api/transport/routes,19,0,0
+1784754124537,10,CP-R04 - Consultar anuncios,200,OK,Usuarios concurrentes - Carga inicial 1-10,text,true,,1769,192,1,1,http://localhost:3000/api/announcements,10,0,0

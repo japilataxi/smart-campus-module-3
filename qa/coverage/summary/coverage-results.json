@@ -1,0 +1,102 @@
+﻿[
+    {
+        "app":  "announcement-service",
+        "exitCode":  0,
+        "reportPath":  "qa/coverage/reports/announcement-service/index.html",
+        "summaryPath":  "qa/coverage/reports/announcement-service/coverage-summary.json",
+        "statements":  0,
+        "branches":  0,
+        "functions":  0,
+        "lines":  0
+    },
+    {
+        "app":  "api-gateway",
+        "exitCode":  0,
+        "reportPath":  "qa/coverage/reports/api-gateway/index.html",
+        "summaryPath":  "qa/coverage/reports/api-gateway/coverage-summary.json",
+        "statements":  34.46,
+        "branches":  0,
+        "functions":  6.25,
+        "lines":  33.44
+    },
+    {
+        "app":  "auth-service",
+        "exitCode":  0,
+        "reportPath":  "qa/coverage/reports/auth-service/index.html",
+        "summaryPath":  "qa/coverage/reports/auth-service/coverage-summary.json",
+        "statements":  49.73,
+        "branches":  4.34,
+        "functions":  24,
+        "lines":  47.07
+    },
+    {
+        "app":  "campus-incident-service",
+        "exitCode":  0,
+        "reportPath":  "qa/coverage/reports/campus-incident-service/index.html",
+        "summaryPath":  "qa/coverage/reports/campus-incident-service/coverage-summary.json",
+        "statements":  34.14,
+        "branches":  0,
+        "functions":  26.31,
+        "lines":  30.43
+    },
+    {
+        "app":  "library-service",
+        "exitCode":  0,
+        "reportPath":  "qa/coverage/reports/library-service/index.html",
+        "summaryPath":  "qa/coverage/reports/library-service/coverage-summary.json",
+        "statements":  51.46,
+        "branches":  0,
+        "functions":  23.25,
+        "lines":  48.63
+    },
+    {
+        "app":  "notification-service",
+        "exitCode":  0,
+        "reportPath":  "qa/coverage/reports/notification-service/index.html",
+        "summaryPath":  "qa/coverage/reports/notification-service/coverage-summary.json",
+        "statements":  21.49,
+        "branches":  1.58,
+        "functions":  13.72,
+        "lines":  20.28
+    },
+    {
+        "app":  "qr-access-service",
+        "exitCode":  0,
+        "reportPath":  "qa/coverage/reports/qr-access-service/index.html",
+        "summaryPath":  "qa/coverage/reports/qr-access-service/coverage-summary.json",
+        "statements":  19.64,
+        "branches":  25.22,
+        "functions":  13.92,
+        "lines":  19.68
+    },
+    {
+        "app":  "space-availability-service",
+        "exitCode":  0,
+        "reportPath":  "qa/coverage/reports/space-availability-service/index.html",
+        "summaryPath":  "qa/coverage/reports/space-availability-service/coverage-summary.json",
+        "statements":  30.61,
+        "branches":  15.87,
+        "functions":  16.92,
+        "lines":  31.67
+    },
+    {
+        "app":  "transport-service",
+        "exitCode":  0,
+        "reportPath":  "qa/coverage/reports/transport-service/index.html",
+        "summaryPath":  "qa/coverage/reports/transport-service/coverage-summary.json",
+        "statements":  29.65,
+        "branches":  17.64,
+        "functions":  16.39,
+        "lines":  31.17
+    },
+    {
+        "app":  "workflow-service",
+        "exitCode":  0,
+        "reportPath":  "qa/coverage/reports/workflow-service/index.html",
+        "summaryPath":  "qa/coverage/reports/workflow-service/coverage-summary.json",
+        "statements":  31.27,
+        "branches":  11.7,
+        "functions":  19.04,
+        "lines":  31.72
+    }
+]

@@ -1,0 +1,670 @@
+﻿# EjecuciÃ³n de cobertura con Jest
+Fecha: 2026-07-23 21:50:54
+
+
+============================================================
+AplicaciÃ³n: announcement-service
+Comando: pnpm exec jest --coverage --coverageDirectory="C:\Users\Usuario\Desktop\smart-campus-module-3\qa\coverage\reports\announcement-service" --coverageReporters=text --coverageReporters=html --coverageReporters=json-summary
+============================================================
+
+pnpm.cmd : PASS src/app.spec.ts (10.307 s)
+En C:\Users\Usuario\Documents\Codex\2026-07-08\hol\run_coverage_phase.ps1: 38 Carácter: 15
++ ...   $output = & pnpm exec jest --coverage --coverageDirectory="$coverag ...
++                 ~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
+    + CategoryInfo          : NotSpecified: (PASS src/app.spec.ts (10.307 s):String) [], RemoteException
+    + FullyQualifiedErrorId : NativeCommandError
+ 
+  AnnouncementService basic test
+    √ should pass (5 ms)
+
+--------------------------------|---------|----------|---------|---------|-------------------
+File                            | % Stmts | % Branch | % Funcs | % Lines | Uncovered Line #s 
+--------------------------------|---------|----------|---------|---------|-------------------
+All files                       |       0 |        0 |       0 |       0 |                   
+ src                            |       0 |        0 |       0 |       0 |                   
+  app.module.ts                 |       0 |        0 |     100 |       0 | 1-33              
+  main.ts                       |       0 |        0 |       0 |       0 | 1-47              
+ src/announcements              |       0 |        0 |       0 |       0 |                   
+  announcements.controller.ts   |       0 |      100 |       0 |       0 | 1-84              
+  announcements.module.ts       |       0 |      100 |     100 |       0 | 1-15              
+  announcements.service.ts      |       0 |        0 |       0 |       0 | 1-174             
+ src/announcements/dto          |       0 |      100 |       0 |       0 |                   
+  create-announcement.dto.ts    |       0 |      100 |     100 |       0 | 1-53              
+  filter-announcements.dto.ts   |       0 |      100 |       0 |       0 | 1-51              
+  update-announcement.dto.ts    |       0 |      100 |     100 |       0 | 1-40              
+ src/announcements/entities     |       0 |      100 |     100 |       0 |                   
+  announcement.entity.ts        |       0 |      100 |     100 |       0 | 1-57              
+ src/announcements/enums        |       0 |        0 |       0 |       0 |                   
+  announcement-category.enum.ts |       0 |        0 |       0 |       0 | 1-6               
+  announcement-priority.enum.ts |       0 |        0 |       0 |       0 | 1-5               
+  announcement-status.enum.ts   |       0 |        0 |       0 |       0 | 1-4               
+ src/health                     |       0 |      100 |       0 |       0 |                   
+  health.controller.ts          |       0 |      100 |       0 |       0 | 1-7               
+  health.module.ts              |       0 |      100 |     100 |       0 | 1-8               
+ src/kafka                      |       0 |        0 |       0 |       0 |                   
+  kafka-producer.service.ts     |       0 |        0 |       0 |       0 | 1-41              
+  kafka.module.ts               |       0 |      100 |     100 |       0 | 1-9               
+ src/metrics                    |       0 |      100 |       0 |       0 |                   
+  metrics.controller.ts         |       0 |      100 |       0 |       0 | 1-12              
+  metrics.module.ts             |       0 |      100 |     100 |       0 | 1-12              
+  metrics.service.ts            |       0 |      100 |       0 |       0 | 1-16              
+--------------------------------|---------|----------|---------|---------|-------------------
+Test Suites: 1 passed, 1 total
+Tests:       1 passed, 1 total
+Snapshots:   0 total
+Time:        61.393 s
+Ran all test suites.
+
+
+CÃ³digo de salida: 0
+
+
+============================================================
+AplicaciÃ³n: api-gateway
+Comando: pnpm exec jest --coverage --coverageDirectory="C:\Users\Usuario\Desktop\smart-campus-module-3\qa\coverage\reports\api-gateway" --coverageReporters=text --coverageReporters=html --coverageReporters=json-summary
+============================================================
+
+pnpm.cmd : PASS src/app.controller.spec.ts (8.711 s)
+En C:\Users\Usuario\Documents\Codex\2026-07-08\hol\run_coverage_phase.ps1: 38 Carácter: 15
++ ...   $output = & pnpm exec jest --coverage --coverageDirectory="$coverag ...
++                 ~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
+    + CategoryInfo          : NotSpecified: (PASS src/app.co...ec.ts (8.711 s):String) [], RemoteException
+    + FullyQualifiedErrorId : NativeCommandError
+ 
+PASS src/health/health.controller.spec.ts (9.029 s)
+PASS src/proxy/proxy.service.spec.ts (9.057 s)
+PASS src/metrics/metrics.controller.spec.ts (9.281 s)
+PASS src/proxy/proxy.controller.spec.ts (9.934 s)
+A worker process has failed to exit gracefully and has been force exited. This is likely caused by tests leaking due 
+to improper teardown. Try running with --detectOpenHandles to find leaks. Active timers can also cause this, ensure 
+that .unref() was called on them.
+------------------------|---------|----------|---------|---------|-----------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------
+File                    | % Stmts | % Branch | % Funcs | % Lines | Uncovered Line #s                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                             
+------------------------|---------|----------|---------|---------|-----------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------
+All files               |   34.46 |        0 |    6.25 |   33.44 |                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                               
+ src                    |    32.5 |        0 |      75 |   26.47 |                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                               
+  app.controller.ts     |     100 |      100 |     100 |     100 |                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                               
+  app.module.ts         |       0 |      100 |     100 |       0 | 1-14                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                          
+  app.service.ts        |     100 |      100 |     100 |     100 |                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                               
+  main.ts               |       0 |        0 |       0 |       0 | 1-47                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                          
+ src/health             |      50 |        0 |       0 |      50 |                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                               
+  health.controller.ts  |   85.71 |        0 |       0 |      80 | 9                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                             
+  health.module.ts      |       0 |      100 |     100 |       0 | 1-7                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                           
+ src/metrics            |   57.14 |      100 |       0 |      60 |                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                               
+  metrics.controller.ts |   88.88 |      100 |       0 |   85.71 | 13                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                            
+  metrics.module.ts     |       0 |      100 |     100 |       0 | 1-7                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                           
+ src/proxy              |   32.81 |        0 |     2.7 |   32.79 |                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                               
+  proxy.controller.ts   |   32.63 |        0 |    1.38 |    32.9 | 24-26,40-42,57-59,73-75,89-91,106-108,124-126,140-142,156-158,170-172,186-188,203-205,220-222,232-234,245-247,261-263,276-278,292-294,304-306,319-321,335-337,351-353,363-365,374-376,389-391,405-407,421-423,437-439,452-455,468-470,481-483,496-498,512-515,528-530,543-545,561-568,578-580,593-595,608-610,623-625,638-640,654-656,670-672,685-687,701-703,716-718,734-741,751-753,766-768,782-784,797-799,812-814,827-829,843-845,859-861,874-876,890-892,906-908,922-924,938-940,954-956,970-972,986-989,1002-1004,1017-1019,1032-1034,1048-1050,1065-1067,1082-1084,1098-1100,1114-1116 
+  proxy.module.ts       |       0 |      100 |     100 |       0 | 1-12                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                          
+  proxy.service.ts      |   53.84 |        0 |      50 |   45.45 | 15-36                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                         
+------------------------|---------|----------|---------|---------|-----------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------
+
+Test Suites: 5 passed, 5 total
+Tests:       5 passed, 5 total
+Snapshots:   0 total
+Time:        24.323 s
+Ran all test suites.
+
+pnpm.cmd : PASS src/app.controller.spec.ts (20.463 s)
+En C:\Users\Usuario\Documents\Codex\2026-07-08\hol\run_coverage_phase.ps1: 38 Carácter: 15
++ ...   $output = & pnpm exec jest --coverage --coverageDirectory="$coverag ...
++                 ~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
+    + CategoryInfo          : NotSpecified: (PASS src/app.co...c.ts (20.463 s):String) [], RemoteException
+    + FullyQualifiedErrorId : NativeCommandError
+ 
+PASS src/metrics/metrics.controller.spec.ts (21.494 s)
+PASS src/health/health.controller.spec.ts (22.001 s)
+PASS src/roles/roles.service.spec.ts (22.664 s)
+PASS src/audit/audit.service.spec.ts (22.857 s)
+PASS src/users/users.service.spec.ts (23.433 s)
+PASS src/users/users.controller.spec.ts (24.184 s)
+PASS src/auth/auth.service.spec.ts (25.573 s)
+PASS src/auth/auth.controller.spec.ts (26.006 s)
+A worker process has failed to exit gracefully and has been force exited. This is likely caused by tests leaking due 
+to improper teardown. Try running with --detectOpenHandles to find leaks. Active timers can also cause this, ensure 
+that .unref() was called on them.
+--------------------------------|---------|----------|---------|---------|----------------------
+File                            | % Stmts | % Branch | % Funcs | % Lines | Uncovered Line #s    
+--------------------------------|---------|----------|---------|---------|----------------------
+All files                       |   49.73 |     4.34 |      24 |   47.07 |                      
+ src                            |   26.53 |        0 |      75 |   20.93 |                      
+  app.controller.ts             |     100 |      100 |     100 |     100 |                      
+  app.module.ts                 |       0 |        0 |     100 |       0 | 1-46                 
+  app.service.ts                |     100 |      100 |     100 |     100 |                      
+  main.ts                       |       0 |        0 |       0 |       0 | 1-47                 
+ src/audit                      |   47.05 |      100 |      50 |   46.15 |                      
+  audit.module.ts               |       0 |      100 |     100 |       0 | 1-12                 
+  audit.service.ts              |      80 |      100 |      50 |      75 | 20-21                
+ src/audit/entities             |     100 |      100 |     100 |     100 |                      
+  audit-log.entity.ts           |     100 |      100 |     100 |     100 |                      
+ src/auth                       |   43.58 |        0 |    12.5 |   41.66 |                      
+  auth.controller.ts            |      75 |      100 |    12.5 |   73.07 | 33,39,47,56,67,77,85 
+  auth.module.ts                |       0 |        0 |     100 |       0 | 1-31                 
+  auth.service.ts               |   34.21 |        0 |    12.5 |   30.55 | 25-129               
+ src/auth/decorators            |   77.77 |      100 |      50 |   71.42 |                      
+  current-user.decorator.ts     |      50 |      100 |       0 |      50 | 5-6                  
+  roles.decorator.ts            |     100 |      100 |     100 |     100 |                      
+ src/auth/dto                   |     100 |      100 |     100 |     100 |                      
+  login.dto.ts                  |     100 |      100 |     100 |     100 |                      
+  register.dto.ts               |     100 |      100 |     100 |     100 |                      
+ src/auth/enums                 |     100 |      100 |     100 |     100 |                      
+  role.enum.ts                  |     100 |      100 |     100 |     100 |                      
+ src/auth/guards                |   57.14 |        0 |   33.33 |      50 |                      
+  jwt-auth.guard.ts             |     100 |      100 |     100 |     100 |                      
+  roles.guard.ts                |   43.75 |        0 |   33.33 |   38.46 | 16-32                
+ src/auth/strategies            |       0 |        0 |       0 |       0 |                      
+  jwt.strategy.ts               |       0 |        0 |       0 |       0 | 1-34                 
+ src/health                     |      50 |        0 |       0 |      50 |                      
+  health.controller.ts          |   85.71 |        0 |       0 |      80 | 9                    
+  health.module.ts              |       0 |      100 |     100 |       0 | 1-7                  
+ src/metrics                    |   57.14 |      100 |       0 |      60 |                      
+  metrics.controller.ts         |   88.88 |      100 |       0 |   85.71 | 13                   
+  metrics.module.ts             |       0 |      100 |     100 |       0 | 1-7                  
+ src/rabbitmq                   |   22.72 |        0 |       0 |   16.66 |                      
+  rabbitmq-publisher.service.ts |   29.41 |        0 |       0 |      20 | 6-37                 
+  rabbitmq.module.ts            |       0 |      100 |     100 |       0 | 1-8                  
+ src/roles                      |   39.28 |        0 |      25 |    37.5 |                      
+  roles.module.ts               |       0 |      100 |     100 |       0 | 1-13                 
+  roles.service.ts              |      55 |        0 |      25 |      50 | 20-53                
+ src/roles/entities             |   93.75 |      100 |       0 |   91.66 |                      
+  permission.entity.ts          |     100 |      100 |     100 |     100 |                      
+  role.entity.ts                |   88.88 |      100 |       0 |   85.71 | 18                   
+ src/users                      |   46.29 |        0 |      20 |   43.75 |                      
+  users.controller.ts           |    87.5 |      100 |   33.33 |   85.71 | 30,40                
+  users.module.ts               |       0 |      100 |     100 |       0 | 1-16                 
+  users.service.ts              |   37.93 |        0 |   14.28 |   33.33 | 23-79                
+ src/users/dto                  |     100 |      100 |     100 |     100 |                      
+  update-user-roles.dto.ts      |     100 |      100 |     100 |     100 |                      
+ src/users/entities             |   93.33 |      100 |       0 |    92.3 |                      
+  user.entity.ts                |   93.33 |      100 |       0 |    92.3 | 32                   
+--------------------------------|---------|----------|---------|---------|----------------------
+
+Test Suites: 9 passed, 9 total
+Tests:       9 passed, 9 total
+Snapshots:   0 total
+Time:        53.71 s
+Ran all test suites.
+
+
+============================================================
+AplicaciÃ³n: campus-incident-service
+Comando: pnpm exec jest --coverage --coverageDirectory="C:\Users\Usuario\Desktop\smart-campus-module-3\qa\coverage\reports\campus-incident-service" --coverageReporters=text --coverageReporters=html --coverageReporters=json-summary
+============================================================
+
+pnpm.cmd : PASS src/app.controller.spec.ts (9.21 s)
+En C:\Users\Usuario\Documents\Codex\2026-07-08\hol\run_coverage_phase.ps1: 38 Carácter: 15
++ ...   $output = & pnpm exec jest --coverage --coverageDirectory="$coverag ...
++                 ~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
+    + CategoryInfo          : NotSpecified: (PASS src/app.controller.spec.ts (9.21 s):String) [], RemoteException
+    + FullyQualifiedErrorId : NativeCommandError
+ 
+PASS src/health/health.controller.spec.ts (9.591 s)
+PASS src/metrics/metrics.controller.spec.ts (9.763 s)
+PASS src/incidents/incidents.service.spec.ts (10.18 s)
+--------------------------------|---------|----------|---------|---------|-------------------
+File                            | % Stmts | % Branch | % Funcs | % Lines | Uncovered Line #s 
+--------------------------------|---------|----------|---------|---------|-------------------
+All files                       |   34.14 |        0 |   26.31 |   30.43 |                   
+ src                            |    31.7 |        0 |      75 |   25.71 |                   
+  app.controller.ts             |     100 |      100 |     100 |     100 |                   
+  app.module.ts                 |       0 |        0 |     100 |       0 | 1-32              
+  app.service.ts                |     100 |      100 |     100 |     100 |                   
+  main.ts                       |       0 |        0 |       0 |       0 | 1-48              
+ src/health                     |      50 |        0 |       0 |      50 |                   
+  health.controller.ts          |   85.71 |        0 |       0 |      80 | 9                 
+  health.module.ts              |       0 |      100 |     100 |       0 | 1-7               
+ src/incidents                  |   25.92 |        0 |   16.66 |      25 |                   
+  incidents.controller.ts       |       0 |      100 |       0 |       0 | 1-44              
+  incidents.module.ts           |       0 |      100 |     100 |       0 | 1-16              
+  incidents.service.ts          |   51.85 |        0 |   33.33 |      48 | 37-77             
+ src/incidents/dto              |       0 |      100 |     100 |       0 |                   
+  create-incident.dto.ts        |       0 |      100 |     100 |       0 | 1-24              
+  update-incident.dto.ts        |       0 |      100 |     100 |       0 | 1-13              
+ src/incidents/entities         |     100 |      100 |     100 |     100 |                   
+  incident.entity.ts            |     100 |      100 |     100 |     100 |                   
+ src/metrics                    |   57.14 |      100 |       0 |      60 |                   
+  metrics.controller.ts         |   88.88 |      100 |       0 |   85.71 | 13                
+  metrics.module.ts             |       0 |      100 |     100 |       0 | 1-7               
+ src/rabbitmq                   |   22.72 |        0 |       0 |   16.66 |                   
+  rabbitmq-publisher.service.ts |   29.41 |        0 |       0 |      20 | 6-37              
+  rabbitmq.module.ts            |       0 |      100 |     100 |       0 | 1-8               
+--------------------------------|---------|----------|---------|---------|-------------------
+
+Test Suites: 4 passed, 4 total
+Tests:       4 passed, 4 total
+Snapshots:   0 total
+Time:        30.441 s
+Ran all test suites.
+
+
+============================================================
+AplicaciÃ³n: library-service
+Comando: pnpm exec jest --coverage --coverageDirectory="C:\Users\Usuario\Desktop\smart-campus-module-3\qa\coverage\reports\library-service" --coverageReporters=text --coverageReporters=html --coverageReporters=json-summary
+============================================================
+
+pnpm.cmd : PASS src/app.controller.spec.ts (23.229 s)
+En C:\Users\Usuario\Documents\Codex\2026-07-08\hol\run_coverage_phase.ps1: 38 Carácter: 15
++ ...   $output = & pnpm exec jest --coverage --coverageDirectory="$coverag ...
++                 ~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
+    + CategoryInfo          : NotSpecified: (PASS src/app.co...c.ts (23.229 s):String) [], RemoteException
+    + FullyQualifiedErrorId : NativeCommandError
+ 
+PASS src/categories/categories.service.spec.ts (23.74 s)
+PASS src/metrics/metrics.controller.spec.ts (23.773 s)
+PASS src/loans/loans.service.spec.ts (23.575 s)
+PASS src/health/health.controller.spec.ts (23.488 s)
+PASS src/books/books.service.spec.ts (24.134 s)
+PASS src/books/books.controller.spec.ts (24.914 s)
+PASS src/authors/authors.controller.spec.ts (25.457 s)
+PASS src/authors/authors.service.spec.ts (25.641 s)
+PASS src/categories/categories.controller.spec.ts (25.825 s)
+PASS src/loans/loans.controller.spec.ts (26.878 s)
+A worker process has failed to exit gracefully and has been force exited. This is likely caused by tests leaking due 
+to improper teardown. Try running with --detectOpenHandles to find leaks. Active timers can also cause this, ensure 
+that .unref() was called on them.
+--------------------------------|---------|----------|---------|---------|-------------------
+File                            | % Stmts | % Branch | % Funcs | % Lines | Uncovered Line #s 
+--------------------------------|---------|----------|---------|---------|-------------------
+All files                       |   51.46 |        0 |   23.25 |   48.63 |                   
+ src                            |   27.65 |        0 |      75 |   21.95 |                   
+  app.controller.ts             |     100 |      100 |     100 |     100 |                   
+  app.module.ts                 |       0 |        0 |     100 |       0 | 1-47              
+  app.service.ts                |     100 |      100 |     100 |     100 |                   
+  main.ts                       |       0 |        0 |       0 |       0 | 1-47              
+ src/authors                    |   54.83 |      100 |   16.66 |      52 |                   
+  authors.controller.ts         |   83.33 |      100 |   33.33 |      80 | 31,39             
+  authors.module.ts             |       0 |      100 |     100 |       0 | 1-15              
+  authors.service.ts            |   63.63 |      100 |       0 |   55.55 | 13-22             
+ src/authors/dto                |     100 |      100 |     100 |     100 |                   
+  create-author.dto.ts          |     100 |      100 |     100 |     100 |                   
+ src/authors/entities           |     100 |      100 |     100 |     100 |                   
+  author.entity.ts              |     100 |      100 |     100 |     100 |                   
+ src/books                      |   36.66 |        0 |   18.18 |   33.33 |                   
+  books.controller.ts           |   83.33 |      100 |   33.33 |      80 | 22,27             
+  books.module.ts               |       0 |      100 |     100 |       0 | 1-22              
+  books.service.ts              |   31.57 |        0 |    12.5 |   27.77 | 28-108            
+ src/books/dto                  |     100 |      100 |     100 |     100 |                   
+  create-book.dto.ts            |     100 |      100 |     100 |     100 |                   
+ src/books/entities             |    87.5 |      100 |       0 |   85.71 |                   
+  book.entity.ts                |    87.5 |      100 |       0 |   85.71 | 29,34             
+ src/categories                 |   56.25 |      100 |   28.57 |   53.84 |                   
+  categories.controller.ts      |   83.33 |      100 |   33.33 |      80 | 22,27             
+  categories.module.ts          |       0 |      100 |     100 |       0 | 1-15              
+  categories.service.ts         |   66.66 |      100 |      25 |      60 | 16-25             
+ src/categories/dto             |     100 |      100 |     100 |     100 |                   
+  create-category.dto.ts        |     100 |      100 |     100 |     100 |                   
+ src/categories/entities        |     100 |      100 |     100 |     100 |                   
+  category.entity.ts            |     100 |      100 |     100 |     100 |                   
+ src/health                     |      50 |        0 |       0 |      50 |                   
+  health.controller.ts          |   85.71 |        0 |       0 |      80 | 9                 
+  health.module.ts              |       0 |      100 |     100 |       0 | 1-7               
+ src/loans                      |   40.67 |        0 |      20 |   37.73 |                   
+  loans.controller.ts           |      75 |      100 |      20 |   71.42 | 26,32,38,44       
+  loans.module.ts               |       0 |      100 |     100 |       0 | 1-22              
+  loans.service.ts              |   36.36 |        0 |      20 |   32.25 | 28-103            
+ src/loans/dto                  |     100 |      100 |     100 |     100 |                   
+  create-loan.dto.ts            |     100 |      100 |     100 |     100 |                   
+ src/loans/entities             |     100 |      100 |     100 |     100 |                   
+  loan.entity.ts                |     100 |      100 |     100 |     100 |                   
+ src/metrics                    |   57.14 |      100 |       0 |      60 |                   
+  metrics.controller.ts         |   88.88 |      100 |       0 |   85.71 | 13                
+  metrics.module.ts             |       0 |      100 |     100 |       0 | 1-7               
+ src/rabbitmq                   |   22.72 |        0 |       0 |   16.66 |                   
+  rabbitmq-publisher.service.ts |   29.41 |        0 |       0 |      20 | 6-37              
+  rabbitmq.module.ts            |       0 |      100 |     100 |       0 | 1-8               
+--------------------------------|---------|----------|---------|---------|-------------------
+
+Test Suites: 11 passed, 11 total
+Tests:       11 passed, 11 total
+Snapshots:   0 total
+Time:        48.921 s
+Ran all test suites.
+
+pnpm.cmd : PASS src/health/health.controller.spec.ts (7.002 s)
+En C:\Users\Usuario\Documents\Codex\2026-07-08\hol\run_coverage_phase.ps1: 38 Carácter: 15
++ ...   $output = & pnpm exec jest --coverage --coverageDirectory="$coverag ...
++                 ~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
+    + CategoryInfo          : NotSpecified: (PASS src/health...ec.ts (7.002 s):String) [], RemoteException
+    + FullyQualifiedErrorId : NativeCommandError
+ 
+PASS src/notifications/notifications.service.spec.ts (8.697 s)
+PASS src/metrics/metrics.controller.spec.ts (9.057 s)
+------------------------------------|---------|----------|---------|---------|--------------------
+File                                | % Stmts | % Branch | % Funcs | % Lines | Uncovered Line #s  
+------------------------------------|---------|----------|---------|---------|--------------------
+All files                           |   21.49 |     1.58 |   13.72 |   20.28 |                    
+ src                                |       0 |        0 |       0 |       0 |                    
+  app.module.ts                     |       0 |        0 |       0 |       0 | 1-51               
+  main.ts                           |       0 |        0 |       0 |       0 | 1-45               
+ src/cache                          |   31.25 |        0 |       0 |      25 |                    
+  redis.module.ts                   |       0 |      100 |     100 |       0 | 1-8                
+  redis.service.ts                  |   45.45 |        0 |       0 |   33.33 | 9-32               
+ src/health                         |   54.54 |      100 |     100 |   57.14 |                    
+  health.controller.ts              |     100 |      100 |     100 |     100 |                    
+  health.module.ts                  |       0 |      100 |     100 |       0 | 1-7                
+ src/kafka                          |       0 |        0 |       0 |       0 |                    
+  kafka-consumer.service.ts         |       0 |        0 |       0 |       0 | 1-96               
+  kafka.module.ts                   |       0 |      100 |     100 |       0 | 1-12               
+ src/metrics                        |      56 |      100 |      50 |   52.63 |                    
+  metrics.controller.ts             |     100 |      100 |     100 |     100 |                    
+  metrics.module.ts                 |       0 |      100 |     100 |       0 | 1-11               
+  metrics.service.ts                |      60 |      100 |       0 |      50 | 7-16               
+ src/notifications                  |   32.25 |       25 |   23.52 |   32.14 |                    
+  notifications.controller.ts       |       0 |      100 |       0 |       0 | 1-36               
+  notifications.module.ts           |       0 |      100 |     100 |       0 | 1-24               
+  notifications.service.ts          |    60.6 |       25 |      40 |   58.06 | 16-32,44-60,82-103 
+ src/notifications/entities         |      60 |      100 |     100 |    61.9 |                    
+  notification-preference.entity.ts |       0 |      100 |     100 |       0 | 1-27               
+  notification.entity.ts            |     100 |      100 |     100 |     100 |                    
+ src/rabbitmq                       |       0 |        0 |       0 |       0 |                    
+  rabbitmq.module.ts                |       0 |      100 |     100 |       0 | 1-16               
+  rabbitmq.service.ts               |       0 |        0 |       0 |       0 | 1-275              
+ src/websocket                      |   18.36 |        0 |       0 |   17.39 |                    
+  notifications.gateway.ts          |   20.45 |        0 |       0 |    18.6 | 28-92,103-130      
+  websocket.module.ts               |       0 |      100 |     100 |       0 | 1-8                
+------------------------------------|---------|----------|---------|---------|--------------------
+
+Test Suites: 3 passed, 3 total
+Tests:       6 passed, 6 total
+Snapshots:   0 total
+Time:        35.219 s
+Ran all test suites.
+
+
+============================================================
+AplicaciÃ³n: qr-access-service
+Comando: pnpm exec jest --coverage --coverageDirectory="C:\Users\Usuario\Desktop\smart-campus-module-3\qa\coverage\reports\qr-access-service" --coverageReporters=text --coverageReporters=html --coverageReporters=json-summary
+============================================================
+
+pnpm.cmd : PASS src/app.service.spec.ts (8.328 s)
+En C:\Users\Usuario\Documents\Codex\2026-07-08\hol\run_coverage_phase.ps1: 38 Carácter: 15
++ ...   $output = & pnpm exec jest --coverage --coverageDirectory="$coverag ...
++                 ~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
+    + CategoryInfo          : NotSpecified: (PASS src/app.service.spec.ts (8.328 s):String) [], RemoteException
+    + FullyQualifiedErrorId : NativeCommandError
+ 
+PASS src/qr-access/application/use-cases/qr-access.service.spec.ts (9.061 s)
+PASS src/qr-access/interfaces/http/qr-access.controller.spec.ts (9.567 s)
+-------------------------------------------|---------|----------|---------|---------|--------------------------------------------
+File                                       | % Stmts | % Branch | % Funcs | % Lines | Uncovered Line #s                          
+-------------------------------------------|---------|----------|---------|---------|--------------------------------------------
+All files                                  |   19.64 |    25.22 |   13.92 |   19.68 |                                            
+ src                                       |   11.36 |        0 |   33.33 |    7.89 |                                            
+  app.controller.ts                        |       0 |        0 |       0 |       0 | 1-9                                        
+  app.module.ts                            |       0 |        0 |     100 |       0 | 1-30                                       
+  app.service.ts                           |     100 |      100 |     100 |     100 |                                            
+  main.ts                                  |       0 |        0 |       0 |       0 | 1-51                                       
+ src/common/cache                          |   16.12 |        0 |       0 |   13.04 |                                            
+  redis-cache.service.ts                   |   16.12 |        0 |       0 |   13.04 | 9-56                                       
+ src/common/health                         |       0 |        0 |       0 |       0 |                                            
+  health.controller.ts                     |       0 |        0 |       0 |       0 | 1-20                                       
+  health.module.ts                         |       0 |      100 |     100 |       0 | 1-9                                        
+ src/common/logging                        |      25 |        0 |       0 |   16.66 |                                            
+  logging.module.ts                        |       0 |      100 |     100 |       0 | 1-8                                        
+  structured-logger.service.ts             |   36.36 |        0 |       0 |   22.22 | 6-34                                       
+ src/common/metrics                        |       0 |      100 |       0 |       0 |                                            
+  metrics.controller.ts                    |       0 |      100 |       0 |       0 | 1-13                                       
+  metrics.module.ts                        |       0 |      100 |     100 |       0 | 1-7                                        
+ src/common/outbox                         |       0 |        0 |       0 |       0 |                                            
+  index.ts                                 |       0 |      100 |     100 |       0 | 1-10                                       
+  noop-outbox-message.publisher.ts         |       0 |      100 |       0 |       0 | 1-11                                       
+  outbox-health.service.ts                 |       0 |        0 |       0 |       0 | 1-27                                       
+  outbox-metrics.service.ts                |       0 |      100 |       0 |       0 | 1-27                                       
+  outbox.module.ts                         |       0 |      100 |     100 |       0 | 1-36                                       
+  outbox.publisher.ts                      |       0 |        0 |       0 |       0 | 1-80                                       
+  outbox.repository.ts                     |       0 |        0 |       0 |       0 | 1-91                                       
+  outbox.service.ts                        |       0 |      100 |       0 |       0 | 1-33                                       
+ src/common/outbox/entities                |       0 |      100 |     100 |       0 |                                            
+  outbox-event.entity.ts                   |       0 |      100 |     100 |       0 | 1-54                                       
+ src/common/outbox/enums                   |       0 |        0 |       0 |       0 |                                            
+  outbox-status.enum.ts                    |       0 |        0 |       0 |       0 | 1-5                                        
+ src/common/outbox/interfaces              |       0 |      100 |     100 |       0 |                                            
+  outbox-message-publisher.interface.ts    |       0 |      100 |     100 |       0 | 3                                          
+ src/qr-access                             |       0 |      100 |     100 |       0 |                                            
+  qr-access.module.ts                      |       0 |      100 |     100 |       0 | 1-25                                       
+ src/qr-access/application/dto             |     100 |      100 |     100 |     100 |                                            
+  create-qr-access.dto.ts                  |     100 |      100 |     100 |     100 |                                            
+  validate-qr-access.dto.ts                |     100 |      100 |     100 |     100 |                                            
+ src/qr-access/application/ports           |     100 |      100 |     100 |     100 |                                            
+  qr-access-repository.port.ts             |     100 |      100 |     100 |     100 |                                            
+ src/qr-access/application/use-cases       |    67.6 |    63.41 |   63.63 |   67.64 |                                            
+  qr-access.service.ts                     |    67.6 |    63.41 |   63.63 |   67.64 | 67-108,115,122-131,182-183,192-193,211-213 
+ src/qr-access/domain                      |   20.83 |      100 |   33.33 |   20.83 |                                            
+  qr-access-code.model.ts                  |       0 |      100 |       0 |       0 | 1-11                                       
+  qr-access-log.model.ts                   |       0 |      100 |       0 |       0 | 1-10                                       
+  qr-access-status.enum.ts                 |     100 |      100 |     100 |     100 |                                            
+ src/qr-access/infrastructure/entities     |       0 |      100 |       0 |       0 |                                            
+  qr-access-code.entity.ts                 |       0 |      100 |       0 |       0 | 1-39                                       
+  qr-access-log.entity.ts                  |       0 |      100 |       0 |       0 | 1-36                                       
+ src/qr-access/infrastructure/repositories |       0 |        0 |       0 |       0 |                                            
+  typeorm-qr-access.repository.ts          |       0 |        0 |       0 |       0 | 1-67                                       
+ src/qr-access/interfaces/http             |   78.94 |      100 |   33.33 |   76.47 |                                            
+  qr-access.controller.ts                  |   78.94 |      100 |   33.33 |   76.47 | 22,28,35,41                                
+ src/rabbitmq                              |   17.85 |        0 |       0 |    12.5 |                                            
+  rabbitmq-publisher.module.ts             |       0 |      100 |     100 |       0 | 1-8                                        
+  rabbitmq-publisher.service.ts            |   21.73 |        0 |       0 |   14.28 | 6-55                                       
+-------------------------------------------|---------|----------|---------|---------|--------------------------------------------
+
+Test Suites: 3 passed, 3 total
+Tests:       5 passed, 5 total
+Snapshots:   0 total
+Time:        36.56 s
+Ran all test suites.
+
+
+============================================================
+AplicaciÃ³n: space-availability-service
+Comando: pnpm exec jest --coverage --coverageDirectory="C:\Users\Usuario\Desktop\smart-campus-module-3\qa\coverage\reports\space-availability-service" --coverageReporters=text --coverageReporters=html --coverageReporters=json-summary
+============================================================
+
+pnpm.cmd : PASS src/app.service.spec.ts (8.221 s)
+En C:\Users\Usuario\Documents\Codex\2026-07-08\hol\run_coverage_phase.ps1: 38 Carácter: 15
++ ...   $output = & pnpm exec jest --coverage --coverageDirectory="$coverag ...
++                 ~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
+    + CategoryInfo          : NotSpecified: (PASS src/app.service.spec.ts (8.221 s):String) [], RemoteException
+    + FullyQualifiedErrorId : NativeCommandError
+ 
+PASS src/space/application/use-cases/space.service.spec.ts (9.087 s)
+PASS src/space/interfaces/http/space.controller.spec.ts (10.314 s)
+A worker process has failed to exit gracefully and has been force exited. This is likely caused by tests leaking due 
+to improper teardown. Try running with --detectOpenHandles to find leaks. Active timers can also cause this, ensure 
+that .unref() was called on them.
+---------------------------------------|---------|----------|---------|---------|---------------------------------------
+File                                   | % Stmts | % Branch | % Funcs | % Lines | Uncovered Line #s                     
+---------------------------------------|---------|----------|---------|---------|---------------------------------------
+All files                              |   30.61 |    15.87 |   16.92 |   31.67 |                                       
+ src                                   |   10.86 |        0 |      25 |     7.5 |                                       
+  app.controller.ts                    |       0 |      100 |       0 |       0 | 1-14                                  
+  app.module.ts                        |       0 |      100 |     100 |       0 | 1-29                                  
+  app.service.ts                       |     100 |      100 |     100 |     100 |                                       
+  main.ts                              |       0 |        0 |       0 |       0 | 1-51                                  
+ src/common/cache                      |   16.12 |        0 |       0 |   13.04 |                                       
+  redis-cache.service.ts               |   16.12 |        0 |       0 |   13.04 | 9-56                                  
+ src/common/health                     |       0 |        0 |       0 |       0 |                                       
+  health.controller.ts                 |       0 |        0 |       0 |       0 | 1-20                                  
+  health.module.ts                     |       0 |      100 |     100 |       0 | 1-9                                   
+ src/common/logging                    |      25 |        0 |       0 |   16.66 |                                       
+  logging.module.ts                    |       0 |      100 |     100 |       0 | 1-8                                   
+  structured-logger.service.ts         |   36.36 |        0 |       0 |   22.22 | 6-34                                  
+ src/common/metrics                    |       0 |      100 |       0 |       0 |                                       
+  metrics.controller.ts                |       0 |      100 |       0 |       0 | 1-13                                  
+  metrics.module.ts                    |       0 |      100 |     100 |       0 | 1-7                                   
+ src/rabbitmq                          |   17.85 |        0 |       0 |    12.5 |                                       
+  rabbitmq-publisher.module.ts         |       0 |      100 |     100 |       0 | 1-8                                   
+  rabbitmq-publisher.service.ts        |   21.73 |        0 |       0 |   14.28 | 6-56                                  
+ src/space                             |       0 |      100 |     100 |       0 |                                       
+  space.module.ts                      |       0 |      100 |     100 |       0 | 1-26                                  
+ src/space/application/dto             |     100 |      100 |     100 |     100 |                                       
+  create-space-reservation.dto.ts      |     100 |      100 |     100 |     100 |                                       
+  create-space.dto.ts                  |     100 |      100 |     100 |     100 |                                       
+  update-space-availability.dto.ts     |     100 |      100 |     100 |     100 |                                       
+  update-space.dto.ts                  |     100 |      100 |     100 |     100 |                                       
+ src/space/application/ports           |     100 |      100 |     100 |     100 |                                       
+  space-repository.port.ts             |     100 |      100 |     100 |     100 |                                       
+ src/space/application/use-cases       |   40.27 |    23.52 |   35.71 |   43.54 |                                       
+  space.service.ts                     |   40.27 |    23.52 |   35.71 |   43.54 | 56-62,78-170,202-222                  
+ src/space/domain                      |   43.24 |    54.54 |      50 |   45.71 |                                       
+  space-status.enum.ts                 |     100 |      100 |     100 |     100 |                                       
+  space.model.ts                       |       0 |        0 |       0 |       0 | 1-35                                  
+ src/space/infrastructure/entities     |       0 |      100 |     100 |       0 |                                       
+  space.entity.ts                      |       0 |      100 |     100 |       0 | 1-53                                  
+ src/space/infrastructure/repositories |       0 |        0 |       0 |       0 |                                       
+  typeorm-space.repository.ts          |       0 |        0 |       0 |       0 | 1-83                                  
+ src/space/interfaces/http             |   68.42 |      100 |   14.28 |   66.66 |                                       
+  space.controller.ts                  |   68.42 |      100 |   14.28 |   66.66 | 31,37,56,62,69,75,81,87,93,99,108,114 
+---------------------------------------|---------|----------|---------|---------|---------------------------------------
+
+Test Suites: 3 passed, 3 total
+Tests:       4 passed, 4 total
+Snapshots:   0 total
+Time:        35.219 s
+Ran all test suites.
+
+
+============================================================
+AplicaciÃ³n: transport-service
+Comando: pnpm exec jest --coverage --coverageDirectory="C:\Users\Usuario\Desktop\smart-campus-module-3\qa\coverage\reports\transport-service" --coverageReporters=text --coverageReporters=html --coverageReporters=json-summary
+============================================================
+
+pnpm.cmd : PASS src/app.service.spec.ts (7.759 s)
+En C:\Users\Usuario\Documents\Codex\2026-07-08\hol\run_coverage_phase.ps1: 38 Carácter: 15
++ ...   $output = & pnpm exec jest --coverage --coverageDirectory="$coverag ...
++                 ~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
+    + CategoryInfo          : NotSpecified: (PASS src/app.service.spec.ts (7.759 s):String) [], RemoteException
+    + FullyQualifiedErrorId : NativeCommandError
+ 
+PASS src/transport/application/use-cases/transport.service.spec.ts (8.14 s)
+PASS src/transport/interfaces/http/transport.controller.spec.ts (9.064 s)
+-------------------------------------------|---------|----------|---------|---------|----------------------------------
+File                                       | % Stmts | % Branch | % Funcs | % Lines | Uncovered Line #s                
+-------------------------------------------|---------|----------|---------|---------|----------------------------------
+All files                                  |   29.65 |    17.64 |   16.39 |   31.17 |                                  
+ src                                       |   10.41 |        0 |   33.33 |    7.14 |                                  
+  app.controller.ts                        |       0 |        0 |       0 |       0 | 1-9                              
+  app.module.ts                            |       0 |        0 |     100 |       0 | 1-40                             
+  app.service.ts                           |     100 |      100 |     100 |     100 |                                  
+  main.ts                                  |       0 |        0 |       0 |       0 | 1-51                             
+ src/common/cache                          |   16.12 |        0 |       0 |   13.04 |                                  
+  redis-cache.service.ts                   |   16.12 |        0 |       0 |   13.04 | 9-56                             
+ src/common/health                         |       0 |        0 |       0 |       0 |                                  
+  health.controller.ts                     |       0 |        0 |       0 |       0 | 1-20                             
+  health.module.ts                         |       0 |      100 |     100 |       0 | 1-9                              
+ src/common/logging                        |       0 |        0 |       0 |       0 |                                  
+  logging.module.ts                        |       0 |      100 |     100 |       0 | 1-8                              
+  structured-logger.service.ts             |       0 |        0 |       0 |       0 | 1-34                             
+ src/common/metrics                        |       0 |      100 |       0 |       0 |                                  
+  metrics.controller.ts                    |       0 |      100 |       0 |       0 | 1-13                             
+  metrics.module.ts                        |       0 |      100 |     100 |       0 | 1-7                              
+ src/rabbitmq                              |   17.85 |        0 |       0 |    12.5 |                                  
+  rabbitmq-publisher.module.ts             |       0 |      100 |     100 |       0 | 1-8                              
+  rabbitmq-publisher.service.ts            |   21.73 |        0 |       0 |   14.28 | 6-56                             
+ src/transport                             |       0 |      100 |     100 |       0 |                                  
+  transport.module.ts                      |       0 |      100 |     100 |       0 | 1-30                             
+ src/transport/application/dto             |   95.12 |      100 |       0 |   95.12 |                                  
+  create-transport-route.dto.ts            |     100 |      100 |     100 |     100 |                                  
+  create-transport-schedule.dto.ts         |   83.33 |      100 |       0 |   83.33 | 17,22                            
+  create-transport-stop.dto.ts             |     100 |      100 |     100 |     100 |                                  
+  create-transport-vehicle.dto.ts          |     100 |      100 |     100 |     100 |                                  
+  update-transport-route.dto.ts            |     100 |      100 |     100 |     100 |                                  
+ src/transport/application/ports           |     100 |      100 |     100 |     100 |                                  
+  transport-repository.port.ts             |     100 |      100 |     100 |     100 |                                  
+ src/transport/application/use-cases       |   40.84 |       25 |   38.46 |   42.85 |                                  
+  transport.service.ts                     |   40.84 |       25 |   38.46 |   42.85 | 42-46,56-149                     
+ src/transport/domain                      |     100 |      100 |     100 |     100 |                                  
+  transport-status.enum.ts                 |     100 |      100 |     100 |     100 |                                  
+ src/transport/infrastructure/entities     |       0 |      100 |     100 |       0 |                                  
+  transport-route.entity.ts                |       0 |      100 |     100 |       0 | 1-28                             
+  transport-schedule.entity.ts             |       0 |      100 |     100 |       0 | 1-28                             
+  transport-stop.entity.ts                 |       0 |      100 |     100 |       0 | 1-27                             
+  transport-vehicle.entity.ts              |       0 |      100 |     100 |       0 | 1-28                             
+ src/transport/infrastructure/repositories |       0 |        0 |       0 |       0 |                                  
+  typeorm-transport.repository.ts          |       0 |        0 |       0 |       0 | 1-66                             
+ src/transport/interfaces/http             |   67.64 |      100 |    8.33 |   65.62 |                                  
+  transport.controller.ts                  |   67.64 |      100 |    8.33 |   65.62 | 18,24,30,36,42,48,54,60,66,72,78 
+-------------------------------------------|---------|----------|---------|---------|----------------------------------
+
+Test Suites: 3 passed, 3 total
+Tests:       4 passed, 4 total
+Snapshots:   0 total
+Time:        36.582 s
+Ran all test suites.
+
+
+CÃ³digo de salida: 0
+
+
+============================================================
+AplicaciÃ³n: workflow-service
+Comando: pnpm exec jest --coverage --coverageDirectory="C:\Users\Usuario\Desktop\smart-campus-module-3\qa\coverage\reports\workflow-service" --coverageReporters=text --coverageReporters=html --coverageReporters=json-summary
+============================================================
+
+pnpm.cmd : PASS src/infrastructure/n8n/n8n-webhook.adapter.spec.ts (7.269 s)
+En C:\Users\Usuario\Documents\Codex\2026-07-08\hol\run_coverage_phase.ps1: 38 Carácter: 15
++ ...   $output = & pnpm exec jest --coverage --coverageDirectory="$coverag ...
++                 ~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
+    + CategoryInfo          : NotSpecified: (PASS src/infras...ec.ts (7.269 s):String) [], RemoteException
+    + FullyQualifiedErrorId : NativeCommandError
+ 
+PASS src/application/use-cases/workflow.service.spec.ts (8.231 s)
+PASS src/interfaces/http/workflow.controller.spec.ts (9.996 s)
+-------------------------------------------|---------|----------|---------|---------|-------------------
+File                                       | % Stmts | % Branch | % Funcs | % Lines | Uncovered Line #s 
+-------------------------------------------|---------|----------|---------|---------|-------------------
+All files                                  |   31.27 |     11.7 |   19.04 |   31.72 |                   
+ src                                       |       0 |        0 |       0 |       0 |                   
+  app.controller.ts                        |       0 |      100 |       0 |       0 | 1-12              
+  app.module.ts                            |       0 |        0 |     100 |       0 | 1-33              
+  app.service.ts                           |       0 |        0 |       0 |       0 | 1-6               
+  main.ts                                  |       0 |        0 |       0 |       0 | 1-45              
+  workflow.module.ts                       |       0 |      100 |     100 |       0 | 1-31              
+ src/application/dto                       |   91.66 |      100 |       0 |   95.65 |                   
+  list-workflow-executions-query.dto.ts    |   71.42 |      100 |       0 |   83.33 | 8                 
+  trigger-workflow.dto.ts                  |     100 |      100 |     100 |     100 |                   
+  workflow-event.dto.ts                    |     100 |      100 |     100 |     100 |                   
+ src/application/ports                     |      30 |      100 |       0 |   22.22 |                   
+  n8n-webhook.port.ts                      |     100 |      100 |     100 |     100 |                   
+  workflow-metrics.service.ts              |   26.31 |      100 |       0 |   17.64 | 6-57              
+ src/application/use-cases                 |   54.68 |       20 |      40 |   55.17 |                   
+  workflow.service.ts                      |   54.68 |       20 |      40 |   55.17 | 71-151,157        
+ src/common/cache                          |       0 |        0 |       0 |       0 |                   
+  redis-cache.service.ts                   |       0 |        0 |       0 |       0 | 1-56              
+ src/common/health                         |       0 |        0 |       0 |       0 |                   
+  health.controller.ts                     |       0 |        0 |       0 |       0 | 1-20              
+  health.module.ts                         |       0 |      100 |     100 |       0 | 1-9               
+ src/common/logging                        |      25 |        0 |       0 |   16.66 |                   
+  logging.module.ts                        |       0 |      100 |     100 |       0 | 1-8               
+  structured-logger.service.ts             |   36.36 |        0 |       0 |   22.22 | 6-34              
+ src/common/metrics                        |       0 |      100 |       0 |       0 |                   
+  metrics.controller.ts                    |       0 |      100 |       0 |       0 | 1-13              
+  metrics.module.ts                        |       0 |      100 |     100 |       0 | 1-7               
+ src/domain/entities                       |       0 |      100 |       0 |       0 |                   
+  workflow-execution.model.ts              |       0 |      100 |       0 |       0 | 3-17              
+ src/domain/enums                          |     100 |      100 |     100 |     100 |                   
+  workflow-name.enum.ts                    |     100 |      100 |     100 |     100 |                   
+  workflow-status.enum.ts                  |     100 |      100 |     100 |     100 |                   
+ src/domain/repositories                   |     100 |      100 |     100 |     100 |                   
+  workflow-execution.repository.ts         |     100 |      100 |     100 |     100 |                   
+ src/infrastructure/cache                  |    12.5 |        0 |       0 |      10 |                   
+  workflow-cache.service.ts                |    12.5 |        0 |       0 |      10 | 9-64              
+ src/infrastructure/database               |       0 |        0 |       0 |       0 |                   
+  typeorm-workflow-execution.repository.ts |       0 |        0 |       0 |       0 | 1-45              
+  workflow-execution.entity.ts             |       0 |      100 |     100 |       0 | 1-43              
+ src/infrastructure/n8n                    |   83.33 |       25 |     100 |   81.25 |                   
+  n8n-webhook.adapter.ts                   |   83.33 |       25 |     100 |   81.25 | 18,33,37          
+ src/interfaces/http                       |   77.77 |       50 |      25 |      76 |                   
+  workflow.controller.ts                   |   77.77 |       50 |      25 |      76 | 23,29,35,41,47,59 
+ src/security                              |   47.36 |        0 |      50 |   42.85 |                   
+  jwt-auth.guard.ts                        |      40 |        0 |      50 |   33.33 | 9-21              
+  roles.decorator.ts                       |     100 |      100 |     100 |     100 |                   
+  roles.guard.ts                           |   38.88 |        0 |   33.33 |   38.46 | 10-24             
+-------------------------------------------|---------|----------|---------|---------|-------------------
+
+Test Suites: 3 passed, 3 total
+Tests:       4 passed, 4 total
+Snapshots:   0 total
+Time:        38.546 s
+Ran all test suites.
+
+
+CÃ³digo de salida: 0
+

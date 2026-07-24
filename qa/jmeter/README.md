@@ -1,63 +1,63 @@
-# Performance Testing - Apache JMeter
+﻿# Pruebas de Rendimiento - Apache JMeter
 
-## Objective
+## Objetivo
 
-This folder contains the organization for the performance testing phase of the Smart Campus Module 3 QA work. The objective is to evaluate the behavior of the backend services under load, focusing on response time, throughput, stability, and error rate for representative HTTP requests.
+Esta carpeta contiene la organización para la fase de pruebas de rendimiento del trabajo de QA de Smart Campus Module 3. El objetivo es evaluar el comportamiento de los servicios backend bajo carga, enfocándose en tiempo de respuesta, throughput, estabilidad y tasa de errores para solicitudes HTTP representativas.
 
-## Tool
+## Herramienta
 
-The selected tool for this phase is Apache JMeter.
+La herramienta seleccionada para esta fase es Apache JMeter.
 
-Apache JMeter will be used to create load test plans, execute HTTP requests against the system, collect execution results, and generate evidence for the QA report.
+Apache JMeter se utilizará para crear planes de prueba de carga, ejecutar solicitudes HTTP contra el sistema, recopilar resultados de ejecución y generar evidencias para el informe de QA.
 
-## Evaluated System
+## Sistema evaluado
 
-System evaluated: Smart Campus Module 3.
+Sistema evaluado: Smart Campus Module 3.
 
-The performance tests focus on the backend entry point used by the web application and the microservices architecture.
+Las pruebas de rendimiento se enfocan en el punto de entrada backend utilizado por la aplicación web y la arquitectura de microservicios.
 
-## Entry Point
+## Punto de entrada
 
-The main entry point for the first performance test is:
+El punto de entrada principal para la primera prueba de rendimiento es:
 
 ```text
 http://localhost:3000
 ```
 
-This corresponds to the API Gateway, which centralizes the HTTP requests from the frontend and redirects them to the corresponding microservices.
+Esto corresponde al API Gateway, que centraliza las solicitudes HTTP desde el frontend y las redirige a los microservicios correspondientes.
 
-## Initial JMeter Test Plan
+## Plan inicial de prueba JMeter
 
-File created:
+Archivo creado:
 
 ```text
 qa/jmeter/plans/smart-campus-load-test.jmx
 ```
 
-Test plan name:
+Nombre del plan de prueba:
 
 ```text
 Smart Campus Module 3 - Prueba de Carga Inicial
 ```
 
-Thread Group configuration:
+Configuración del Thread Group:
 
-- Name: Usuarios concurrentes - Carga inicial.
-- Concurrent users: 10.
-- Ramp-up period: 30 seconds.
-- Loop count: 2.
-- Same user on each iteration: enabled.
-- Constant Timer: 500 milliseconds between requests.
+- Nombre: Usuarios concurrentes - Carga inicial.
+- Usuarios concurrentes: 10.
+- Periodo de ramp-up: 30 segundos.
+- Cantidad de iteraciones: 2.
+- Mismo usuario en cada iteración: habilitado.
+- Constant Timer: 500 milisegundos entre solicitudes.
 
-Expected total requests:
+Total esperado de solicitudes:
 
 ```text
 10 users x 2 iterations x 4 endpoints = 80 requests
 ```
 
-## Configurable Variables
+## Variables configurables
 
-The test plan uses these variables in HTTP Request Defaults:
+El plan de prueba utiliza estas variables en HTTP Request Defaults:
 
 ```text
 BASE_PROTOCOL = http
@@ -65,9 +65,9 @@ BASE_HOST = localhost
 BASE_PORT = 3000
 ```
 
-## Endpoints Selected for the First Test
+## Endpoints seleccionados para la primera prueba
 
-The first performance test uses read-oriented endpoints to avoid modifying system data during the initial execution:
+La primera prueba de rendimiento utiliza endpoints orientados a lectura para evitar modificar datos del sistema durante la ejecución inicial:
 
 ```text
 GET /health
@@ -76,16 +76,16 @@ GET /api/transport/routes
 GET /api/announcements
 ```
 
-These endpoints were selected because they represent common operations in the platform:
+Estos endpoints fueron seleccionados porque representan operaciones comunes de la plataforma:
 
-- `/health`: verifies API Gateway availability.
-- `/api/library/books`: represents library catalog queries.
-- `/api/transport/routes`: represents transport route queries.
-- `/api/announcements`: represents institutional announcement queries.
+- `/health`: verifica la disponibilidad del API Gateway.
+- `/api/library/books`: representa consultas al catálogo de biblioteca.
+- `/api/transport/routes`: representa consultas de rutas de transporte.
+- `/api/announcements`: representa consultas de anuncios institucionales.
 
 ## Assertions
 
-Each HTTP request includes a Response Assertion that accepts only successful HTTP status codes:
+Cada solicitud HTTP incluye una Response Assertion que acepta únicamente códigos de estado HTTP exitosos:
 
 ```text
 200
@@ -93,52 +93,52 @@ Each HTTP request includes a Response Assertion that accepts only successful HTT
 204
 ```
 
-The test must fail when the API returns error codes such as:
+La prueba debe fallar cuando el API devuelva códigos de error como:
 
 ```text
 400, 401, 403, 404, 500, 502, 503
 ```
 
-## Local Listeners
+## Listeners locales
 
-The test plan includes only useful local listeners:
+El plan de prueba incluye únicamente listeners útiles para ejecución local:
 
 - Summary Report.
 - Aggregate Report.
 - View Results Tree.
 
-## Metrics to Evaluate
+## Métricas a evaluar
 
-The following metrics will be reviewed during the performance testing phase:
+Las siguientes métricas serán revisadas durante la fase de pruebas de rendimiento:
 
-- Average response time.
-- Minimum and maximum response time.
-- 90th percentile response time.
-- 95th percentile response time.
+- Tiempo promedio de respuesta.
+- Tiempo mínimo y máximo de respuesta.
+- Percentil 90 del tiempo de respuesta.
+- Percentil 95 del tiempo de respuesta.
 - Throughput.
-- Error percentage.
-- Total number of requests.
+- Porcentaje de errores.
+- Número total de solicitudes.
 
-## Folder Organization
+## Organización de carpetas
 
-The files for this phase are organized as follows:
+Los archivos de esta fase se organizan de la siguiente manera:
 
 ```text
 qa/jmeter/
-|-- plans/        # JMeter test plans (.jmx)
-|-- results/      # Raw execution results (.jtl)
-|-- reports/      # HTML reports generated by JMeter
-|-- screenshots/  # Visual evidence of executions and reports
-|-- summary/      # Written summary of performance results
-`-- README.md     # Documentation for this QA phase
+|-- plans/        # Planes de prueba JMeter (.jmx)
+|-- results/      # Resultados crudos de ejecución (.jtl)
+|-- reports/      # Reportes HTML generados por JMeter
+|-- screenshots/  # Evidencias visuales de ejecuciones y reportes
+|-- summary/      # Resumen escrito de resultados de rendimiento
+`-- README.md     # Documentación de esta fase QA
 ```
 
-## Current Status
+## Estado actual
 
-The initial `.jmx` test plan has been created.
+El plan de prueba inicial `.jmx` ha sido creado.
 
-No performance test has been executed yet.
+Todavía no se ha ejecutado ninguna prueba de rendimiento.
 
-No `.jtl` result file has been generated yet.
+Todavía no se ha generado ningún archivo de resultados `.jtl`.
 
-No HTML performance report has been generated yet.
+Todavía no se ha generado ningún reporte HTML de rendimiento.

@@ -1,12 +1,12 @@
 ﻿# QA - Smart Campus Module 3
 
-This folder stores the quality assurance artifacts for the Smart Campus Module 3 project.
+Esta carpeta almacena los artefactos de aseguramiento de la calidad del proyecto Smart Campus Module 3.
 
-## Folder structure
+## Estructura de carpetas
 
-- `selenium/`: Functional automated web tests with Selenium WebDriver.
-- `jmeter/`: Future performance and load testing artifacts.
-- `owasp/`: Future security dependency analysis artifacts.
-- `evidencias/`: Screenshots, execution evidence, exports, and QA support files for the final report.
+- `selenium/`: Pruebas funcionales web automatizadas con Selenium WebDriver.
+- `jmeter/`: Artefactos futuros para pruebas de rendimiento y carga.
+- `owasp/`: Artefactos futuros para análisis de seguridad de dependencias.
+- `evidencias/`: Capturas de pantalla, evidencias de ejecución, exportaciones y archivos de soporte de QA para el informe final.
 
-At this stage, this folder only organizes QA work. It does not modify the application code or project dependencies.
+En esta etapa, esta carpeta únicamente organiza el trabajo de QA. No modifica el código de la aplicación ni las dependencias del proyecto.

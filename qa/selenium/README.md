@@ -1,32 +1,32 @@
-﻿# Selenium QA Automation
+﻿# Automatización QA con Selenium
 
-This folder contains the initial structure for functional web testing with Selenium WebDriver and TypeScript for Smart Campus Module 3.
+Esta carpeta contiene la estructura inicial para pruebas funcionales web con Selenium WebDriver y TypeScript para Smart Campus Module 3.
 
-## Purpose
+## Propósito
 
-The Selenium test project is isolated inside `qa/selenium` to avoid modifying the application source code, the root monorepo configuration, GitHub Actions, or production dependencies.
+El proyecto de pruebas Selenium está aislado dentro de `qa/selenium` para evitar modificar el código fuente de la aplicación, la configuración raíz del monorepo, GitHub Actions o las dependencias de producción.
 
-## Current structure
+## Estructura actual
 
-- `pages/`: Page Object Model classes for real Smart Campus pages. Test code will use this folder later to represent pages such as Landing, Login, and Dashboard.
-- `tests/`: Functional Selenium test cases. No test cases have been created yet.
-- `utils/`: Shared QA utilities, such as WebDriver creation, environment loading, waits, screenshots, and report helpers.
-- `screenshots/`: Evidence generated during test execution, especially screenshots captured on failure.
-- `reports/`: Execution reports showing passed and failed tests.
+- `pages/`: Clases del patrón Page Object Model para páginas reales de Smart Campus. El código de pruebas utilizará esta carpeta posteriormente para representar páginas como Landing, Login y Dashboard.
+- `tests/`: Casos de prueba funcionales con Selenium. Todavía no se han creado casos de prueba.
+- `utils/`: Utilidades compartidas de QA, como creación de WebDriver, carga de variables de entorno, esperas, capturas de pantalla y helpers de reportes.
+- `screenshots/`: Evidencias generadas durante la ejecución de pruebas, especialmente capturas realizadas ante fallos.
+- `reports/`: Reportes de ejecución que muestran pruebas aprobadas y fallidas.
 
-## Files
+## Archivos
 
-- `package.json`: Defines this QA automation folder as an isolated Node.js/TypeScript project. Dependencies are intentionally empty at this stage because Selenium has not been installed yet.
-- `tsconfig.json`: Defines TypeScript compilation rules for QA files under `pages`, `tests`, and `utils`.
-- `.env.example`: Documents the environment variables that future Selenium tests will use, including the frontend URL, API URL, browser, timeout, and test credentials.
-- `README.md`: Documents the QA automation structure and explains how this folder is intended to be used.
+- `package.json`: Define esta carpeta de automatización QA como un proyecto aislado de Node.js/TypeScript. Las dependencias están intencionalmente vacías en esta etapa porque Selenium todavía no ha sido instalado.
+- `tsconfig.json`: Define las reglas de compilación de TypeScript para los archivos QA ubicados en `pages`, `tests` y `utils`.
+- `.env.example`: Documenta las variables de entorno que utilizarán las futuras pruebas Selenium, incluyendo la URL del frontend, URL del API, navegador, tiempo de espera y credenciales de prueba.
+- `README.md`: Documenta la estructura de automatización QA y explica cómo se pretende utilizar esta carpeta.
 
-## Selenium configuration decision
+## Decisión sobre la configuración de Selenium
 
-A separate `selenium.config.ts` file was not created because it is not a standard requirement of Selenium WebDriver. Selenium projects usually create the driver directly in a utility/helper file and read runtime settings from environment variables. This keeps the setup simple, explicit, and easier to defend in a QA review.
+No se creó un archivo separado `selenium.config.ts` porque no es un requisito estándar de Selenium WebDriver. Los proyectos con Selenium normalmente crean el driver directamente en un archivo de utilidad/helper y leen la configuración de ejecución desde variables de entorno. Esto mantiene la configuración simple, explícita y más fácil de defender en una revisión de QA.
 
-## Status
+## Estado
 
-No Selenium test cases have been created yet.
-No dependencies have been installed yet.
-No application code has been modified.
+Todavía no se han creado casos de prueba Selenium.
+Todavía no se han instalado dependencias.
+No se ha modificado código de la aplicación.

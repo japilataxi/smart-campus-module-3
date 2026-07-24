@@ -1,76 +1,76 @@
-# Static Analysis - ESLint and TypeScript Compiler
+﻿# Análisis Estático - ESLint y TypeScript Compiler
 
-## Objective
+## Objetivo
 
-This folder contains the documentation and evidence structure for the static analysis phase of the Smart Campus Module 3 QA work.
+Esta carpeta contiene la estructura de documentación y evidencias para la fase de análisis estático del trabajo de QA de Smart Campus Module 3.
 
-The objective of static analysis is to inspect the source code without executing the application, in order to detect code quality issues, syntax problems, typing errors, and rule violations before runtime.
+El objetivo del análisis estático es inspeccionar el código fuente sin ejecutar la aplicación, con el fin de detectar problemas de calidad de código, problemas de sintaxis, errores de tipado e incumplimientos de reglas antes de la ejecución.
 
-## Tools Used
+## Herramientas utilizadas
 
-The selected tools for this phase are:
+Las herramientas seleccionadas para esta fase son:
 
 - ESLint.
 - TypeScript Compiler.
 
-ESLint is used to validate coding rules, detect unsafe patterns, unused variables, unhandled promises, and style or quality issues according to the configuration already defined in each application.
+ESLint se utiliza para validar reglas de codificación, detectar patrones inseguros, variables no utilizadas, promesas no controladas y problemas de estilo o calidad de acuerdo con la configuración ya definida en cada aplicación.
 
-The TypeScript Compiler is used with `--noEmit` to validate types without generating build artifacts or modifying project files.
+TypeScript Compiler se utiliza con `--noEmit` para validar tipos sin generar artefactos de compilación ni modificar archivos del proyecto.
 
-## Scope
+## Alcance
 
-The static analysis phase covers:
+La fase de análisis estático cubre:
 
-- NestJS microservices.
-- Next.js frontend application.
-- Selenium QA tests written in TypeScript.
+- Microservicios NestJS.
+- Aplicación frontend Next.js.
+- Pruebas QA Selenium escritas en TypeScript.
 
-The analysis will reuse the existing ESLint and TypeScript configurations already present in the project.
+El análisis reutilizará las configuraciones existentes de ESLint y TypeScript ya presentes en el proyecto.
 
-## Static Analysis vs Dynamic Testing
+## Análisis estático vs pruebas dinámicas
 
-Static analysis reviews the code without running the application. It helps detect problems early in the development process, before the software is deployed or executed.
+El análisis estático revisa el código sin ejecutar la aplicación. Ayuda a detectar problemas de forma temprana en el proceso de desarrollo, antes de que el software sea desplegado o ejecutado.
 
-Dynamic testing executes the application or system behavior, such as Selenium functional tests, OWASP dependency scans, or JMeter performance tests.
+Las pruebas dinámicas ejecutan la aplicación o el comportamiento del sistema, como pruebas funcionales Selenium, análisis de dependencias OWASP o pruebas de rendimiento JMeter.
 
-In this project, static analysis complements the previous QA phases by validating code quality and type safety before runtime.
+En este proyecto, el análisis estático complementa las fases anteriores de QA mediante la validación de calidad de código y seguridad de tipos antes de la ejecución.
 
-## Detectable Issues
+## Problemas detectables
 
-The tools selected for this phase can help detect:
+Las herramientas seleccionadas para esta fase pueden ayudar a detectar:
 
-- Syntax errors.
-- Type checking problems.
-- Unused variables.
-- Unhandled or floating promises.
-- Incorrect type usage.
-- Violations of coding rules.
-- Inconsistent patterns against the configured ESLint rules.
+- Errores de sintaxis.
+- Problemas de verificación de tipos.
+- Variables no utilizadas.
+- Promesas no controladas o floating promises.
+- Uso incorrecto de tipos.
+- Incumplimiento de reglas de codificación.
+- Patrones inconsistentes frente a las reglas configuradas de ESLint.
 
-## Safe Execution Criteria
+## Criterios de ejecución segura
 
-For ESLint, safe commands must not use `--fix`, because `--fix` modifies source files automatically.
+Para ESLint, los comandos seguros no deben usar `--fix`, porque `--fix` modifica automáticamente los archivos fuente.
 
-For TypeScript, the compiler must be executed with `--noEmit`, because this validates types without generating output files.
+Para TypeScript, el compilador debe ejecutarse con `--noEmit`, porque esto valida los tipos sin generar archivos de salida.
 
-## Future Evidence Organization
+## Organización futura de evidencias
 
-The evidence for this phase will be organized as follows:
+Las evidencias de esta fase se organizarán de la siguiente manera:
 
 ```text
 qa/static-analysis/
-|-- reports/      # ESLint and TypeScript execution outputs
-|-- screenshots/  # Visual evidence of terminal executions or reports
-|-- summary/      # Final written summary of static analysis results
-`-- README.md     # Documentation for this QA phase
+|-- reports/      # Salidas de ejecución de ESLint y TypeScript
+|-- screenshots/  # Evidencias visuales de ejecuciones en terminal o reportes
+|-- summary/      # Resumen final escrito del análisis estático
+`-- README.md     # Documentación de esta fase QA
 ```
 
-## Current Status
+## Estado actual
 
-No static analysis has been executed yet.
+Todavía no se ha ejecutado análisis estático.
 
-No ESLint report has been generated yet.
+Todavía no se ha generado ningún reporte ESLint.
 
-No TypeScript report has been generated yet.
+Todavía no se ha generado ningún reporte TypeScript.
 
-No source code or existing configuration files have been modified for this phase.
+No se ha modificado código fuente ni archivos de configuración existentes para esta fase.
